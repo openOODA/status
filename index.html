@@ -122,7 +122,7 @@
   <header>
     <div class="brand">open<span>OODA</span> · Flight Telemetry</div>
     <div class="badge-live">● STEALTH-SAFE LIVE (AUTO-REFRESH 5M)</div>
-    <div class="timestamps">Last Updated: <strong>2026-11-03 07:50:30 HST</strong> (2026-11-03 17:50:30 UTC)</div>
+    <div class="timestamps">Last Updated: <strong>2026-11-03 07:51:01 HST</strong> (2026-11-03 17:51:01 UTC)</div>
   </header>
 
   <div class="grid">
@@ -143,7 +143,7 @@
     </div>
     <div class="stat-card">
       <div class="stat-label">Compiled Binaries</div>
-      <div class="stat-val">456</div>
+      <div class="stat-val">452</div>
       <div class="stat-sub">Byte-Identical Deterministic</div>
     </div>
     <div class="stat-card">
@@ -161,52 +161,17 @@
   <h2>What We Are Currently Working On</h2>
   <div class="panel">
     <ul class="missions">
-      <li><span class="tag tag-done">ALIGNED</span><strong>1. Post-Quantum ML-DSA-65 Verification ( + /)</strong>: Fixed inverted sign bit in <code>d_use_hint</code> (<code>mldsa_ntt.c:190</code>); <code>crypto_pq_hmac_self_test() == 1</code> and <code>crypto_mldsa65_verify_internal() == "OK"</code>; full <code>mask == 7</code> enforced across <code>oostore-cas</code>, <code>oorelease</code>, and <code>oogovern</code>.</li>
-      <li><span class="tag tag-done">ALIGNED</span><strong>2. Compiler  Exit Code ()</strong>: Fixed <code>ll_ret_resim</code> in <code>ll_exit.oo</code> so <code>Ok(code)</code> returns truncated <code>i32</code> payload and <code>Err(msg)</code> exits with <code>1</code>; rebuilt self-hosted <code>oodac</code>.</li>
-      <li><span class="tag tag-done">ALIGNED</span><strong>3. Unified 32-Bit Capability Bit-Positions &amp; 8-Bit Rights Mask ()</strong>: Unified <code>caps.h</code>, <code>rt_caps_reg64.oo</code>, <code>rt_caps_check.oo</code>, <code>opm/policy/caps.oo</code>, and <code>ocap_to_oodar.oo</code> + granular seccomp network mask (<code>NET|TCP|UDP|BIND</code>).</li>
-      <li><span class="tag tag-done">ALIGNED</span><strong>4. 16-Byte SIMD Arena Alignment + 1-Cycle  / </strong>: 64-byte aligned arena with 16-byte SIMD bump rounding and 1-cycle mark/reset reclamation in <code>oodar</code>.</li>
-      <li><span class="tag tag-done">ALIGNED</span><strong>5. 4-Phase OODA State Machine ()</strong>: Wired <code>Observe(0) -&gt; Orient(1) -&gt; Decide(2) -&gt; Act(3)</code> with monotonic epoch advancement and 64-bit capability register verification (28/28 assertions).</li>
-      <li><span class="tag tag-done">ALIGNED</span><strong>6. 8-Word ( Cache-Line) Zero-Copy IPC Frame ()</strong>: Upgraded wire codec to 8 × 64-bit words (1 CPU cache line) with Word 1 <code>cap_reg64</code>, 64-bit non-linear MAC mixing, and exact rolling checksum verification.</li>
-      <li><span class="tag tag-active">ACTIVE</span><strong>7. Fleet-Wide GLM-5.3 [high] Upgrade +  Sweep (–)</strong>: Switched Vibe panes to <code>glm-5-3 [high]</code>, running <code>mcode /code-review</code> across all 8 layers toward 99% pre-reset target, and tracking agent provenance in GitHub release tags.</li>
+      <li><span class="tag tag-done">ALIGNED</span><strong>1. Post-Quantum ML-DSA-65 Verification (<code>oodar</code> + <code>L6</code>/<code>L7</code>)</strong>: Fixed inverted sign bit in <code>d_use_hint</code> (<code>mldsa_ntt.c:190</code>); <code>crypto_pq_hmac_self_test() == 1</code> and <code>crypto_mldsa65_verify_internal() == "OK"</code>; full <code>mask == 7</code> enforced across <code>oostore-cas</code>, <code>oorelease</code>, and <code>oogovern</code>.</li>
+      <li><span class="tag tag-done">ALIGNED</span><strong>2. Compiler <code>Result[Int, String]</code> Exit Code (<code>oodac</code>)</strong>: Fixed <code>ll_ret_resim</code> in <code>ll_exit.oo</code> so <code>Ok(code)</code> returns truncated <code>i32</code> payload and <code>Err(msg)</code> exits with <code>1</code>; rebuilt self-hosted <code>oodac</code>.</li>
+      <li><span class="tag tag-done">ALIGNED</span><strong>3. Unified 32-Bit Capability Bit-Positions &amp; 8-Bit Rights Mask (<code>L0</code>)</strong>: Unified <code>caps.h</code>, <code>rt_caps_reg64.oo</code>, <code>rt_caps_check.oo</code>, <code>opm/policy/caps.oo</code>, and <code>ocap_to_oodar.oo</code> + granular seccomp network mask (<code>NET|TCP|UDP|BIND</code>).</li>
+      <li><span class="tag tag-done">ALIGNED</span><strong>4. 16-Byte SIMD Arena Alignment + 1-Cycle <code>@oo_arena_mark</code> / <code>@oo_arena_reset</code></strong>: 64-byte aligned arena with 16-byte SIMD bump rounding and 1-cycle mark/reset reclamation in <code>oodar</code>.</li>
+      <li><span class="tag tag-done">ALIGNED</span><strong>5. 4-Phase OODA State Machine (<code>L7 oooda-engine</code>)</strong>: Wired <code>Observe(0) -&gt; Orient(1) -&gt; Decide(2) -&gt; Act(3)</code> with monotonic epoch advancement and 64-bit capability register verification (28/28 assertions).</li>
+      <li><span class="tag tag-done">ALIGNED</span><strong>6. 8-Word (<code>64-Byte</code> Cache-Line) Zero-Copy IPC Frame (<code>L1 ookernel-ipc</code>)</strong>: Upgraded wire codec to 8 × 64-bit words (1 CPU cache line) with Word 1 <code>cap_reg64</code>, 64-bit non-linear MAC mixing, and exact rolling checksum verification.</li>
+      <li><span class="tag tag-active">ACTIVE</span><strong>7. Fleet-Wide GLM-5.3 [high] Upgrade + <code>mcode /code-review</code> Sweep (<code>L0</code>–<code>L7</code>)</strong>: Switched Vibe panes to <code>glm-5-3 [high]</code>, running <code>mcode /code-review</code> across all 8 layers toward 99% pre-reset target, and tracking agent provenance in GitHub release tags.</li>
     </ul>
   </div>
 
-  <h2>Live Ecosystem &amp; Agent Fleet Snapshot (==============================================================================================
-  openOODA 9-ORG (ROOT + L0-L7) ECOSYSTEM & AGENT FLEET STATUS (PURE .oo DOGFOOD WATCHDOG)
-==============================================================================================
-
-[1] LIVE AGENT & QUOTA TELEMETRY (Target: 99% pre-reset, >=1% hard reserve floor)
-  PANE    WORKSPACE            AGENT                    STATE       QUOTA / TOKENS                     STATUS / PACE TO 99%
-  ------------------------------------------------------------------------------------------------------------------------------
-  wF:p1   (L0) openOODA-core   vibe (GLM-5.3 [high])    idle        Mo 35% (65% rem) / Ctx 11% left    OK (+64% to 99%)
-  wG:p1   (L1) openOODA-kernel vibe (GLM-5.3 [high])    working     Mo 35% (65% rem) / Ctx 62% left    OK (+64% to 99%)
-  wH:p1   (L2) openOODA-OS     grok (Grok 4.7 high)     working     Wk 95% (5% rem, ->99%:4%) / ~132k  OK (+4% to 99%)
-  wJ:p1   (L3) openOODA-tools  mcode (M3.1-Flash)       working     5h 28% used (72% rem) / Ctx 56% left OK (+71% to 99%)
-  wK:p1   (L4) openOODA-DE     vibe (GLM-5.3 [high])    working     Mo 35% (65% rem) / Ctx 62% left    OK (+64% to 99%)
-  wM:p1   (L5) openOODA-apps   devin (SWE-2 Max)        idle        SWE-2 Max (Free / $0) / Ctx 41% left OK (+99% to 99%)
-  wN:p1   (L6) openOODA-cloud  mcode (M3.1-Flash)       working     Ctx 54% left                       OK (+53% to 99%)
-  wP:p1   (L7) openOODA-agents devin (SWE-2 Max)        idle        SWE-2 Max (Free / $0) / Ctx 33% left OK (+99% to 99%)
-
-[2] 9-ORGANIZATION (ROOT + L0-L7) COMPLETION MATRIX (Pages >= 6, Version/Tag >= v0.2.1, Build/Green)
-  ORGANIZATION        TOTAL   PAGES>=6   VER>=0.2.1   TAG>=v0.2.1   GREEN/BUILT
-  ------------------------------------------------------------------------------
-  openOODA                6        6/6          6/6           5/6           6/6
-  openOODA-core          10      10/10        10/10         10/10         10/10
-  openOODA-kernel        16      16/16        16/16         16/16         16/16
-  openOODA-OS            18      18/18        18/18         18/18         18/18
-  openOODA-tools        257    257/257      257/257       257/257       257/257
-  openOODA-DE            20      20/20        20/20         20/20         20/20
-  openOODA-apps          16      16/16        16/16         16/16         16/16
-  openOODA-cloud         18      18/18        18/18         18/18         17/18
-  openOODA-agents        16      16/16        16/16         16/16         16/16
-
-[3] TAILSCALE FLEET & GPU BUILDBOX TELEMETRY (Daily Update/Reboot ~04:00, Nightly Loop 04:30)
-  NODE (TAILSCALE IP)        ROLE           RAM / TMPFS   GPU VRAM & UTIL                        OLLAMA / LLM         BUILDBOX / TIMER
-  ---------------------------------------------------------------------------------------------------------------------------------------
-  zebes (100.102.186.93)     control/herdr  15GiB         no-gpu                                 n/a                  ready/enabled
-  ringmaster (100.88.249.93) buildbox+gpu   63GiB/32G     G0:14823/16380MB(0%) G1:13025/16380MB(0%) active:qwen36-35b    ready/active
-  spotlight (100.66.54.24)   llm+replica    31GiB/16G     G0:14218/16380MB(0%) G1:14886/16380MB(0%) active:qwen36-35b    ready/inactive
-==============================================================================================)</h2>
+  <h2>Live Ecosystem &amp; Agent Fleet Snapshot (<code>eco-status</code>)</h2>
   <div class="panel">
     <pre>==============================================================================================
   openOODA 9-ORG (ROOT + L0-L7) ECOSYSTEM & AGENT FLEET STATUS (PURE .oo DOGFOOD WATCHDOG)
@@ -215,10 +180,10 @@
 [1] LIVE AGENT & QUOTA TELEMETRY (Target: 99% pre-reset, >=1% hard reserve floor)
   PANE    WORKSPACE            AGENT                    STATE       QUOTA / TOKENS                     STATUS / PACE TO 99%
   ------------------------------------------------------------------------------------------------------------------------------
-  wF:p1   (L0) openOODA-core   vibe (GLM-5.3 [high])    idle        Mo 35% (65% rem) / Ctx 11% left    OK (+64% to 99%)
+  wF:p1   (L0) openOODA-core   vibe (GLM-5.3 [high])    idle        Mo 35% (65% rem) / Ctx 100% left   OK (+64% to 99%)
   wG:p1   (L1) openOODA-kernel vibe (GLM-5.3 [high])    working     Mo 35% (65% rem) / Ctx 62% left    OK (+64% to 99%)
-  wH:p1   (L2) openOODA-OS     grok (Grok 4.7 high)     working     Wk 95% (5% rem, ->99%:4%) / ~132k  OK (+4% to 99%)
-  wJ:p1   (L3) openOODA-tools  mcode (M3.1-Flash)       working     5h 28% used (72% rem) / Ctx 56% left OK (+71% to 99%)
+  wH:p1   (L2) openOODA-OS     grok (Grok 4.7 high)     working     Wk 95% (5% rem, ->99%:4%) / ~135k  OK (+4% to 99%)
+  wJ:p1   (L3) openOODA-tools  mcode (M3.1-Flash)       working     5h 28% used (72% rem) / Ctx 54% left OK (+71% to 99%)
   wK:p1   (L4) openOODA-DE     vibe (GLM-5.3 [high])    working     Mo 35% (65% rem) / Ctx 62% left    OK (+64% to 99%)
   wM:p1   (L5) openOODA-apps   devin (SWE-2 Max)        idle        SWE-2 Max (Free / $0) / Ctx 41% left OK (+99% to 99%)
   wN:p1   (L6) openOODA-cloud  mcode (M3.1-Flash)       working     Ctx 54% left                       OK (+53% to 99%)
