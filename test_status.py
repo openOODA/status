@@ -184,6 +184,20 @@ class TestStatusPageOverflowAndTelemetry(unittest.TestCase):
         matches = forbidden.findall(self.html)
         self.assertEqual(matches, [], f"Zero-Trust privacy gate violation: {matches}")
 
+    def test_06_devin_zero_trust_shadow_quota_accounting(self):
+        """Verify Devin displays Zero-Trust Local Shadow Quota instead of 0% used / 100% left."""
+        self.assertIn("API REPORTS 0% (LAG/PROMO) · SHADOW QUOTA:", self.html)
+        self.assertIn("USED — THROTTLED", self.html)
+        self.assertNotIn("100% UNTHROTTLED CAPACITY ACROSS L1–L7", self.html)
+        self.assertNotIn("SWE-2 Free (", self.html)
+        m = re.search(r'<div class="quota-row" data-name="devin" data-rem-pct="(\d+)" data-used-pct="(\d+)"', self.html)
+        self.assertIsNotNone(m, "Devin quota-row must exist with data-rem-pct and data-used-pct")
+        rem_pct = int(m.group(1))
+        used_pct = int(m.group(2))
+        self.assertGreaterEqual(used_pct, 85, f"Expected Devin shadow used_pct >= 85%, got {used_pct}%")
+        self.assertLessEqual(rem_pct, 15, f"Expected Devin shadow rem_pct <= 15%, got {rem_pct}%")
+
 
 if __name__ == "__main__":
     unittest.main()
+
