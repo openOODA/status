@@ -122,7 +122,7 @@
   <header>
     <div class="brand">open<span>OODA</span> · Architecture &amp; Build Status</div>
     <div class="badge-live">● AUTO-REFRESH 5M</div>
-    <div class="timestamps">Last Updated: <strong>2026-11-04 05:00:13 HST</strong> (2026-11-04 15:00:13 UTC)</div>
+    <div class="timestamps">Last Updated: <strong>2026-11-04 05:27:32 HST</strong> (2026-11-04 15:27:32 UTC)</div>
   </header>
 
   <div class="grid">
@@ -189,25 +189,25 @@
   wN:p1   (L6) openOODA-cloud  mcode (M3.1-Flash)       idle        n/a                                OK (+99% to 99%)
   wP:p1   (L7) openOODA-agents devin (SWE-2 Max)        idle        SWE-2 Max (Free / $0) / Ctx 55% left OK (+99% to 99%)
 
-[2] 9-ORGANIZATION (ROOT + L0-L7) COMPLETION MATRIX (Pages >= 6, Version/Tag >= v0.2.1, Build/Green)
-  ORGANIZATION        TOTAL   PAGES>=6   VER>=0.2.1   TAG>=v0.2.1   GREEN/BUILT
+[2] 9-ORGANIZATION (ROOT + L0-L7) USABILITY MATRIX (USABLE vs SCAFFOLD SHELLS)
+  ORGANIZATION        TOTAL     USABLE    SCAFFOLDS   TAG>=v0.2.1   GREEN/BUILT
   ------------------------------------------------------------------------------
-  openOODA                6        6/6          6/6           6/6           6/6
-  openOODA-core          10      10/10        10/10         10/10         10/10
-  openOODA-kernel        16      16/16        16/16         16/16         16/16
-  openOODA-OS            18      18/18        18/18         18/18         18/18
-  openOODA-tools        257    257/257      257/257       257/257       257/257
-  openOODA-DE            20      20/20        20/20         20/20         20/20
-  openOODA-apps          16      16/16        16/16         16/16         16/16
-  openOODA-cloud         18      18/18        18/18         18/18         18/18
-  openOODA-agents        16      16/16        16/16         16/16         16/16
+  openOODA                6        6/6            0           6/6           6/6
+  openOODA-core          10      10/10            0         10/10         10/10
+  openOODA-kernel        16       1/16           15         16/16         16/16
+  openOODA-OS            18       1/18           17         18/18         18/18
+  openOODA-tools        257    105/257          152       257/257       257/257
+  openOODA-DE            20       0/20           20         20/20         20/20
+  openOODA-apps          16       0/16           16         16/16         16/16
+  openOODA-cloud         18       0/18           18         18/18         18/18
+  openOODA-agents        16      16/16            0         16/16         16/16
 
 [3] TAILSCALE FLEET & GPU BUILDBOX TELEMETRY (Daily Update/Reboot ~04:00, Nightly Loop 04:30)
-  NODE (TAILSCALE IP)        ROLE           RAM / TMPFS   GPU VRAM & UTIL                        OLLAMA / LLM         BUILDBOX / TIMER
+  NODE (TAILSCALE IP)        ROLE           RAM / TMPFS   GPU VRAM & UTIL                        OODA-INFERENCE       BUILDBOX / TIMER
   ---------------------------------------------------------------------------------------------------------------------------------------
-  zebes (100.102.186.93)     control/herdr  15GiB         no-gpu                                 n/a                  ready/enabled
-  ringmaster (100.88.249.93) buildbox+gpu   63GiB/32G     G0:2/16380MB(0%) G1:2/16380MB(0%)      inactive:none        ready/active
-  spotlight (100.66.54.24)   llm+replica    31GiB/16G     G0:2/16380MB(0%) G1:2/16380MB(0%)      inactive:none        ready/inactive
+  zebes (100.102.186.93)     control/herdr  15GiB/7.8G    G0:12/12288MB(0%)                      active:ooaid:11435   ready/active
+  ringmaster (100.88.249.93) buildbox+gpu   63GiB/32G     G0:2/16380MB(0%) G1:2/16380MB(0%)      active:ooaid:11435   ready/active
+  spotlight (100.66.54.24)   llm+replica    31GiB/16G     G0:2/16380MB(0%) G1:2/16380MB(0%)      active:ooaid:11435   ready/active
 ==============================================================================================</pre>
   </div>
 
