@@ -372,7 +372,7 @@
       <span class="window-title">sys@openooda:~# status // LIVE TELEMETRY</span>
     </div>
     <div class="titlebar-right">
-      <span class="term-badge badge-cyan">[ FLEET: 845.4 tok/s ]</span>
+      <span class="term-badge badge-cyan">[ FLEET: 844.2 tok/s ]</span>
       <span class="term-badge badge-green">[ 5 GPUs: 20/77808 MB ]</span>
       <span class="term-badge badge-green">[ 32 + 32 = 64 ABI ]</span>
       <span class="term-badge badge-green">[ AUTO-REFRESH 5M ]</span>
@@ -381,20 +381,20 @@
 
   <main class="container">
     <div class="sub-bar">
-      <div>TELEMETRY EPOCH: <strong>2026-11-04 08:15:32 HST</strong> (2026-11-04 18:15:32 UTC) // RELEASE: <code>v0.3.1</code></div>
+      <div>TELEMETRY EPOCH: <strong>2026-11-04 08:15:39 HST</strong> (2026-11-04 18:15:39 UTC) // RELEASE: <code>v0.3.1</code></div>
       <div>ZERO-TRUST PRIVACY GATE: <strong>[ PASS // 0 LEAKED IPS OR HOSTNAMES ]</strong></div>
     </div>
 
     <div class="kpi-grid">
       <div class="stat-card cyan">
         <div class="stat-label">Fleet Throughput</div>
-        <div class="stat-val cyan-val">845.4 tok/s</div>
-        <div class="stat-sub">Peak Cap: 1447.0 tok/s &middot; 12 Panes</div>
+        <div class="stat-val cyan-val">844.2 tok/s</div>
+        <div class="stat-sub">Peak Cap: 1445.8 tok/s &middot; 12 Panes</div>
       </div>
       <div class="stat-card accent">
         <div class="stat-label">5-GPU Cluster VRAM</div>
         <div class="stat-val green-val">20 / 77808 MB</div>
-        <div class="stat-sub">GPU-00..04 &middot; 32&deg;C &middot; 41.0W</div>
+        <div class="stat-sub">GPU-00..04 &middot; 32&deg;C &middot; 41.1W</div>
       </div>
       <div class="stat-card accent">
         <div class="stat-label">Usable Repositories</div>
@@ -420,7 +420,7 @@
 
     <div class="section-head">
       <span class="panel-label">-- [1] LIVE 5-GPU HARDWARE TELEMETRY (GPU-00..GPU-04 // ANONYMIZED NODES) --</span>
-      <span class="term-badge badge-green">[ 1/5 OOAID INFERENCE DAEMONS ONLINE ]</span>
+      <span class="term-badge badge-green">[ 5/5 OOAID INFERENCE DAEMONS ONLINE ]</span>
     </div>
     <div class="panel">
       <div class="gpu-grid">
@@ -445,13 +445,13 @@
           </div>
           <div class="gpu-foot">
             <span>TEMP: <strong>40&deg;C</strong></span>
-            <span>POWER: <strong>15.4W / 170W</strong> (9%)</span>
+            <span>POWER: <strong>15.5W / 170W</strong> (9%)</span>
           </div>
         </div>
         <div class="gpu-card">
           <div class="gpu-card-top">
             <span class="gpu-id">GPU-01 [16GB]</span>
-            <span class="term-badge badge-amber">[ OOAID STANDBY ]</span>
+            <span class="term-badge badge-green">[ OOAID ACTIVE ]</span>
           </div>
           <div class="gpu-meta">
             <span>NODE: <code>NODE-02</code> (buildbox+gpu-a)</span>
@@ -475,7 +475,7 @@
         <div class="gpu-card">
           <div class="gpu-card-top">
             <span class="gpu-id">GPU-02 [16GB]</span>
-            <span class="term-badge badge-amber">[ OOAID STANDBY ]</span>
+            <span class="term-badge badge-green">[ OOAID ACTIVE ]</span>
           </div>
           <div class="gpu-meta">
             <span>NODE: <code>NODE-02</code> (buildbox+gpu-b)</span>
@@ -499,7 +499,7 @@
         <div class="gpu-card">
           <div class="gpu-card-top">
             <span class="gpu-id">GPU-03 [16GB]</span>
-            <span class="term-badge badge-amber">[ OOAID STANDBY ]</span>
+            <span class="term-badge badge-green">[ OOAID ACTIVE ]</span>
           </div>
           <div class="gpu-meta">
             <span>NODE: <code>NODE-03</code> (llm+replica-a)</span>
@@ -523,7 +523,7 @@
         <div class="gpu-card">
           <div class="gpu-card-top">
             <span class="gpu-id">GPU-04 [16GB]</span>
-            <span class="term-badge badge-amber">[ OOAID STANDBY ]</span>
+            <span class="term-badge badge-green">[ OOAID ACTIVE ]</span>
           </div>
           <div class="gpu-meta">
             <span>NODE: <code>NODE-03</code> (llm+replica-b)</span>
@@ -549,7 +549,7 @@
 
     <div class="section-head">
       <span class="panel-label">-- [2] PER-AGENT TOK/SEC THROUGHPUT &amp; TOKEN QUOTA REMAINING PER CYCLE --</span>
-      <span class="term-badge badge-cyan">[ TOTAL FLEET: 845.4 tok/s LIVE // 1447.0 tok/s PEAK ]</span>
+      <span class="term-badge badge-cyan">[ TOTAL FLEET: 844.2 tok/s LIVE // 1445.8 tok/s PEAK ]</span>
     </div>
     <div class="panel table-wrap">
       <table class="crt-table">
@@ -569,7 +569,7 @@
               <td>10 panes (wG..wP)</td>
               <td><code class="seg-bar seg-green">██████████</code> <strong>100%</strong></td>
               <td>Daily/Wk (rst 22:00 UTC)</td>
-              <td><code class="seg-bar seg-cyan">███████░░░</code> <strong>632.4 tok/s</strong> <span class="dim-note">(peak 680.0)</span></td>
+              <td><code class="seg-bar seg-cyan">███████░░░</code> <strong>631.2 tok/s</strong> <span class="dim-note">(peak 680.0)</span></td>
               <td><span class="term-badge badge-green">[ WORKING // 8 ACTIVE ]</span></td>
             </tr>
             <tr>
@@ -677,7 +677,7 @@
               <td><code>devin (SWE-2 Max)</code></td>
               <td><span class="term-badge badge-green">[ WORKING ]</span></td>
               <td><code class="seg-bar seg-cyan">██████░░</code> <strong>96.0 tok/s</strong></td>
-              <td>SWE-2 Free (free-tier, D/Wk 100% rst 22:00) / Ctx 47%</td>
+              <td>SWE-2 Free (free-tier, D/Wk 100% rst 22:00)</td>
               <td>OK (+99% to 99%)</td>
             </tr>
             <tr>
@@ -685,7 +685,7 @@
               <td>(L4) openOODA-DE</td>
               <td><code>devin (SWE-2 Max)</code></td>
               <td><span class="term-badge badge-green">[ WORKING ]</span></td>
-              <td><code class="seg-bar seg-cyan">██████░░</code> <strong>84.3 tok/s</strong></td>
+              <td><code class="seg-bar seg-cyan">██████░░</code> <strong>83.1 tok/s</strong></td>
               <td>SWE-2 Free (free-tier, D/Wk 100% rst 22:00) / Ctx 47%</td>
               <td>OK (+99% to 99%)</td>
             </tr>
@@ -722,7 +722,7 @@
               <td><code>devin (SWE-2 Max)</code></td>
               <td><span class="term-badge badge-green">[ WORKING ]</span></td>
               <td><code class="seg-bar seg-cyan">██████░░</code> <strong>96.0 tok/s</strong></td>
-              <td>SWE-2 Free (free-tier, D/Wk 100% rst 22:00) / Ctx 63%</td>
+              <td>SWE-2 Free (free-tier, D/Wk 100% rst 22:00) / Ctx 62%</td>
               <td>OK (+99% to 99%)</td>
             </tr>
             <tr>
@@ -875,12 +875,12 @@
   wG:p1   (L1) openOODA-kernel devin (SWE-2 Max)      working    SWE-2 Free (free-tier, D/Wk 100% rst 22:00) / Ctx 44% OK (+99% to 99%)
   wH:p1   (L2) openOODA-OS     devin (SWE-2 Max)      idle       SWE-2 Free (free-tier, D/Wk 100% rst 22:00) / Ctx 47% OK (+99% to 99%)
   wJ:p1   (L3) openOODA-tools  devin (SWE-2 Max)      working    SWE-2 Free (free-tier, D/Wk 100% rst 22:00) / Ctx 78% OK (+99% to 99%)
-  wJ:p2   (L3) openOODA-tools  devin (SWE-2 Max)      working    SWE-2 Free (free-tier, D/Wk 100% rst 22:00) / Ctx 47% OK (+99% to 99%)
+  wJ:p2   (L3) openOODA-tools  devin (SWE-2 Max)      working    SWE-2 Free (free-tier, D/Wk 100% rst 22:00)   OK (+99% to 99%)
   wK:p1   (L4) openOODA-DE     devin (SWE-2 Max)      working    SWE-2 Free (free-tier, D/Wk 100% rst 22:00) / Ctx 47% OK (+99% to 99%)
   wK:p2   (L4) openOODA-DE     devin (SWE-2 Max)      working    SWE-2 Free (free-tier, D/Wk 100% rst 22:00) / Ctx 39% OK (+99% to 99%)
   wM:p1   (L5) openOODA-apps   devin (SWE-2 Max)      idle       SWE-2 Free (free-tier, D/Wk 100% rst 22:00) / Ctx 50% OK (+99% to 99%)
   wN:p1   (L6) openOODA-cloud  devin (SWE-2 Max)      working    SWE-2 Free (free-tier, D/Wk 100% rst 22:00) / Ctx 46% OK (+99% to 99%)
-  wN:p2   (L6) openOODA-cloud  devin (SWE-2 Max)      working    SWE-2 Free (free-tier, D/Wk 100% rst 22:00) / Ctx 63% OK (+99% to 99%)
+  wN:p2   (L6) openOODA-cloud  devin (SWE-2 Max)      working    SWE-2 Free (free-tier, D/Wk 100% rst 22:00) / Ctx 62% OK (+99% to 99%)
   wP:p1   (L7) openOODA-agents devin (SWE-2 Max)      working    SWE-2 Free (free-tier, D/Wk 100% rst 22:00) / Ctx 36% OK (+99% to 99%)
 
 [2] 9-ORGANIZATION (ROOT + L0-L7) USABILITY MATRIX (USABLE vs SCAFFOLD SHELLS)
@@ -900,8 +900,8 @@
   NODE (TAILSCALE IP)        ROLE           RAM / TMPFS   GPU VRAM & UTIL                        OODA-INFERENCE       BUILDBOX / TIMER
   ---------------------------------------------------------------------------------------------------------------------------------------
   NODE-01 (mesh-ctrl)     control/herdr  15GiB/7.8G    G0:12/12288MB(0%)                      active:ooaid:ooaid-ipc   ready/active
-  NODE-02 (mesh-gpu-a) buildbox+gpu   UNREACHABLE   offline                                offline              offline
-  NODE-03 (mesh-gpu-b)   llm+replica    UNREACHABLE   offline                                offline              offline
+  NODE-02 (mesh-gpu-a) buildbox+gpu   63GiB/32G     G0:2/16380MB(0%) G1:2/16380MB(0%)      active:ooaid:ooaid-ipc   ready/active
+  NODE-03 (mesh-gpu-b)   llm+replica    31GiB/16G     G0:2/16380MB(0%) G1:2/16380MB(0%)      active:ooaid:ooaid-ipc   ready/active
 ==============================================================================================</pre>
     </div>
   </main>
