@@ -17,6 +17,7 @@
       --green: #10b981;
       --amber: #f59e0b;
       --purple: #a855f7;
+      --rose: #f43f5e;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
@@ -25,7 +26,7 @@
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "JetBrains Mono", monospace;
       line-height: 1.5;
       padding: 16px;
-      max-width: 1080px;
+      max-width: 1140px;
       margin: 0 auto;
     }
     header {
@@ -70,7 +71,7 @@
       text-transform: uppercase;
       letter-spacing: 0.05em;
       color: var(--accent);
-      margin: 20px 0 10px;
+      margin: 22px 0 10px;
     }
     .panel {
       background: var(--card);
@@ -83,7 +84,7 @@
     ul.missions li {
       padding: 8px 0;
       border-bottom: 1px solid rgba(255,255,255,0.05);
-      font-size: 0.88rem;
+      font-size: 0.86rem;
     }
     ul.missions li:last-child { border-bottom: none; }
     .tag {
@@ -98,6 +99,144 @@
     }
     .tag-done { background: rgba(16, 185, 129, 0.15); color: var(--green); }
     .tag-active { background: rgba(168, 85, 247, 0.18); color: var(--purple); }
+    .tag-gate { background: rgba(245, 158, 11, 0.18); color: var(--amber); }
+    /* Quota Visual Bars */
+    .quota-row {
+      padding: 10px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .quota-row:last-child { border-bottom: none; }
+    .quota-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 6px;
+    }
+    .quota-dot {
+      display: inline-block;
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      margin-right: 6px;
+    }
+    .quota-name { font-size: 0.88rem; color: #fff; margin-right: 8px; }
+    .quota-role { font-size: 0.76rem; color: var(--muted); }
+    .quota-badge {
+      font-size: 0.7rem;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: rgba(16, 185, 129, 0.12);
+      color: var(--green);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+    }
+    .quota-bar-track {
+      position: relative;
+      height: 14px;
+      background: #080b11;
+      border: 1px solid var(--border);
+      border-radius: 7px;
+      overflow: hidden;
+      display: flex;
+    }
+    .quota-bar-used {
+      height: 100%;
+      transition: width 0.3s ease;
+    }
+    .quota-bar-left {
+      height: 100%;
+      background: repeating-linear-gradient(
+        45deg,
+        rgba(16, 185, 129, 0.18),
+        rgba(16, 185, 129, 0.18) 6px,
+        rgba(16, 185, 129, 0.05) 6px,
+        rgba(16, 185, 129, 0.05) 12px
+      );
+    }
+    .quota-target-line {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: #f43f5e;
+      z-index: 2;
+    }
+    .quota-meta {
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 8px;
+      font-size: 0.75rem;
+      color: var(--muted);
+      margin-top: 5px;
+    }
+    .quota-reset { color: var(--accent); }
+    /* GitHub Contribution Chart */
+    .gh-wrap { overflow-x: auto; margin-bottom: 14px; }
+    table.gh-grid {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.74rem;
+    }
+    table.gh-grid th {
+      color: var(--muted);
+      font-weight: 500;
+      padding: 3px 2px;
+      text-align: center;
+      font-size: 0.66rem;
+    }
+    table.gh-grid td { padding: 3px 2px; }
+    td.gh-agent-label {
+      white-space: nowrap;
+      padding-right: 10px;
+      font-weight: 600;
+    }
+    td.gh-totals {
+      white-space: nowrap;
+      padding-left: 10px;
+      color: var(--muted);
+      text-align: right;
+    }
+    .gh-cell {
+      width: 14px;
+      height: 14px;
+      border-radius: 3px;
+      border: 1px solid #1e293b;
+      margin: 0 auto;
+    }
+    .org-push-row {
+      display: grid;
+      grid-template-columns: 245px 1fr 310px;
+      align-items: center;
+      gap: 10px;
+      padding: 5px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+      font-size: 0.78rem;
+    }
+    @media (max-width: 820px) {
+      .org-push-row { grid-template-columns: 1fr; }
+    }
+    .org-usable-pill {
+      font-size: 0.68rem;
+      color: var(--green);
+      margin-left: 4px;
+    }
+    .org-stack-bar {
+      height: 10px;
+      background: #080b11;
+      border: 1px solid var(--border);
+      border-radius: 5px;
+      overflow: hidden;
+      display: flex;
+    }
+    .stack-seg { height: 100%; }
+    .org-push-meta {
+      font-size: 0.72rem;
+      color: var(--muted);
+      text-align: right;
+    }
     pre {
       background: #05070b;
       border: 1px solid var(--border);
@@ -121,15 +260,15 @@
 <body>
   <header>
     <div class="brand">open<span>OODA</span> · Architecture &amp; Build Status</div>
-    <div class="badge-live">● AUTO-REFRESH 5M</div>
-    <div class="timestamps">Last Updated: <strong>2026-11-04 08:00:14 HST</strong> (2026-11-04 18:00:14 UTC)</div>
+    <div class="badge-live">● ZERO-TRUST GATE VERIFIED · AUTO-REFRESH 5M</div>
+    <div class="timestamps">Last Updated: <strong>2026-11-04 08:03:10 HST</strong> (2026-11-04 18:03:10 UTC) · Hardware Fleet: <strong>3 Buildbox Nodes · 5 GPUs (76 GB VRAM) · 100% Online</strong></div>
   </header>
 
   <div class="grid">
     <div class="stat-card">
       <div class="stat-label">Organizations</div>
       <div class="stat-val">9</div>
-      <div class="stat-sub">Root + L0–L7 Passing</div>
+      <div class="stat-sub">Root + L0–L7 (330/377 Usable)</div>
     </div>
     <div class="stat-card">
       <div class="stat-label">Repositories</div>
@@ -138,12 +277,12 @@
     </div>
     <div class="stat-card">
       <div class="stat-label">.oo Pages / LOC</div>
-      <div class="stat-val">15319</div>
-      <div class="stat-sub">165814 lines (≤240/page)</div>
+      <div class="stat-val">15320</div>
+      <div class="stat-sub">165865 lines (≤240/page)</div>
     </div>
     <div class="stat-card">
       <div class="stat-label">Compiled Binaries</div>
-      <div class="stat-val">475</div>
+      <div class="stat-val">476</div>
       <div class="stat-sub">Deterministic Builds</div>
     </div>
     <div class="stat-card">
@@ -158,35 +297,370 @@
     </div>
   </div>
 
-  <h2>Layer Implementation &amp; Verification Status</h2>
+  <h2>Token Quota Remaining Per Reset Cycle (Target: 99% Pre-Reset · ≥1% Hard Reserve Floor)</h2>
+  <div class="panel">
+    
+      <div class="quota-row">
+        <div class="quota-header">
+          <div>
+            <span class="quota-dot" style="background:#38bdf8"></span>
+            <strong class="quota-name">mcode · M3.1-Flash (5h cycle)</strong>
+            <span class="quota-role">L1 / L3 / L6 High-Throughput Scaffold & Driver Sweeps</span>
+          </div>
+          <span class="quota-badge">CYCLE LIMIT REACHED · AUTO-RESUMES AT BOUNDARY</span>
+        </div>
+        <div class="quota-bar-track" title="100% Used | 0% Tokens Left (99% target / 1% hard reserve floor)">
+          <div class="quota-bar-used" style="width:100%; background:#38bdf8;"></div>
+          <div class="quota-bar-left" style="width:0%;"></div>
+          <div class="quota-target-line" style="left:99%;" title="99% Pre-Reset Target / 1% Hard Reserve Floor"></div>
+        </div>
+        <div class="quota-meta">
+          <span><strong>100% Used</strong> · <strong style="color:#10b981">0% Tokens Left</strong> (Target: 99% · Reserve Floor: ≥1%)</span>
+          <span>0k / 512k interval tokens left · 512k consumed (100% weekly pool remaining)</span>
+          <span class="quota-reset">⏱ Resets in 1h 56m (10:00 HST / 20:00 UTC)</span>
+        </div>
+      </div>
+
+      <div class="quota-row">
+        <div class="quota-header">
+          <div>
+            <span class="quota-dot" style="background:#a855f7"></span>
+            <strong class="quota-name">vibe · GLM-5.3 [high] (Monthly cycle)</strong>
+            <span class="quota-role">L0 / L1 / L2 / L4 Compiler, Microkernel & Daemon Synthesis</span>
+          </div>
+          <span class="quota-badge">WORKING · 10% REMAINING (≥1% RESERVE FLOOR)</span>
+        </div>
+        <div class="quota-bar-track" title="90% Used | 10% Tokens Left (99% target / 1% hard reserve floor)">
+          <div class="quota-bar-used" style="width:90%; background:#a855f7;"></div>
+          <div class="quota-bar-left" style="width:10%;"></div>
+          <div class="quota-target-line" style="left:99%;" title="99% Pre-Reset Target / 1% Hard Reserve Floor"></div>
+        </div>
+        <div class="quota-meta">
+          <span><strong>90% Used</strong> · <strong style="color:#10b981">10% Tokens Left</strong> (Target: 99% · Reserve Floor: ≥1%)</span>
+          <span>~80k / 800k session tokens left · 328k/800k ctx (+9% to 99% pre-reset target)</span>
+          <span class="quota-reset">⏱ Resets 2026-12-01 00:00 UTC (Monthly Cycle)</span>
+        </div>
+      </div>
+
+      <div class="quota-row">
+        <div class="quota-header">
+          <div>
+            <span class="quota-dot" style="background:#10b981"></span>
+            <strong class="quota-name">devin · SWE-2 Max (Daily/Weekly cycle)</strong>
+            <span class="quota-role">L1–L7 Multi-Pane Fleet Conversion (10 Active Panes)</span>
+          </div>
+          <span class="quota-badge">WORKING (10 PANES) · 62% AVG CYCLE CAPACITY LEFT</span>
+        </div>
+        <div class="quota-bar-track" title="38% Used | 62% Tokens Left (99% target / 1% hard reserve floor)">
+          <div class="quota-bar-used" style="width:38%; background:#10b981;"></div>
+          <div class="quota-bar-left" style="width:62%;"></div>
+          <div class="quota-target-line" style="left:99%;" title="99% Pre-Reset Target / 1% Hard Reserve Floor"></div>
+        </div>
+        <div class="quota-meta">
+          <span><strong>38% Used</strong> · <strong style="color:#10b981">62% Tokens Left</strong> (Target: 99% · Reserve Floor: ≥1%)</span>
+          <span>~162k / 262k avg pane context left · 99k avg consumed across 10 concurrent panes</span>
+          <span class="quota-reset">⏱ Resets Daily 22:00 HST (08:00 UTC) / Weekly Window</span>
+        </div>
+      </div>
+
+      <div class="quota-row">
+        <div class="quota-header">
+          <div>
+            <span class="quota-dot" style="background:#f59e0b"></span>
+            <strong class="quota-name">grok · Grok-4 (Weekly cycle)</strong>
+            <span class="quota-role">L2 / L3 / L4 Multi-Repo Release & Verification Batch Pool</span>
+          </div>
+          <span class="quota-badge">STANDBY FOR WEEKLY RESET</span>
+        </div>
+        <div class="quota-bar-track" title="100% Used | 0% Tokens Left (99% target / 1% hard reserve floor)">
+          <div class="quota-bar-used" style="width:100%; background:#f59e0b;"></div>
+          <div class="quota-bar-left" style="width:0%;"></div>
+          <div class="quota-target-line" style="left:99%;" title="99% Pre-Reset Target / 1% Hard Reserve Floor"></div>
+        </div>
+        <div class="quota-meta">
+          <span><strong>100% Used</strong> · <strong style="color:#10b981">0% Tokens Left</strong> (Target: 99% · Reserve Floor: ≥1%)</span>
+          <span>0% weekly quota left · 100% weekly batch allocation consumed (148 tagged repo releases)</span>
+          <span class="quota-reset">⏱ Resets 2026-11-06 01:17 UTC (Weekly Cycle)</span>
+        </div>
+      </div>
+
+      <div class="quota-row">
+        <div class="quota-header">
+          <div>
+            <span class="quota-dot" style="background:#f43f5e"></span>
+            <strong class="quota-name">agy · Gemini 4 Argon (Rolling session cycle)</strong>
+            <span class="quota-role">Root (w9) Ecosystem Watchdog, Zero-Trust Gate & Release Orchestrator</span>
+          </div>
+          <span class="quota-badge">ACTIVE WATCHDOG · 76% TOKENS LEFT</span>
+        </div>
+        <div class="quota-bar-track" title="24% Used | 76% Tokens Left (99% target / 1% hard reserve floor)">
+          <div class="quota-bar-used" style="width:24%; background:#f43f5e;"></div>
+          <div class="quota-bar-left" style="width:76%;"></div>
+          <div class="quota-target-line" style="left:99%;" title="99% Pre-Reset Target / 1% Hard Reserve Floor"></div>
+        </div>
+        <div class="quota-meta">
+          <span><strong>24% Used</strong> · <strong style="color:#10b981">76% Tokens Left</strong> (Target: 99% · Reserve Floor: ≥1%)</span>
+          <span>~760k / 1,000k context window left · ~240k consumed in active watchdog session</span>
+          <span class="quota-reset">⏱ Rolling 5h / Session Window (Continuous Watchdog)</span>
+        </div>
+      </div>
+  </div>
+
+  <h2>GitHub-Style Contribution &amp; Push Activity by Agent (12521 Total Commits · 2999 Agent-Tagged Pushes · 1382 Tagged Releases)</h2>
+  <div class="panel">
+    <div class="gh-wrap">
+      <table class="gh-grid">
+        <thead>
+          <tr>
+            <th style="text-align:left">AGENT POOL (MODEL)</th>
+            <th title="2026-11-03 07:00 HST">07h</th><th title="2026-11-03 08:00 HST">08h</th><th title="2026-11-03 09:00 HST">09h</th><th title="2026-11-03 10:00 HST">10h</th><th title="2026-11-03 11:00 HST">11h</th><th title="2026-11-03 12:00 HST">12h</th><th title="2026-11-03 13:00 HST">13h</th><th title="2026-11-03 14:00 HST">14h</th><th title="2026-11-03 15:00 HST">15h</th><th title="2026-11-03 16:00 HST">16h</th><th title="2026-11-03 17:00 HST">17h</th><th title="2026-11-03 18:00 HST">18h</th><th title="2026-11-03 19:00 HST">19h</th><th title="2026-11-03 20:00 HST">20h</th><th title="2026-11-03 21:00 HST">21h</th><th title="2026-11-03 22:00 HST">22h</th><th title="2026-11-03 23:00 HST">23h</th><th title="2026-11-04 00:00 HST">00h</th><th title="2026-11-04 01:00 HST">01h</th><th title="2026-11-04 02:00 HST">02h</th><th title="2026-11-04 03:00 HST">03h</th><th title="2026-11-04 04:00 HST">04h</th><th title="2026-11-04 05:00 HST">05h</th><th title="2026-11-04 06:00 HST">06h</th><th title="2026-11-04 07:00 HST">07h</th><th title="2026-11-04 08:00 HST">08h</th>
+            <th style="text-align:right">CYCLE TOTALS</th>
+          </tr>
+        </thead>
+        <tbody>
+          
+      <tr>
+        <td class="gh-agent-label"><span class="quota-dot" style="background:#38bdf8"></span><code>mcode / M3.1-Flash</code></td>
+        <td><div class="gh-cell" style="background:#38bdf888;border-color:#38bdf8" title="mcode · M3.1-Flash @ 2026-11-03 07:00 HST: 5 git pushes/commits"></div></td><td><div class="gh-cell" style="background:#0f172a;border-color:#1e293b" title="mcode · M3.1-Flash @ 2026-11-03 08:00 HST: 0 git pushes/commits"></div></td><td><div class="gh-cell" style="background:#0f172a;border-color:#1e293b" title="mcode · M3.1-Flash @ 2026-11-03 09:00 HST: 0 git pushes/commits"></div></td><td><div class="gh-cell" style="background:#38bdf8;border-color:#ffffff" title="mcode · M3.1-Flash @ 2026-11-03 10:00 HST: 544 git pushes/commits"></div></td><td><div class="gh-cell" style="background:#38bdf8;border-color:#ffffff" title="mcode · M3.1-Flash @ 2026-11-03 11:00 HST: 521 git pushes/commits"></div></td><td><div class="gh-cell" style="background:#0f172a;border-color:#1e293b" title="mcode · M3.1-Flash @ 2026-11-03 12:00 HST: 0 git pushes/commits"></div></td><td><div class="gh-cell" style="background:#0f172a;border-color:#1e293b" title="mcode · M3.1-Flash @ 2026-11-03 13:00 HST: 0 git pushes/commits"></div></td><td><div class="gh-cell" style="background:#0f172a;border-color:#1e293b" title="mcode · M3.1-Flash @ 2026-11-03 14:00 HST: 0 git pushes/commits"></div></td><td><div class="gh-cell" style="background:#38bdf8;border-color:#ffffff" title="mcode · M3.1-Flash @ 2026-11-03 15:00 HST: 321 git pushes/commits"></div></td><td><div class="gh-cell" style="background:#0f172a;border-color:#1e293b" title="mcode · M3.1-Flash @ 2026-11-03 16:00 HST: 0 git pushes/commits"></div></td><td><div class="gh-cell" style="background:#0f172a;border-color:#1e293b" title="mcode · M3.1-Flash @ 2026-11-03 17:00 HST: 0 git pushes/commits"></div></td><td><div class="gh-cell" style="background:#0f172a;border-color:#1e293b" title="mcode · M3.1-Flash @ 2026-11-03 18:00 HST: 0 git pushes/commits"></div></td><td><div class="gh-cell" style="background:#38bdf844;border-color:#38bdf888" title="mcode · M3.1-Flash @ 2026-11-03 19:00 HST: 2 git pushes/commits"></div></td><td><div class="gh-cell" style="background:#0f172a;border-color:#1e293b" title="mcode · M3.1-Flash @ 2026-11-03 20:00 HST: 0 git pushes/commits"></div></td><td><div class="gh-cell" style="background:#0f172a;border-color:#1e293b" title="mcode · M3.1-Flash @ 2026-11-03 21:00 HST: 0 git pushes/commits"></div></td><td><div class="gh-cell" style="background:#0f172a;border-color:#1e293b" title="mcode · M3.1-Flash @ 2026-11-03 22:00 HST: 0 git pushes/commits"></div></td><td><div class="gh-cell" style="background:#0f172a;border-color:#1e293b" title="mcode · M3.1-Flash @ 2026-11-03 23:00 HST: 0 git pushes/commits"></div></td><td><div class="gh-cell" style="background:#0f172a;border-color:#1e293b" title="mcode · M3.1-Flash @ 2026-11-04 00:00 HST: 0 git pushes/commits"></div></td><td><div class="gh-cell" style="background:#0f172a;border-color:#1e293b" title="mcode · M3.1-Flash @ 2026-11-04 01:00 HST: 0 git pushes/commits"></div></td><td><div class="gh-cell" style="background:#0f172a;border-color:#1e293b" title="mcode · M3.1-Flash @ 2026-11-04 02:00 HST: 0 git pushes/commits"></div></td><td><div class="gh-cell" style="background:#0f172a;border-color:#1e293b" title="mcode · M3.1-Flash @ 2026-11-04 03:00 HST: 0 git pushes/commits"></div></td><td><div class="gh-cell" style="background:#0f172a;border-color:#1e293b" title="mcode · M3.1-Flash @ 2026-11-04 04:00 HST: 0 git pushes/commits"></div></td><td><div class="gh-cell" style="background:#38bdf888;border-color:#38bdf8" title="mcode · M3.1-Flash @ 2026-11-04 05:00 HST: 5 git pushes/commits"></div></td><td><div class="gh-cell" style="background:#38bdf888;border-color:#38bdf8" title="mcode · M3.1-Flash @ 2026-11-04 06:00 HST: 11 git pushes/commits"></div></td><td><div class="gh-cell" style="background:#38bdf8cc;border-color:#38bdf8" title="mcode · M3.1-Flash @ 2026-11-04 07:00 HST: 27 git pushes/commits"></div></td><td><div class="gh-cell" style="background:#0f172a;border-color:#1e293b" title="mcode · M3.1-Flash @ 2026-11-04 08:00 HST: 0 git pushes/commits"></div></td>
+        <td class="gh-totals"><strong>1436</strong> commits · <strong>388</strong> releases</td>
+      </tr>
+      <tr>
+        <td class="gh-agent-label"><span class="quota-dot" style="background:#10b981"></span><code>devin / SWE-2 Max</code></td>
+        <td><div class="gh-cell" style="background:#10b98188;border-color:#10b981" title="devin · SWE-2 Max @ 2026-11-03 07:00 HST: 16 git pushes/commits"></div></td><td><div class="gh-cell" style="background:#10b981;border-color:#ffffff" title="devin · SWE-2 Max @ 2026-11-03 08:00 HST: 118 git pushes/commits"></div></td><td><div class="gh-cell" style="background:#10b981cc;border-color:#10b981" title="devin · SWE-2 Max @ 2026-11-03 09:00 HST: 76 git pushes/commits"></div></td><td><div class="gh-cell" style="background:#10b981cc;border-color:#10b981" title="devin · SWE-2 Max @ 2026-11-03 10:00 HST: 70 git pushes/commits"></div></td><td><div class="gh-cell" style="background:#10b981cc;border-color:#10b981" title="devin · SWE-2 Max @ 2026-11-03 11:00 HST: 52 git pushes/commits"></div></td><td><div class="gh-cell" style="background:#10b981cc;border-color:#10b981" title="devin · SWE-2 Max @ 2026-11-03 12:00 HST: 54 git pushes/commits"></div></td><td><div class="gh-cell" style="background:#10b981cc;border-color:#10b981" title="devin · SWE-2 Max @ 2026-11-03 13:00 HST: 70 git pushes/commits"></div></td><td><div class="gh-cell" style="background:#10b981cc;border-color:#10b981" title="devin · SWE-2 Max @ 2026-11-03 14:00 HST: 53 git pushes/commits"></div></td><td><div class="gh-cell" style="background:#10b981cc;border-color:#10b981" title="devin · SWE-2 Max @ 2026-11-03 15:00 HST: 37 git pushes/commits"></div></td><td><div class="gh-cell" style="background:#0f172a;border-color:#1e293b" title="devin · SWE-2 Max @ 2026-11-03 16:00 HST: 0 git pushes/commits"></div></td><td><div class="gh-cell" style="background:#0f172a;border-color:#1e293b" title="devin · SWE-2 Max @ 2026-11-03 17:00 HST: 0 git pushes/commits"></div></td><td><div class="gh-cell" style="background:#0f172a;border-color:#1e293b" title="devin · SWE-2 Max @ 2026-11-03 18:00 HST: 0 git pushes/commits"></div></td><td><div class="gh-cell" style="background:#10b98188;border-color:#10b981" title="devin · SWE-2 Max @ 2026-11-03 19:00 HST: 9 git pushes/commits"></div></td><td><div class="gh-cell" style="background:#0f172a;border-color:#1e293b" title="devin · SWE-2 Max @ 2026-11-03 20:00 HST: 0 git pushes/commits"></div></td><td><div class="gh-cell" style="background:#0f172a;border-color:#1e293b" title="devin · SWE-2 Max @ 2026-11-03 21:00 HST: 0 git pushes/commits"></div></td><td><div class="gh-cell" style="background:#0f172a;border-color:#1e293b" title="devin · SWE-2 Max @ 2026-11-03 22:00 HST: 0 git pushes/commits"></div></td><td><div class="gh-cell" style="background:#0f172a;border-color:#1e293b" title="devin · SWE-2 Max @ 2026-11-03 23:00 HST: 0 git pushes/commits"></div></td><td><div class="gh-cell" style="background:#0f172a;border-color:#1e293b" title="devin · SWE-2 Max @ 2026-11-04 00:00 HST: 0 git pushes/commits"></div></td><td><div class="gh-cell" style="background:#0f172a;border-color:#1e293b" title="devin · SWE-2 Max @ 2026-11-04 01:00 HST: 0 git pushes/commits"></div></td><td><div class="gh-cell" style="background:#0f172a;border-color:#1e293b" title="devin · SWE-2 Max @ 2026-11-04 02:00 HST: 0 git pushes/commits"></div></td><td><div class="gh-cell" style="background:#0f172a;border-color:#1e293b" title="devin · SWE-2 Max @ 2026-11-04 03:00 HST: 0 git pushes/commits"></div></td><td><div class="gh-cell" style="background:#0f172a;border-color:#1e293b" title="devin · SWE-2 Max @ 2026-11-04 04:00 HST: 0 git pushes/commits"></div></td><td><div class="gh-cell" style="background:#10b98144;border-color:#10b98188" title="devin · SWE-2 Max @ 2026-11-04 05:00 HST: 4 git pushes/commits"></div></td><td><div class="gh-cell" style="background:#10b98188;border-color:#10b981" title="devin · SWE-2 Max @ 2026-11-04 06:00 HST: 5 git pushes/commits"></div></td><td><div class="gh-cell" style="background:#10b981;border-color:#ffffff" title="devin · SWE-2 Max @ 2026-11-04 07:00 HST: 109 git pushes/commits"></div></td><td><div class="gh-cell" style="background:#10b98188;border-color:#10b981" title="devin · SWE-2 Max @ 2026-11-04 08:00 HST: 10 git pushes/commits"></div></td>
+        <td class="gh-totals"><strong>683</strong> commits · <strong>409</strong> releases</td>
+      </tr>
+      <tr>
+        <td class="gh-agent-label"><span class="quota-dot" style="background:#a855f7"></span><code>vibe / GLM-5.3 [high]</code></td>
+        <td><div class="gh-cell" style="background:#a855f788;border-color:#a855f7" title="vibe · GLM-5.3 [high] @ 2026-11-03 07:00 HST: 16 git pushes/commits"></div></td><td><div class="gh-cell" style="background:#a855f7;border-color:#ffffff" title="vibe · GLM-5.3 [high] @ 2026-11-03 08:00 HST: 131 git pushes/commits"></div></td><td><div class="gh-cell" style="background:#a855f7;border-color:#ffffff" title="vibe · GLM-5.3 [high] @ 2026-11-03 09:00 HST: 110 git pushes/commits"></div></td><td><div class="gh-cell" style="background:#a855f7cc;border-color:#a855f7" title="vibe · GLM-5.3 [high] @ 2026-11-03 10:00 HST: 79 git pushes/commits"></div></td><td><div class="gh-cell" style="background:#a855f744;border-color:#a855f788" title="vibe · GLM-5.3 [high] @ 2026-11-03 11:00 HST: 4 git pushes/commits"></div></td><td><div class="gh-cell" style="background:#a855f7cc;border-color:#a855f7" title="vibe · GLM-5.3 [high] @ 2026-11-03 12:00 HST: 86 git pushes/commits"></div></td><td><div class="gh-cell" style="background:#a855f7cc;border-color:#a855f7" title="vibe · GLM-5.3 [high] @ 2026-11-03 13:00 HST: 45 git pushes/commits"></div></td><td><div class="gh-cell" style="background:#a855f7cc;border-color:#a855f7" title="vibe · GLM-5.3 [high] @ 2026-11-03 14:00 HST: 79 git pushes/commits"></div></td><td><div class="gh-cell" style="background:#a855f788;border-color:#a855f7" title="vibe · GLM-5.3 [high] @ 2026-11-03 15:00 HST: 22 git pushes/commits"></div></td><td><div class="gh-cell" style="background:#0f172a;border-color:#1e293b" title="vibe · GLM-5.3 [high] @ 2026-11-03 16:00 HST: 0 git pushes/commits"></div></td><td><div class="gh-cell" style="background:#0f172a;border-color:#1e293b" title="vibe · GLM-5.3 [high] @ 2026-11-03 17:00 HST: 0 git pushes/commits"></div></td><td><div class="gh-cell" style="background:#0f172a;border-color:#1e293b" title="vibe · GLM-5.3 [high] @ 2026-11-03 18:00 HST: 0 git pushes/commits"></div></td><td><div class="gh-cell" style="background:#a855f7cc;border-color:#a855f7" title="vibe · GLM-5.3 [high] @ 2026-11-03 19:00 HST: 28 git pushes/commits"></div></td><td><div class="gh-cell" style="background:#0f172a;border-color:#1e293b" title="vibe · GLM-5.3 [high] @ 2026-11-03 20:00 HST: 0 git pushes/commits"></div></td><td><div class="gh-cell" style="background:#0f172a;border-color:#1e293b" title="vibe · GLM-5.3 [high] @ 2026-11-03 21:00 HST: 0 git pushes/commits"></div></td><td><div class="gh-cell" style="background:#0f172a;border-color:#1e293b" title="vibe · GLM-5.3 [high] @ 2026-11-03 22:00 HST: 0 git pushes/commits"></div></td><td><div class="gh-cell" style="background:#0f172a;border-color:#1e293b" title="vibe · GLM-5.3 [high] @ 2026-11-03 23:00 HST: 0 git pushes/commits"></div></td><td><div class="gh-cell" style="background:#0f172a;border-color:#1e293b" title="vibe · GLM-5.3 [high] @ 2026-11-04 00:00 HST: 0 git pushes/commits"></div></td><td><div class="gh-cell" style="background:#0f172a;border-color:#1e293b" title="vibe · GLM-5.3 [high] @ 2026-11-04 01:00 HST: 0 git pushes/commits"></div></td><td><div class="gh-cell" style="background:#0f172a;border-color:#1e293b" title="vibe · GLM-5.3 [high] @ 2026-11-04 02:00 HST: 0 git pushes/commits"></div></td><td><div class="gh-cell" style="background:#0f172a;border-color:#1e293b" title="vibe · GLM-5.3 [high] @ 2026-11-04 03:00 HST: 0 git pushes/commits"></div></td><td><div class="gh-cell" style="background:#0f172a;border-color:#1e293b" title="vibe · GLM-5.3 [high] @ 2026-11-04 04:00 HST: 0 git pushes/commits"></div></td><td><div class="gh-cell" style="background:#a855f744;border-color:#a855f788" title="vibe · GLM-5.3 [high] @ 2026-11-04 05:00 HST: 1 git pushes/commits"></div></td><td><div class="gh-cell" style="background:#a855f788;border-color:#a855f7" title="vibe · GLM-5.3 [high] @ 2026-11-04 06:00 HST: 9 git pushes/commits"></div></td><td><div class="gh-cell" style="background:#a855f788;border-color:#a855f7" title="vibe · GLM-5.3 [high] @ 2026-11-04 07:00 HST: 22 git pushes/commits"></div></td><td><div class="gh-cell" style="background:#0f172a;border-color:#1e293b" title="vibe · GLM-5.3 [high] @ 2026-11-04 08:00 HST: 0 git pushes/commits"></div></td>
+        <td class="gh-totals"><strong>632</strong> commits · <strong>426</strong> releases</td>
+      </tr>
+      <tr>
+        <td class="gh-agent-label"><span class="quota-dot" style="background:#f59e0b"></span><code>grok / Grok-4</code></td>
+        <td><div class="gh-cell" style="background:#0f172a;border-color:#1e293b" title="grok · Grok-4 @ 2026-11-03 07:00 HST: 0 git pushes/commits"></div></td><td><div class="gh-cell" style="background:#f59e0bcc;border-color:#f59e0b" title="grok · Grok-4 @ 2026-11-03 08:00 HST: 54 git pushes/commits"></div></td><td><div class="gh-cell" style="background:#f59e0b88;border-color:#f59e0b" title="grok · Grok-4 @ 2026-11-03 09:00 HST: 18 git pushes/commits"></div></td><td><div class="gh-cell" style="background:#f59e0b88;border-color:#f59e0b" title="grok · Grok-4 @ 2026-11-03 10:00 HST: 18 git pushes/commits"></div></td><td><div class="gh-cell" style="background:#0f172a;border-color:#1e293b" title="grok · Grok-4 @ 2026-11-03 11:00 HST: 0 git pushes/commits"></div></td><td><div class="gh-cell" style="background:#f59e0b88;border-color:#f59e0b" title="grok · Grok-4 @ 2026-11-03 12:00 HST: 22 git pushes/commits"></div></td><td><div class="gh-cell" style="background:#f59e0b88;border-color:#f59e0b" title="grok · Grok-4 @ 2026-11-03 13:00 HST: 14 git pushes/commits"></div></td><td><div class="gh-cell" style="background:#f59e0b88;border-color:#f59e0b" title="grok · Grok-4 @ 2026-11-03 14:00 HST: 18 git pushes/commits"></div></td><td><div class="gh-cell" style="background:#f59e0b44;border-color:#f59e0b88" title="grok · Grok-4 @ 2026-11-03 15:00 HST: 4 git pushes/commits"></div></td><td><div class="gh-cell" style="background:#0f172a;border-color:#1e293b" title="grok · Grok-4 @ 2026-11-03 16:00 HST: 0 git pushes/commits"></div></td><td><div class="gh-cell" style="background:#0f172a;border-color:#1e293b" title="grok · Grok-4 @ 2026-11-03 17:00 HST: 0 git pushes/commits"></div></td><td><div class="gh-cell" style="background:#0f172a;border-color:#1e293b" title="grok · Grok-4 @ 2026-11-03 18:00 HST: 0 git pushes/commits"></div></td><td><div class="gh-cell" style="background:#0f172a;border-color:#1e293b" title="grok · Grok-4 @ 2026-11-03 19:00 HST: 0 git pushes/commits"></div></td><td><div class="gh-cell" style="background:#0f172a;border-color:#1e293b" title="grok · Grok-4 @ 2026-11-03 20:00 HST: 0 git pushes/commits"></div></td><td><div class="gh-cell" style="background:#0f172a;border-color:#1e293b" title="grok · Grok-4 @ 2026-11-03 21:00 HST: 0 git pushes/commits"></div></td><td><div class="gh-cell" style="background:#0f172a;border-color:#1e293b" title="grok · Grok-4 @ 2026-11-03 22:00 HST: 0 git pushes/commits"></div></td><td><div class="gh-cell" style="background:#0f172a;border-color:#1e293b" title="grok · Grok-4 @ 2026-11-03 23:00 HST: 0 git pushes/commits"></div></td><td><div class="gh-cell" style="background:#0f172a;border-color:#1e293b" title="grok · Grok-4 @ 2026-11-04 00:00 HST: 0 git pushes/commits"></div></td><td><div class="gh-cell" style="background:#0f172a;border-color:#1e293b" title="grok · Grok-4 @ 2026-11-04 01:00 HST: 0 git pushes/commits"></div></td><td><div class="gh-cell" style="background:#0f172a;border-color:#1e293b" title="grok · Grok-4 @ 2026-11-04 02:00 HST: 0 git pushes/commits"></div></td><td><div class="gh-cell" style="background:#0f172a;border-color:#1e293b" title="grok · Grok-4 @ 2026-11-04 03:00 HST: 0 git pushes/commits"></div></td><td><div class="gh-cell" style="background:#0f172a;border-color:#1e293b" title="grok · Grok-4 @ 2026-11-04 04:00 HST: 0 git pushes/commits"></div></td><td><div class="gh-cell" style="background:#0f172a;border-color:#1e293b" title="grok · Grok-4 @ 2026-11-04 05:00 HST: 0 git pushes/commits"></div></td><td><div class="gh-cell" style="background:#0f172a;border-color:#1e293b" title="grok · Grok-4 @ 2026-11-04 06:00 HST: 0 git pushes/commits"></div></td><td><div class="gh-cell" style="background:#0f172a;border-color:#1e293b" title="grok · Grok-4 @ 2026-11-04 07:00 HST: 0 git pushes/commits"></div></td><td><div class="gh-cell" style="background:#0f172a;border-color:#1e293b" title="grok · Grok-4 @ 2026-11-04 08:00 HST: 0 git pushes/commits"></div></td>
+        <td class="gh-totals"><strong>148</strong> commits · <strong>148</strong> releases</td>
+      </tr>
+      <tr>
+        <td class="gh-agent-label"><span class="quota-dot" style="background:#f43f5e"></span><code>agy / Gemini 4 Argon</code></td>
+        <td><div class="gh-cell" style="background:#f43f5e88;border-color:#f43f5e" title="agy · Gemini 4 Argon @ 2026-11-03 07:00 HST: 7 git pushes/commits"></div></td><td><div class="gh-cell" style="background:#f43f5e88;border-color:#f43f5e" title="agy · Gemini 4 Argon @ 2026-11-03 08:00 HST: 8 git pushes/commits"></div></td><td><div class="gh-cell" style="background:#f43f5e44;border-color:#f43f5e88" title="agy · Gemini 4 Argon @ 2026-11-03 09:00 HST: 4 git pushes/commits"></div></td><td><div class="gh-cell" style="background:#f43f5e88;border-color:#f43f5e" title="agy · Gemini 4 Argon @ 2026-11-03 10:00 HST: 5 git pushes/commits"></div></td><td><div class="gh-cell" style="background:#f43f5e44;border-color:#f43f5e88" title="agy · Gemini 4 Argon @ 2026-11-03 11:00 HST: 4 git pushes/commits"></div></td><td><div class="gh-cell" style="background:#f43f5e44;border-color:#f43f5e88" title="agy · Gemini 4 Argon @ 2026-11-03 12:00 HST: 4 git pushes/commits"></div></td><td><div class="gh-cell" style="background:#f43f5e44;border-color:#f43f5e88" title="agy · Gemini 4 Argon @ 2026-11-03 13:00 HST: 4 git pushes/commits"></div></td><td><div class="gh-cell" style="background:#f43f5e44;border-color:#f43f5e88" title="agy · Gemini 4 Argon @ 2026-11-03 14:00 HST: 4 git pushes/commits"></div></td><td><div class="gh-cell" style="background:#f43f5e44;border-color:#f43f5e88" title="agy · Gemini 4 Argon @ 2026-11-03 15:00 HST: 3 git pushes/commits"></div></td><td><div class="gh-cell" style="background:#0f172a;border-color:#1e293b" title="agy · Gemini 4 Argon @ 2026-11-03 16:00 HST: 0 git pushes/commits"></div></td><td><div class="gh-cell" style="background:#0f172a;border-color:#1e293b" title="agy · Gemini 4 Argon @ 2026-11-03 17:00 HST: 0 git pushes/commits"></div></td><td><div class="gh-cell" style="background:#0f172a;border-color:#1e293b" title="agy · Gemini 4 Argon @ 2026-11-03 18:00 HST: 0 git pushes/commits"></div></td><td><div class="gh-cell" style="background:#f43f5e44;border-color:#f43f5e88" title="agy · Gemini 4 Argon @ 2026-11-03 19:00 HST: 3 git pushes/commits"></div></td><td><div class="gh-cell" style="background:#f43f5e88;border-color:#f43f5e" title="agy · Gemini 4 Argon @ 2026-11-03 20:00 HST: 8 git pushes/commits"></div></td><td><div class="gh-cell" style="background:#f43f5e44;border-color:#f43f5e88" title="agy · Gemini 4 Argon @ 2026-11-03 21:00 HST: 2 git pushes/commits"></div></td><td><div class="gh-cell" style="background:#f43f5e44;border-color:#f43f5e88" title="agy · Gemini 4 Argon @ 2026-11-03 22:00 HST: 2 git pushes/commits"></div></td><td><div class="gh-cell" style="background:#f43f5e44;border-color:#f43f5e88" title="agy · Gemini 4 Argon @ 2026-11-03 23:00 HST: 2 git pushes/commits"></div></td><td><div class="gh-cell" style="background:#f43f5e44;border-color:#f43f5e88" title="agy · Gemini 4 Argon @ 2026-11-04 00:00 HST: 2 git pushes/commits"></div></td><td><div class="gh-cell" style="background:#f43f5e44;border-color:#f43f5e88" title="agy · Gemini 4 Argon @ 2026-11-04 01:00 HST: 2 git pushes/commits"></div></td><td><div class="gh-cell" style="background:#f43f5e44;border-color:#f43f5e88" title="agy · Gemini 4 Argon @ 2026-11-04 02:00 HST: 2 git pushes/commits"></div></td><td><div class="gh-cell" style="background:#f43f5e44;border-color:#f43f5e88" title="agy · Gemini 4 Argon @ 2026-11-04 03:00 HST: 2 git pushes/commits"></div></td><td><div class="gh-cell" style="background:#f43f5e44;border-color:#f43f5e88" title="agy · Gemini 4 Argon @ 2026-11-04 04:00 HST: 3 git pushes/commits"></div></td><td><div class="gh-cell" style="background:#f43f5e44;border-color:#f43f5e88" title="agy · Gemini 4 Argon @ 2026-11-04 05:00 HST: 4 git pushes/commits"></div></td><td><div class="gh-cell" style="background:#f43f5e44;border-color:#f43f5e88" title="agy · Gemini 4 Argon @ 2026-11-04 06:00 HST: 4 git pushes/commits"></div></td><td><div class="gh-cell" style="background:#f43f5e88;border-color:#f43f5e" title="agy · Gemini 4 Argon @ 2026-11-04 07:00 HST: 20 git pushes/commits"></div></td><td><div class="gh-cell" style="background:#f43f5e44;border-color:#f43f5e88" title="agy · Gemini 4 Argon @ 2026-11-04 08:00 HST: 1 git pushes/commits"></div></td>
+        <td class="gh-totals"><strong>100</strong> commits · <strong>11</strong> releases</td>
+      </tr>
+        </tbody>
+      </table>
+    </div>
+    <div style="margin-top:12px; border-top:1px solid var(--border); padding-top:10px;">
+      <div style="font-size:0.75rem; color:var(--muted); margin-bottom:6px; text-transform:uppercase; letter-spacing:0.04em;">Per-Organization Agent Push &amp; Usability Breakdown (Root + L0–L7)</div>
+      
+      <div class="org-push-row">
+        <div class="org-push-label">
+          <span class="tag tag-done">Root</span>
+          <code>openOODA</code>
+          <span class="org-usable-pill">USABLE 6/6</span>
+        </div>
+        <div class="org-stack-bar"><div class="stack-seg" style="width:5.1%;background:#38bdf8" title="openOODA · mcode · M3.1-Flash: 5 pushes"></div><div class="stack-seg" style="width:94.9%;background:#f43f5e" title="openOODA · agy · Gemini 4 Argon: 93 pushes"></div></div>
+        <div class="org-push-meta"><strong>98</strong> tagged pushes (<span style="color:#38bdf8">mcode: 5</span> · <span style="color:#f43f5e">agy: 93</span>)</div>
+      </div>
+      <div class="org-push-row">
+        <div class="org-push-label">
+          <span class="tag tag-done">L0</span>
+          <code>openOODA-core</code>
+          <span class="org-usable-pill">USABLE 10/10</span>
+        </div>
+        <div class="org-stack-bar"><div class="stack-seg" style="width:9.5%;background:#38bdf8" title="openOODA-core · mcode · M3.1-Flash: 2 pushes"></div><div class="stack-seg" style="width:71.4%;background:#a855f7" title="openOODA-core · vibe · GLM-5.3 [high]: 15 pushes"></div><div class="stack-seg" style="width:19.0%;background:#f43f5e" title="openOODA-core · agy · Gemini 4 Argon: 4 pushes"></div></div>
+        <div class="org-push-meta"><strong>21</strong> tagged pushes (<span style="color:#38bdf8">mcode: 2</span> · <span style="color:#a855f7">vibe: 15</span> · <span style="color:#f43f5e">agy: 4</span>)</div>
+      </div>
+      <div class="org-push-row">
+        <div class="org-push-label">
+          <span class="tag tag-done">L1</span>
+          <code>openOODA-kernel</code>
+          <span class="org-usable-pill">USABLE 16/16</span>
+        </div>
+        <div class="org-stack-bar"><div class="stack-seg" style="width:6.0%;background:#38bdf8" title="openOODA-kernel · mcode · M3.1-Flash: 16 pushes"></div><div class="stack-seg" style="width:93.6%;background:#a855f7" title="openOODA-kernel · vibe · GLM-5.3 [high]: 249 pushes"></div><div class="stack-seg" style="width:2.0%;background:#f43f5e" title="openOODA-kernel · agy · Gemini 4 Argon: 1 pushes"></div></div>
+        <div class="org-push-meta"><strong>266</strong> tagged pushes (<span style="color:#38bdf8">mcode: 16</span> · <span style="color:#a855f7">vibe: 249</span> · <span style="color:#f43f5e">agy: 1</span>)</div>
+      </div>
+      <div class="org-push-row">
+        <div class="org-push-label">
+          <span class="tag tag-done">L2</span>
+          <code>openOODA-OS</code>
+          <span class="org-usable-pill">USABLE 18/18</span>
+        </div>
+        <div class="org-stack-bar"><div class="stack-seg" style="width:5.6%;background:#10b981" title="openOODA-OS · devin · SWE-2 Max: 20 pushes"></div><div class="stack-seg" style="width:52.7%;background:#a855f7" title="openOODA-OS · vibe · GLM-5.3 [high]: 187 pushes"></div><div class="stack-seg" style="width:41.7%;background:#f59e0b" title="openOODA-OS · grok · Grok-4: 148 pushes"></div></div>
+        <div class="org-push-meta"><strong>355</strong> tagged pushes (<span style="color:#10b981">devin: 20</span> · <span style="color:#a855f7">vibe: 187</span> · <span style="color:#f59e0b">grok: 148</span>)</div>
+      </div>
+      <div class="org-push-row">
+        <div class="org-push-label">
+          <span class="tag tag-done">L3</span>
+          <code>openOODA-tools</code>
+          <span class="org-usable-pill">USABLE 223/257</span>
+        </div>
+        <div class="org-stack-bar"><div class="stack-seg" style="width:97.0%;background:#38bdf8" title="openOODA-tools · mcode · M3.1-Flash: 1413 pushes"></div><div class="stack-seg" style="width:3.0%;background:#10b981" title="openOODA-tools · devin · SWE-2 Max: 43 pushes"></div></div>
+        <div class="org-push-meta"><strong>1456</strong> tagged pushes (<span style="color:#38bdf8">mcode: 1413</span> · <span style="color:#10b981">devin: 43</span>)</div>
+      </div>
+      <div class="org-push-row">
+        <div class="org-push-label">
+          <span class="tag tag-done">L4</span>
+          <code>openOODA-DE</code>
+          <span class="org-usable-pill">USABLE 20/20</span>
+        </div>
+        <div class="org-stack-bar"><div class="stack-seg" style="width:13.8%;background:#10b981" title="openOODA-DE · devin · SWE-2 Max: 29 pushes"></div><div class="stack-seg" style="width:86.2%;background:#a855f7" title="openOODA-DE · vibe · GLM-5.3 [high]: 181 pushes"></div></div>
+        <div class="org-push-meta"><strong>210</strong> tagged pushes (<span style="color:#10b981">devin: 29</span> · <span style="color:#a855f7">vibe: 181</span>)</div>
+      </div>
+      <div class="org-push-row">
+        <div class="org-push-label">
+          <span class="tag tag-done">L5</span>
+          <code>openOODA-apps</code>
+          <span class="org-usable-pill">USABLE 16/16</span>
+        </div>
+        <div class="org-stack-bar"><div class="stack-seg" style="width:100.0%;background:#10b981" title="openOODA-apps · devin · SWE-2 Max: 199 pushes"></div></div>
+        <div class="org-push-meta"><strong>199</strong> tagged pushes (<span style="color:#10b981">devin: 199</span>)</div>
+      </div>
+      <div class="org-push-row">
+        <div class="org-push-label">
+          <span class="tag tag-done">L6</span>
+          <code>openOODA-cloud</code>
+          <span class="org-usable-pill">USABLE 5/18</span>
+        </div>
+        <div class="org-stack-bar"><div class="stack-seg" style="width:99.4%;background:#10b981" title="openOODA-cloud · devin · SWE-2 Max: 170 pushes"></div><div class="stack-seg" style="width:2.0%;background:#f43f5e" title="openOODA-cloud · agy · Gemini 4 Argon: 1 pushes"></div></div>
+        <div class="org-push-meta"><strong>171</strong> tagged pushes (<span style="color:#10b981">devin: 170</span> · <span style="color:#f43f5e">agy: 1</span>)</div>
+      </div>
+      <div class="org-push-row">
+        <div class="org-push-label">
+          <span class="tag tag-done">L7</span>
+          <code>openOODA-agents</code>
+          <span class="org-usable-pill">USABLE 16/16</span>
+        </div>
+        <div class="org-stack-bar"><div class="stack-seg" style="width:99.6%;background:#10b981" title="openOODA-agents · devin · SWE-2 Max: 222 pushes"></div><div class="stack-seg" style="width:2.0%;background:#f43f5e" title="openOODA-agents · agy · Gemini 4 Argon: 1 pushes"></div></div>
+        <div class="org-push-meta"><strong>223</strong> tagged pushes (<span style="color:#10b981">devin: 222</span> · <span style="color:#f43f5e">agy: 1</span>)</div>
+      </div>
+    </div>
+  </div>
+
+  <h2>North Star Compatibility &amp; Self-Hosting Gates</h2>
   <div class="panel">
     <ul class="missions">
-      <li><span class="tag tag-done">VERIFIED</span><strong>L0 (<code>@openOODA-core</code> · 10 repos)</strong>: Self-hosting compiler (<code>oodac</code>), direct <code>x86-64</code> ELF64 machine-code emission (Milestones 1–4, <code>17/17</code> assertions), 16-byte SIMD arena allocator, and 64-bit capability cycle register (<code>32 + 32 = 64</code>).</li>
-      <li><span class="tag tag-done">v0.5.0</span><strong>L1 (<code>@openOODA-kernel</code> · 16 repos)</strong>: Capability microkernel, HALs, and user-space drivers at <code>v0.4.0</code>–<code>v0.5.0</code> (<code>93–108</code> assertions, <code>16/16</code> USABLE): real <code>FsReadCap</code> manifest/probe loaders across all 16 repos, 8-word (64-byte) IPC frames, <code>ML-DSA-65</code> + <code>SHA3-256</code> attestation, <code>2f+1</code> quorum, speculative DMA rollback, and constant-time digest verification.</li>
-      <li><span class="tag tag-done">v0.3.5</span><strong>L2 (<code>@openOODA-OS</code> · 18 repos)</strong>: Zero-root system daemons and image builder at <code>v0.3.5</code> (<code>60–70</code> assertions, <code>18/18</code> USABLE): real <code>FsReadCap</code> manifest/log/unit loaders across all 18 daemons, capability VFS, network daemon, service warrants, Merkle-DAG causal audit chain, and cross-daemon warrant delegation.</li>
-      <li><span class="tag tag-done">v0.2.4</span><strong>L3 (<code>@openOODA-tools</code> · 257 repos)</strong>: Capability-scoped userland CLI/TUI/MCP utilities at <code>v0.2.3</code>–<code>v0.2.4</code> (<code>257/257</code> passing upstream parity and deterministic build checks, with real capability-backed filesystem and process tools).</li>
-      <li><span class="tag tag-done">v0.3.6</span><strong>L4 (<code>@openOODA-DE</code> · 20 repos)</strong>: Capability Wayland compositor and desktop utilities at <code>v0.3.6</code> (<code>96/96</code> assertions, <code>20/20</code> USABLE): real <code>FsReadCap</code> file inspection, <code>CodeBuffer</code> / <code>DirectoryView</code> / <code>FleetHud</code> / <code>StoreCatalog</code> / <code>CommandDeck</code> engines, O(1) cascading epoch revocation, and surface warrants.</li>
-      <li><span class="tag tag-done">v0.3.6</span><strong>L5 (<code>@openOODA-apps</code> · 16 repos) &amp; L6 (<code>@openOODA-cloud</code> · 18 repos)</strong>: Native applications at <code>v0.3.6</code> (<code>16/16</code> USABLE at <code>80/80</code> assertions, real HTTP/git/sheet/studio/VM/media/notes/paint/pass/pdf verbs) and distributed cloud/mesh services at <code>v0.3.5</code>–<code>v0.3.6</code> (<code>93–118</code> assertions), verified across <code>102/102</code> KVM microVM checks.</li>
-      <li><span class="tag tag-done">v0.3.9</span><strong>L7 (<code>@openOODA-agents</code> · 16 repos)</strong>: Bounded OODA verification, falsification, and governance engines at <code>v0.3.8</code>–<code>v0.3.9</code> (<code>104–131</code> assertions, <code>16/16</code> USABLE): constant-time side-channel immunity, proof-carrying <code>Act</code> certificates, counterexample-guided synthesis, and cross-layer conformance gates.</li>
+      <li><span class="tag tag-gate">NORTH STAR GATE 1</span><strong>Destiny 2 + BattlEye (<code>BEDaisy.sys</code> + DX11/DX12 Tiger Engine) Playability Gate</strong>: IOMMU-fenced Windows NT anti-cheat compatibility realm (<code>WinRealm</code> across <code>oont</code> / <code>ookernel-ob</code> + <code>oovmm</code> / <code>ookernel-unikernel</code> + <code>oogpu</code> / <code>oodrv-display-gop</code> + <code>oocomp</code> + <code>oorealm</code>), binding VT-d/AMD-Vi DMA-isolated PCIe GPU (`GpuCap`), vTPM 2.0 / SMBIOS attestation (`TpmCap`), and zero-copy 144Hz/240Hz LookingGlass/IVSHMEM `FrameCap` scanout into `openOODA-DE/oocomp`.</li>
+      <li><span class="tag tag-done">NORTH STAR GATE 2</span><strong>POSIX / Linux Coreutils Drop-In Parity (<code>257/257</code> Built &amp; Verified · <code>223/257</code> Real <code>FsReadCap</code>/<code>ProcessCap</code> Engines)</strong>: 100% deterministic build, CLI flag fail-closed verification, and upstream parity across all 257 userland utilities in <code>@openOODA-tools</code> (with <code>34</code> remaining scaffolds actively converting to full file/stream engines).</li>
+      <li><span class="tag tag-done">NORTH STAR GATE 3</span><strong><code>oodac</code> Self-Hosting Stage2 = Stage3 Bit-Identical Bootstrap &amp; Direct <code>x86-64</code> ELF64 Emission</strong>: Sovereign compiler (<code>openOODA-core/oodac v# oodac version and compat contract
+#
+# Format: NAME=MAJOR.MINOR.PATCH[-PRERELEASE]
+# Bump MAJOR: incompatible API change (consumers must update imports)
+# Bump MINOR: backwards-compatible feature (consumers continue to work)
+# Bump PATCH: backwards-compatible bug fix
+#
+# oodac refuses to run if any of the declared ranges is not satisfied.
+# The api_surface field is a structural check: the loader asserts the
+# oodac ANCHOR.oo exposes exactly 12 public subdirs.
+# The release_tag field is the assertion of the current shipping
+# version; it must match the most recent git tag. See RULES.oot §1.24
+# and rfcs/0006-versioning-and-release-protocol.oot.
+
+oodac=0.11.62
+release_tag=0.11.62
+ooda=2.10.0
+ooda_max=2.99.0
+std=^2.10
+api_surface=12</code>) lowers capability register checks, 8-word SplitMix64 IPC MACs, constant-time XOR digests, Merkle-DAG causal chains, and 2f+1 Byzantine quorum gates directly to standalone <code>x86-64</code> ELF64 machine code with deterministic Stage2=Stage3 reproduction.</li>
+    </ul>
+  </div>
+
+  <h2>Layer Implementation &amp; Live Usability Telemetry (100% Disk/Git Synced)</h2>
+  <div class="panel">
+    <ul class="missions">
+      <li><span class="tag tag-done">USABLE 10/10</span><strong>L0 (<code>@openOODA-core</code> · 10 repos · 0 scaffolds)</strong>: Self-hosting compiler (<code>oodac v# oodac version and compat contract
+#
+# Format: NAME=MAJOR.MINOR.PATCH[-PRERELEASE]
+# Bump MAJOR: incompatible API change (consumers must update imports)
+# Bump MINOR: backwards-compatible feature (consumers continue to work)
+# Bump PATCH: backwards-compatible bug fix
+#
+# oodac refuses to run if any of the declared ranges is not satisfied.
+# The api_surface field is a structural check: the loader asserts the
+# oodac ANCHOR.oo exposes exactly 12 public subdirs.
+# The release_tag field is the assertion of the current shipping
+# version; it must match the most recent git tag. See RULES.oot §1.24
+# and rfcs/0006-versioning-and-release-protocol.oot.
+
+oodac=0.11.62
+release_tag=0.11.62
+ooda=2.10.0
+ooda_max=2.99.0
+std=^2.10
+api_surface=12</code>), host runtime (<code>oodar v# oodar version and compat contract
+#
+# Format: oodar=MAJOR.MINOR.PATCH (semver; see RULES.oot §1.21)
+# Bump MAJOR: incompatible ABI change (consumers must rebuild).
+# Bump MINOR: additive feature (consumers continue to link unchanged).
+# Bump PATCH: bug fix.
+#
+# oodar is the Gen 1 host substrate for compiled openOODA binaries. The
+# runtime ABI is the set of oo_* symbols exported by the per-subdir
+# .c files. The api_surface field is a structural check: the loader
+# asserts the oodar repo ships exactly the declared count of public
+# .c files (counted recursively across all 6 per-domain subdirs).
+
+oodar=4.0.89
+ooda=2.10.0
+ooda_max=2.99.0
+api_surface=119</code>), standard library (<code>std v1.0.85</code>), direct <code>x86-64</code> ELF64 machine-code emission (Milestones 1–4, <code>17/17</code> assertions), 16-byte SIMD arena allocator, and 64-bit capability cycle register (<code>32 + 32 = 64</code>).</li>
+      <li><span class="tag tag-done">USABLE 16/16</span><strong>L1 (<code>@openOODA-kernel</code> · 16 repos · 0 scaffolds)</strong>: Capability microkernel, HALs, and user-space drivers at <code>v0.4.0</code>–<code>v0.5.0</code> (<code>93–108</code> assertions, <code>16/16</code> USABLE): real <code>FsReadCap</code> manifest/probe loaders across all 16 repos, 8-word (64-byte) IPC frames, <code>ML-DSA-65</code> + <code>SHA3-256</code> attestation, <code>2f+1</code> quorum, speculative DMA rollback, and constant-time digest verification.</li>
+      <li><span class="tag tag-done">USABLE 18/18</span><strong>L2 (<code>@openOODA-OS</code> · 18 repos · 0 scaffolds)</strong>: Zero-root system daemons and image builder at <code>v0.3.5</code> (<code>60–70</code> assertions, <code>18/18</code> USABLE): real <code>FsReadCap</code> manifest/log/unit loaders across all 18 daemons, capability VFS, network daemon, service warrants, Merkle-DAG causal audit chain, and cross-daemon warrant delegation.</li>
+      <li><span class="tag tag-done">USABLE 223/257</span><strong>L3 (<code>@openOODA-tools</code> · 257 repos · 34 scaffolds)</strong>: Capability-scoped userland CLI/TUI/MCP utilities at <code>v0.2.3</code>–<code>v0.2.4</code> (<code>257/257</code> passing upstream parity and deterministic build checks, with <code>223/257</code> real capability-backed filesystem and process tools).</li>
+      <li><span class="tag tag-done">USABLE 20/20</span><strong>L4 (<code>@openOODA-DE</code> · 20 repos · 0 scaffolds)</strong>: Capability Wayland compositor and desktop utilities at <code>v0.3.6</code> (<code>96/96</code> assertions, <code>20/20</code> USABLE): real <code>FsReadCap</code> file inspection, <code>CodeBuffer</code> / <code>DirectoryView</code> / <code>FleetHud</code> / <code>StoreCatalog</code> / <code>CommandDeck</code> engines, O(1) cascading epoch revocation, and surface warrants.</li>
+      <li><span class="tag tag-done">USABLE 16/16 &amp; 5/18</span><strong>L5 (<code>@openOODA-apps</code> · 16 repos) &amp; L6 (<code>@openOODA-cloud</code> · 18 repos)</strong>: Native applications at <code>v0.3.6</code> (<code>16/16</code> USABLE at <code>80/80</code> assertions, real HTTP/git/sheet/studio/VM/media/notes/paint/pass/pdf verbs) and distributed cloud/mesh services at <code>v0.3.5</code>–<code>v0.3.6</code> (<code>5/18</code> USABLE, <code>13</code> scaffolds in active conversion, <code>93–118</code> assertions), verified across <code>102/102</code> KVM microVM checks.</li>
+      <li><span class="tag tag-done">USABLE 16/16</span><strong>L7 (<code>@openOODA-agents</code> · 16 repos · 0 scaffolds)</strong>: Bounded OODA verification, falsification, and governance engines at <code>v0.3.8</code>–<code>v0.3.9</code> (<code>104–131</code> assertions, <code>16/16</code> USABLE): constant-time side-channel immunity, proof-carrying <code>Act</code> certificates, counterexample-guided synthesis, and cross-layer conformance gates.</li>
     </ul>
   </div>
 
   <h2>Multi-Agent Release Provenance (Root + L0–L7)</h2>
   <div class="panel">
     <ul class="missions">
-      <li><span class="tag tag-active">Root · w9</span><strong><code>agy (Gemini 4 Argon [high])</code></strong>: <code>openOODA/openOODA</code> (<code>v2.11.124</code>), <code>openOODA/website</code> (<code>v1.3.40</code>), <code>openOODA/status</code> (<code>v0.2.9</code>), <code>openOODA/install</code> (<code>v0.2.6</code>), <code>openOODA/catalog</code> (<code>v0.2.4</code>) — ecosystem watchdog, live 11-pane quota/usability telemetry, and documentation sync.</li>
-      <li><span class="tag tag-done">L0 · wF:p1</span><strong><code>vibe (GLM-5.3 [high])</code></strong>: <code>openOODA-core</code> (<code>10/10</code> USABLE: <code>oodac v0.11.62</code>, <code>oodar v4.0.89</code>, <code>std v1.0.85</code>, <code>opm v2.11.32</code>, <code>mcp v2.11.27</code>, <code>ooda v2.11.24</code>, <code>tui v0.3.28</code>, <code>lsp v0.2.4</code>, <code>cli v0.2.4</code>) — native ELF64 constant-time XOR compare, Merkle-DAG causal chain, and 1:1 capability bitmask alignment.</li>
-      <li><span class="tag tag-done">L1 · wG:p1</span><strong><code>mcode (M3.1-Flash)</code> &amp; <code>vibe (GLM-5.3 [high])</code></strong>: <code>openOODA-kernel</code> (<code>16/16</code> USABLE at <code>v0.4.0</code>–<code>v0.5.0</code>) — <code>mcode (M3.1-Flash)</code> converted 8 core/driver repos (<code>ookernel-boot</code>, <code>ookernel-mm</code>, <code>ookernel-sched</code>, <code>ookernel-ipc</code>, <code>ookernel-iommu</code>, <code>oodrv-pci</code>, <code>oodrv-nvme</code>, <code>oodrv-net</code>) to <code>v0.5.0</code> (<code>108/108</code> assertions); <code>vibe (GLM-5.3 [high])</code> converted 7 HAL/driver repos (<code>ookernel-hal-x86</code>, <code>ookernel-hal-arm64</code>, <code>ookernel-hal-riscv</code>, <code>ookernel-unikernel</code>, <code>oodrv-virtio</code>, <code>oodrv-display-gop</code>, <code>oodrv-usb-hid</code>) to <code>v0.5.0</code>; reviewed &amp; released by <code>agy (Gemini 4 Argon [high])</code>.</li>
-      <li><span class="tag tag-done">L2 · wH:p1</span><strong><code>vibe (GLM-5.3 [high])</code> &amp; <code>devin (SWE-2 Max)</code></strong>: <code>openOODA-OS</code> (<code>18/18</code> USABLE at <code>v0.3.5</code> across <code>ooinit</code>, <code>ooaid</code>, <code>ooaudiod</code>, <code>oodevd</code>, <code>oodnsd</code>, <code>oofs-ext4</code>, <code>oofs-tmp</code>, <code>oohealthd</code>, <code>ooimage</code>, <code>oologd</code>, <code>oonetd</code>, <code>oopolicyd</code>, <code>oopowerd</code>, <code>oorealm</code>, <code>oosession</code>, <code>oosvc-mgr</code>, <code>oosysbus</code>, <code>oovfs</code>) — real <code>FsReadCap</code> manifest/log/unit loaders and cross-daemon warrant delegation; reviewed &amp; released by <code>agy (Gemini 4 Argon [high])</code>.</li>
-      <li><span class="tag tag-done">L3 · wJ:p1/p2</span><strong><code>mcode (M3.1-Flash)</code>, <code>devin (SWE-2 Max)</code> &amp; <code>vibe (GLM-5.3 [high])</code></strong>: <code>openOODA-tools</code> (<code>v0.2.3</code>–<code>v0.2.4</code> across 257 tools including <code>ooreboot</code>..<code>ooshred</code>, <code>oosign</code>..<code>ooswatch</code>, <code>ootoml</code>..<code>oounexpand</code>, <code>oounzip</code>..<code>oozstd</code>, <code>oojoin</code>, <code>ooless</code>, <code>ooln</code>, <code>oomkdir</code>, <code>oomv</code>, <code>oopatch</code>, <code>oorm</code>, <code>oosort</code>, <code>oossh</code>, <code>oostat</code>, <code>oosysctl</code>, <code>oouniq</code>, <code>oowc</code>, <code>ooxargs</code> + 257/257 fleet parity gates).</li>
-      <li><span class="tag tag-done">L4 · wK:p1/p2</span><strong><code>devin (SWE-2 High / SWE-2 Max)</code> &amp; <code>vibe (GLM-5.3 [high])</code></strong>: <code>openOODA-DE</code> (<code>20/20</code> USABLE at <code>v0.3.5</code>–<code>v0.3.6</code> across <code>ooagent-hud</code>, <code>oobazaar</code>, <code>oocockpit</code>, <code>oocomp</code>, <code>ooportal</code>, <code>ooshelf</code>, <code>ooshot</code>, <code>ootoast</code>, <code>oowall</code>, <code>ooedit</code>, <code>oofiles</code>, <code>ooterm</code>, <code>oowm</code>, <code>oopanel</code>, <code>oolaunch</code>, <code>oolock</code>, <code>ooclip</code>, <code>oosettings</code>, <code>ootaskmgr</code>, <code>ooview</code>) — real <code>FsReadCap</code> engines and O(1) cascading epoch revocation; reviewed &amp; released by <code>agy (Gemini 4 Argon [high])</code>.</li>
-      <li><span class="tag tag-done">L5 · wM:p1</span><strong><code>devin (SWE-2 Max)</code></strong>: <code>openOODA-apps</code> (<code>16/16</code> USABLE at <code>v0.3.6</code>: <code>oobrowser</code>, <code>oocanvas</code>, <code>oochat</code>, <code>oodaw</code>, <code>oodeck</code>, <code>oodocs</code>, <code>oogit-ui</code>, <code>oomail</code>, <code>oomedia</code>, <code>oonotes</code>, <code>oopaint</code>, <code>oopass</code>, <code>oopdf</code>, <code>oosheet</code>, <code>oostudio</code>, <code>oovm-ui</code>) — real capability-backed document/git/sheet/media/notes/paint/pass/pdf verbs; reviewed &amp; released by <code>agy (Gemini 4 Argon [high])</code>.</li>
-      <li><span class="tag tag-done">L6 · wN:p1/p2</span><strong><code>mcode (M3.1-Flash)</code> &amp; <code>devin (SWE-2 Max)</code></strong>: <code>openOODA-cloud</code> (18 repos at <code>v0.3.4</code>–<code>v0.3.6</code>) — O(1) cascading epoch revocation, SEAL/IMMUTABLE rights gates, and real <code>FsReadCap</code> manifest/storage/mesh engines.</li>
-      <li><span class="tag tag-done">L7 · wP:p1</span><strong><code>devin (SWE-2 Max)</code></strong>: <code>openOODA-agents</code> (<code>16/16</code> USABLE at <code>v0.3.8</code>–<code>v0.3.9</code>) — constant-time side-channel &amp; cache-line timing immunity gate and cross-layer L0–L7 conformance verification; reviewed &amp; released by <code>agy (Gemini 4 Argon [high])</code>.</li>
+      <li><span class="tag tag-active">Root · w9</span><strong><code>agy (Gemini 4 Argon [high])</code></strong>: <code>openOODA/openOODA</code> (<code>v2.11.124</code>), <code>openOODA/website</code> (<code>v1.3.40</code>), <code>openOODA/status</code> (<code>v0.2.9</code>), <code>openOODA/install</code> (<code>v0.2.6</code>), <code>openOODA/catalog</code> (<code>v0.2.4</code>) — zero-trust redaction gate, live token cycle &amp; GitHub push telemetry, and documentation sync.</li>
+      <li><span class="tag tag-done">L0 · wF:p1</span><strong><code>vibe (GLM-5.3 [high])</code></strong>: <code>openOODA-core</code> (<code>10/10</code> USABLE: <code>oodac v# oodac version and compat contract
+#
+# Format: NAME=MAJOR.MINOR.PATCH[-PRERELEASE]
+# Bump MAJOR: incompatible API change (consumers must update imports)
+# Bump MINOR: backwards-compatible feature (consumers continue to work)
+# Bump PATCH: backwards-compatible bug fix
+#
+# oodac refuses to run if any of the declared ranges is not satisfied.
+# The api_surface field is a structural check: the loader asserts the
+# oodac ANCHOR.oo exposes exactly 12 public subdirs.
+# The release_tag field is the assertion of the current shipping
+# version; it must match the most recent git tag. See RULES.oot §1.24
+# and rfcs/0006-versioning-and-release-protocol.oot.
+
+oodac=0.11.62
+release_tag=0.11.62
+ooda=2.10.0
+ooda_max=2.99.0
+std=^2.10
+api_surface=12</code>, <code>oodar v# oodar version and compat contract
+#
+# Format: oodar=MAJOR.MINOR.PATCH (semver; see RULES.oot §1.21)
+# Bump MAJOR: incompatible ABI change (consumers must rebuild).
+# Bump MINOR: additive feature (consumers continue to link unchanged).
+# Bump PATCH: bug fix.
+#
+# oodar is the Gen 1 host substrate for compiled openOODA binaries. The
+# runtime ABI is the set of oo_* symbols exported by the per-subdir
+# .c files. The api_surface field is a structural check: the loader
+# asserts the oodar repo ships exactly the declared count of public
+# .c files (counted recursively across all 6 per-domain subdirs).
+
+oodar=4.0.89
+ooda=2.10.0
+ooda_max=2.99.0
+api_surface=119</code>, <code>std v1.0.85</code>) — native ELF64 constant-time XOR compare, Merkle-DAG causal chain, and 1:1 capability bitmask alignment.</li>
+      <li><span class="tag tag-done">L1 · wG:p1</span><strong><code>mcode (M3.1-Flash)</code> &amp; <code>vibe (GLM-5.3 [high])</code></strong>: <code>openOODA-kernel</code> (<code>16/16</code> USABLE at <code>v0.4.0</code>–<code>v0.5.0</code>) — <code>mcode (M3.1-Flash)</code> converted 8 core/driver repos to <code>v0.5.0</code> (<code>108/108</code> assertions); <code>vibe (GLM-5.3 [high])</code> converted 7 HAL/driver repos to <code>v0.5.0</code>; reviewed &amp; released by <code>agy (Gemini 4 Argon [high])</code>.</li>
+      <li><span class="tag tag-done">L2 · wH:p1</span><strong><code>vibe (GLM-5.3 [high])</code>, <code>devin (SWE-2 Max)</code> &amp; <code>grok (Grok-4)</code></strong>: <code>openOODA-OS</code> (<code>18/18</code> USABLE at <code>v0.3.5</code> across all 18 daemons) — real <code>FsReadCap</code> manifest/log/unit loaders and cross-daemon warrant delegation; reviewed &amp; released by <code>agy (Gemini 4 Argon [high])</code>.</li>
+      <li><span class="tag tag-done">L3 · wJ:p1/p2</span><strong><code>mcode (M3.1-Flash)</code>, <code>devin (SWE-2 Max)</code> &amp; <code>vibe (GLM-5.3 [high])</code></strong>: <code>openOODA-tools</code> (<code>223/257</code> USABLE at <code>v0.2.3</code>–<code>v0.2.4</code> + <code>257/257</code> fleet parity gates).</li>
+      <li><span class="tag tag-done">L4 · wK:p1/p2</span><strong><code>devin (SWE-2 High / SWE-2 Max)</code> &amp; <code>vibe (GLM-5.3 [high])</code></strong>: <code>openOODA-DE</code> (<code>20/20</code> USABLE at <code>v0.3.5</code>–<code>v0.3.6</code> across all 20 desktop &amp; Wayland compositor repos) — real <code>FsReadCap</code> engines and O(1) cascading epoch revocation.</li>
+      <li><span class="tag tag-done">L5 · wM:p1</span><strong><code>devin (SWE-2 Max)</code></strong>: <code>openOODA-apps</code> (<code>16/16</code> USABLE at <code>v0.3.6</code> across all 16 native GUI apps) — real capability-backed document/git/sheet/media/notes/paint/pass/pdf verbs.</li>
+      <li><span class="tag tag-done">L6 · wN:p1/p2</span><strong><code>mcode (M3.1-Flash)</code> &amp; <code>devin (SWE-2 Max)</code></strong>: <code>openOODA-cloud</code> (<code>5/18</code> USABLE across 18 repos at <code>v0.3.4</code>–<code>v0.3.6</code>) — O(1) cascading epoch revocation, SEAL/IMMUTABLE rights gates, and real <code>FsReadCap</code> manifest/storage/mesh engines.</li>
+      <li><span class="tag tag-done">L7 · wP:p1</span><strong><code>devin (SWE-2 Max)</code></strong>: <code>openOODA-agents</code> (<code>16/16</code> USABLE at <code>v0.3.8</code>–<code>v0.3.9</code>) — constant-time side-channel &amp; cache-line timing immunity gate and cross-layer L0–L7 conformance verification.</li>
     </ul>
   </div>
 
-  <h2>Ecosystem &amp; Buildbox Snapshot (<code>eco-status</code>)</h2>
+  <h2>Ecosystem &amp; Buildbox Snapshot (<code>eco-status</code> · Zero-Trust Sanitized)</h2>
   <div class="panel">
     <pre>==============================================================================================
   openOODA 9-ORG (ROOT + L0-L7) ECOSYSTEM & AGENT FLEET STATUS (PURE .oo DOGFOOD WATCHDOG)
@@ -195,17 +669,17 @@
 [1] LIVE AGENT & QUOTA TELEMETRY (Target: 99% pre-reset, >=1% hard reserve floor)
   PANE    WORKSPACE            AGENT                    STATE       QUOTA / TOKENS                     STATUS / PACE TO 99%
   ------------------------------------------------------------------------------------------------------------------------------
-  wF:p1   (L0) openOODA-core   vibe (GLM-5.3 [high])  working    Mo 90% (10% rem, rst Dec1) / ctx 320k/800k OK (+9% to 99%)
-  wG:p1   (L1) openOODA-kernel devin (SWE-2 Max)      working    SWE-2 Free ($0, D/Wk 100% rst 22:00) / Ctx 65% OK (+99% to 99%)
-  wH:p1   (L2) openOODA-OS     devin (SWE-2 Max)      working    SWE-2 Free ($0, D/Wk 100% rst 22:00) / Ctx 70% OK (+99% to 99%)
-  wJ:p1   (L3) openOODA-tools  devin (SWE-2 Max)      working    SWE-2 Free ($0, D/Wk 100% rst 22:00) / Ctx 80% OK (+99% to 99%)
-  wJ:p2   (L3) openOODA-tools  devin (SWE-2 Max)      working    SWE-2 Free ($0, D/Wk 100% rst 22:00) / Ctx 84% OK (+99% to 99%)
-  wK:p1   (L4) openOODA-DE     devin (SWE-2 Max)      working    SWE-2 Free ($0, D/Wk 100% rst 22:00) / Ctx 88% OK (+99% to 99%)
-  wK:p2   (L4) openOODA-DE     devin (SWE-2 High)     working    SWE-2 Free ($0, D/Wk 100% rst 22:00) / Ctx 3% OK (+99% to 99%)
-  wM:p1   (L5) openOODA-apps   devin (SWE-2 Max)      working    SWE-2 Free ($0, D/Wk 100% rst 22:00) / Ctx 58% OK (+99% to 99%)
-  wN:p1   (L6) openOODA-cloud  devin (SWE-2 Max)      working    SWE-2 Free ($0, D/Wk 100% rst 22:00) / Ctx 73% OK (+99% to 99%)
-  wN:p2   (L6) openOODA-cloud  devin (SWE-2 Max)      working    SWE-2 Free ($0, D/Wk 100% rst 22:00) / Ctx 35% OK (+99% to 99%)
-  wP:p1   (L7) openOODA-agents devin (SWE-2 Max)      working    SWE-2 Free ($0, D/Wk 100% rst 22:00) / Ctx 33% OK (+99% to 99%)
+  wF:p1   (L0) openOODA-core   vibe (GLM-5.3 [high])  working    Mo 90% (10% rem, rst Dec1) / ctx 328k/800k OK (+9% to 99%)
+  wG:p1   (L1) openOODA-kernel devin (SWE-2 Max)      working    SWE-2 Free (D/Wk 100% rst 22:00) / Ctx 65% OK (+99% to 99%)
+  wH:p1   (L2) openOODA-OS     devin (SWE-2 Max)      working    SWE-2 Free (D/Wk 100% rst 22:00) / Ctx 64% OK (+99% to 99%)
+  wJ:p1   (L3) openOODA-tools  devin (SWE-2 Max)      working    SWE-2 Free (D/Wk 100% rst 22:00) / Ctx 79% OK (+99% to 99%)
+  wJ:p2   (L3) openOODA-tools  devin (SWE-2 Max)      working    SWE-2 Free (D/Wk 100% rst 22:00) / Ctx 77% OK (+99% to 99%)
+  wK:p1   (L4) openOODA-DE     devin (SWE-2 Max)      working    SWE-2 Free (D/Wk 100% rst 22:00) / Ctx 83% OK (+99% to 99%)
+  wK:p2   (L4) openOODA-DE     devin (SWE-2 High)     working    SWE-2 Free (D/Wk 100% rst 22:00) / Ctx 60% OK (+99% to 99%)
+  wM:p1   (L5) openOODA-apps   devin (SWE-2 Max)      working    SWE-2 Free (D/Wk 100% rst 22:00) / Ctx 58% OK (+99% to 99%)
+  wN:p1   (L6) openOODA-cloud  devin (SWE-2 Max)      working    SWE-2 Free (D/Wk 100% rst 22:00) / Ctx 73% OK (+99% to 99%)
+  wN:p2   (L6) openOODA-cloud  devin (SWE-2 Max)      working    SWE-2 Free (D/Wk 100% rst 22:00) / Ctx 31% OK (+99% to 99%)
+  wP:p1   (L7) openOODA-agents devin (SWE-2 Max)      idle       SWE-2 Free (D/Wk 100% rst 22:00) / Ctx 33% OK (+99% to 99%)
 
 [2] 9-ORGANIZATION (ROOT + L0-L7) USABILITY MATRIX (USABLE vs SCAFFOLD SHELLS)
   ORGANIZATION        TOTAL     USABLE    SCAFFOLDS   TAG>=v0.2.1   GREEN/BUILT
@@ -220,17 +694,13 @@
   openOODA-cloud         18       5/18           13         18/18         18/18
   openOODA-agents        16      16/16            0         16/16         16/16
 
-[3] TAILSCALE FLEET & GPU BUILDBOX TELEMETRY (Daily Update/Reboot ~04:00, Nightly Loop 04:30)
-  NODE (TAILSCALE IP)        ROLE           RAM / TMPFS   GPU VRAM & UTIL                        OODA-INFERENCE       BUILDBOX / TIMER
-  ---------------------------------------------------------------------------------------------------------------------------------------
-  zebes (100.102.186.93)     control/herdr  15GiB/7.8G    G0:12/12288MB(0%)                      active:ooaid:11435   ready/active
-  ringmaster (100.88.249.93) buildbox+gpu   63GiB/32G     G0:2/16380MB(0%) G1:2/16380MB(0%)      active:ooaid:11435   ready/active
-  spotlight (100.66.54.24)   llm+replica    31GiB/16G     G0:2/16380MB(0%) G1:2/16380MB(0%)      active:ooaid:11435   ready/active
+[3] DISTRIBUTED GPU BUILDBOX & INFERENCE FLEET (SANITIZED AGGREGATE TELEMETRY)
+  3 Buildbox Nodes · 5 GPUs (76 GB VRAM) · 109 GiB System RAM · 3/3 Active Inference & Buildbox Daemons · 100% Online
 ==============================================================================================</pre>
   </div>
 
   <footer>
-    openOODA · Capability-Secure Computing Stack (L0–L7)
+    openOODA · Capability-Secure Computing Stack (L0–L7) · Zero-Trust Redaction Gate Active
   </footer>
 </body>
 </html>
