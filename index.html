@@ -5,104 +5,109 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="robots" content="noindex, nofollow">
   <meta http-equiv="refresh" content="300">
-  <title>sys@openooda:~# status // LIVE TELEMETRY (v0.3.1)</title>
+  <title>openOODA // LIVE TELEMETRY &amp; FLIGHT STATUS (L0–L7)</title>
   <style>
     :root {
       --bg-deep: #06080b;
-      --bg-window: #090c12;
+      --bg-window: rgba(9, 12, 18, 0.92);
       --bg-bar: #0c1018;
       --bg-titlebar: rgba(11, 15, 23, 0.96);
       --bg-card: rgba(12, 16, 24, 0.92);
+      --bg-btn: #121824;
       --phosphor: #50fa7b;
+      --accent-rgb: 80, 250, 123;
       --phosphor-dim: rgba(80, 250, 123, 0.14);
-      --phosphor-glow: rgba(80, 250, 123, 0.32);
+      --phosphor-glow: rgba(80, 250, 123, 0.30);
       --hot: #a2ffbc;
-      --amber: #ffb000;
-      --amber-dim: rgba(255, 176, 0, 0.15);
-      --cyan: #00e5ff;
-      --cyan-dim: rgba(0, 229, 255, 0.14);
-      --red: #ff5555;
-      --red-dim: rgba(255, 85, 85, 0.16);
-      --purple: #bd93f9;
+      --color-green: #50fa7b;
+      --color-amber: #ffb000;
+      --color-cyan: #00e5ff;
+      --color-red: #ff5555;
+      --color-purple: #bd93f9;
+      --color-pink: #ff79c6;
       --text-primary: #f3f4f6;
       --text-secondary: #94a3b8;
       --text-muted: #64748b;
       --border-subtle: #1e2636;
-      --border-accent: rgba(80, 250, 123, 0.44);
+      --border-accent-color: rgba(80, 250, 123, 0.44);
       --font-mono: ui-monospace, SFMono-Regular, "JetBrains Mono", Menlo, Consolas, "Liberation Mono", Courier, monospace;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
+    body.terminal-body {
       background-color: var(--bg-deep);
       background-image:
-        linear-gradient(rgba(80, 250, 123, 0.03) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(80, 250, 123, 0.03) 1px, transparent 1px);
-      background-size: 24px 24px;
+        linear-gradient(rgba(18, 24, 34, 0) 50%, rgba(0, 0, 0, 0.38) 50%),
+        radial-gradient(rgba(80, 250, 123, 0.06) 1px, transparent 1px);
+      background-size: 100% 4px, 24px 24px;
       color: var(--text-primary);
       font-family: var(--font-mono);
-      font-size: 13px;
       line-height: 1.55;
       min-height: 100vh;
-      position: relative;
     }
-    /* Subtle 8/16-bit CRT Scanline Overlay */
-    body::after {
-      content: "";
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      z-index: 999;
-      background: repeating-linear-gradient(
-        0deg,
-        rgba(0, 0, 0, 0.18) 0px,
-        rgba(0, 0, 0, 0.18) 1px,
-        transparent 1px,
-        transparent 3px
-      );
-    }
+    a { color: var(--color-cyan); text-decoration: none; }
+    a:hover { color: var(--hot); text-decoration: underline; }
+    code { color: var(--color-cyan); font-family: var(--font-mono); }
+    .muted { color: var(--text-secondary); }
+
+    /* Top CRT Window Titlebar (Matching openOODA.org) */
     .window-titlebar {
       position: sticky;
       top: 0;
-      z-index: 100;
+      z-index: 95;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 10px;
+      gap: 12px;
       min-height: 52px;
       padding: 8px 20px;
       background: var(--bg-titlebar);
-      background-image: linear-gradient(rgba(18, 22, 28, 0) 50%, rgba(0, 0, 0, 0.42) 50%);
+      background-image: linear-gradient(rgba(18, 22, 28, 0) 50%, rgba(0, 0, 0, 0.45) 50%);
       background-size: 100% 4px;
-      border-bottom: 2px solid var(--border-accent);
+      border-bottom: 2px solid var(--border-accent-color);
       box-shadow: 0 2px 0 0 #000, 0 8px 24px rgba(0, 0, 0, 0.75);
+      backdrop-filter: blur(12px);
+      font-size: 12px;
+      flex-wrap: wrap;
     }
-    .titlebar-left {
+    .header-brand {
       display: flex;
       align-items: center;
       gap: 10px;
+      color: var(--text-primary);
+      font-weight: 800;
+      font-size: 14px;
+      letter-spacing: 0.04em;
+      text-decoration: none;
     }
-    .brand-box {
-      color: var(--phosphor);
-      background: #080b10;
+    .crest-box {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
       border: 1.5px solid var(--phosphor);
       box-shadow: 2px 2px 0 0 #000, 0 0 10px var(--phosphor-dim);
-      padding: 3px 9px;
-      font-weight: 700;
-      letter-spacing: 0.06em;
-      text-decoration: none;
+      background: #080b10;
+      color: var(--phosphor);
+      font-weight: 800;
+      font-size: 12px;
     }
     .window-title {
       color: var(--hot);
       font-weight: 700;
       letter-spacing: 0.05em;
-      text-shadow: 0 0 8px var(--phosphor-dim);
+      text-shadow: 0 0 10px var(--phosphor-dim);
+      flex: 1;
+      text-align: center;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
-    .titlebar-right {
+    .header-right {
       display: flex;
       align-items: center;
-      flex-wrap: wrap;
       gap: 8px;
+      flex-wrap: wrap;
     }
     .term-badge {
       display: inline-block;
@@ -110,246 +115,394 @@
       font-size: 11px;
       font-weight: 700;
       letter-spacing: 0.05em;
-      border: 1px solid var(--border-accent);
+      border: 1px solid var(--border-accent-color);
+      background: var(--phosphor-dim);
+      color: var(--hot);
       box-shadow: 2px 2px 0 0 #000;
       white-space: nowrap;
     }
-    .badge-green {
-      color: var(--hot);
-      background: var(--phosphor-dim);
-      border-color: var(--border-accent);
+    .term-badge-green {
+      color: var(--phosphor);
+      border-color: rgba(80, 250, 123, 0.5);
+      background: rgba(80, 250, 123, 0.12);
     }
-    .badge-cyan {
-      color: var(--cyan);
-      background: var(--cyan-dim);
-      border-color: rgba(0, 229, 255, 0.45);
+    .term-badge-amber {
+      color: var(--color-amber);
+      border-color: rgba(255, 176, 0, 0.5);
+      background: rgba(255, 176, 0, 0.12);
     }
-    .badge-amber {
-      color: var(--amber);
-      background: var(--amber-dim);
-      border-color: rgba(255, 176, 0, 0.45);
+    .term-badge-cyan {
+      color: var(--color-cyan);
+      border-color: rgba(0, 229, 255, 0.5);
+      background: rgba(0, 229, 255, 0.12);
     }
-    .badge-red {
-      color: var(--red);
-      background: var(--red-dim);
-      border-color: rgba(255, 85, 85, 0.45);
+    .term-badge-red {
+      color: var(--color-red);
+      border-color: rgba(255, 85, 85, 0.5);
+      background: rgba(255, 85, 85, 0.14);
     }
+    .term-status-online {
+      color: var(--phosphor);
+      font-weight: 700;
+      animation: blink-soft 2.6s steps(2) infinite;
+    }
+    @keyframes blink-soft {
+      50% { opacity: 0.4; }
+    }
+
+    /* Main Container */
     .container {
-      max-width: 1220px;
+      max-width: 1180px;
       margin: 0 auto;
-      padding: 22px 18px 48px;
+      padding: 20px 18px 48px;
     }
-    .sub-bar {
+
+    /* Sub-header command bar */
+    .cmd-banner {
       display: flex;
       justify-content: space-between;
       align-items: center;
       flex-wrap: wrap;
-      gap: 8px;
-      background: var(--bg-bar);
-      border: 1px solid var(--border-subtle);
-      box-shadow: 3px 3px 0 0 #000;
-      padding: 8px 14px;
-      margin-bottom: 20px;
+      gap: 10px;
+      background: var(--bg-card);
+      border: 1.5px solid var(--border-accent-color);
+      border-left: 4px solid var(--phosphor);
+      box-shadow: 3px 3px 0 0 #000, 0 8px 20px rgba(0, 0, 0, 0.55);
+      padding: 10px 16px;
+      margin-bottom: 18px;
       font-size: 12px;
-      color: var(--text-secondary);
     }
-    .sub-bar strong { color: var(--hot); }
-    .kpi-grid {
+    .cmd-prompt { color: var(--phosphor); font-weight: 700; margin-right: 6px; }
+
+    /* Top KPI Grid */
+    .grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(175px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
       gap: 12px;
-      margin-bottom: 24px;
+      margin-bottom: 22px;
     }
     .stat-card {
       background: var(--bg-card);
       border: 1.5px solid var(--border-subtle);
-      box-shadow: 4px 4px 0 0 #000;
-      padding: 13px 14px;
-      position: relative;
+      box-shadow: 3px 3px 0 0 #000;
+      padding: 12px 14px;
+      transition: border-color 0.12s steps(2), transform 0.12s steps(2);
     }
-    .stat-card.accent {
-      border-color: var(--border-accent);
+    .stat-card:hover {
+      border-color: var(--phosphor);
+      transform: translateY(-1px);
     }
-    .stat-card.cyan {
-      border-color: rgba(0, 229, 255, 0.45);
+    .stat-card-highlight {
+      border-color: var(--border-accent-color);
+      background: rgba(12, 22, 28, 0.94);
     }
     .stat-label {
-      font-size: 11px;
+      font-size: 10.5px;
       color: var(--text-secondary);
       text-transform: uppercase;
       letter-spacing: 0.08em;
+      font-weight: 700;
     }
     .stat-val {
-      font-size: 1.45rem;
-      font-weight: 700;
-      color: var(--text-primary);
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: #ffffff;
+      text-shadow: 2px 2px 0 #000, 0 0 12px var(--phosphor-dim);
       margin-top: 4px;
-      text-shadow: 0 0 10px rgba(80, 250, 123, 0.2);
-    }
-    .stat-val.cyan-val {
-      color: var(--cyan);
-      text-shadow: 0 0 10px rgba(0, 229, 255, 0.28);
-    }
-    .stat-val.green-val {
-      color: var(--phosphor);
     }
     .stat-sub {
       font-size: 11px;
       color: var(--phosphor);
-      margin-top: 4px;
+      margin-top: 3px;
     }
-    .section-head {
+
+    /* Section Headings */
+    .section-hdr {
+      color: var(--hot);
+      font-size: 12.5px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin: 24px 0 10px;
+      padding: 6px 12px;
+      background: var(--bg-bar);
+      border: 1.5px solid var(--border-accent-color);
+      border-left: 4px solid var(--phosphor);
+      box-shadow: 2px 2px 0 0 #000;
       display: flex;
-      align-items: center;
       justify-content: space-between;
+      align-items: center;
       flex-wrap: wrap;
       gap: 8px;
-      margin: 26px 0 10px;
-      padding-bottom: 6px;
-      border-bottom: 1.5px solid var(--border-subtle);
     }
-    .panel-label {
-      color: var(--hot);
-      font-size: 12px;
-      font-weight: 700;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      text-shadow: 0 0 10px var(--phosphor-dim);
-    }
+
     .panel {
       background: var(--bg-card);
       border: 1.5px solid var(--border-subtle);
-      box-shadow: 4px 4px 0 0 #000;
+      box-shadow: 3px 3px 0 0 #000, 0 8px 24px rgba(0, 0, 0, 0.55);
       padding: 16px;
       margin-bottom: 18px;
     }
+
+    /* 5-GPU Telemetry Grid */
     .gpu-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(215px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
       gap: 12px;
     }
     .gpu-card {
       background: #080b11;
       border: 1.5px solid var(--border-subtle);
-      box-shadow: 3px 3px 0 0 #000;
+      box-shadow: 2px 2px 0 0 #000;
       padding: 12px;
-      display: flex;
-      flex-direction: column;
-      gap: 7px;
+      font-size: 11.5px;
     }
     .gpu-card:hover {
-      border-color: var(--border-accent);
+      border-color: var(--color-cyan);
     }
-    .gpu-card-top {
+    .gpu-hdr {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 6px;
+    }
+    .gpu-id {
+      color: var(--color-cyan);
+      font-weight: 800;
+      font-size: 13px;
+      letter-spacing: 0.04em;
+    }
+    .gpu-meta {
+      display: flex;
+      justify-content: space-between;
+      color: var(--text-secondary);
+      font-size: 10.5px;
+      margin-bottom: 8px;
+      padding-bottom: 6px;
+      border-bottom: 1px dashed #1e2636;
+    }
+    .gpu-bar-line {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 5px;
+      font-size: 11px;
+    }
+    .gpu-bar-lbl {
+      width: 36px;
+      color: var(--color-amber);
+      font-weight: 700;
+      font-size: 10.5px;
+    }
+    .seg-bar {
+      font-family: var(--font-mono);
+      letter-spacing: 0.04em;
+      font-size: 11.5px;
+    }
+    .seg-inline {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.02em;
+    }
+    .gpu-bar-val {
+      color: var(--text-primary);
+      font-size: 10.5px;
+      white-space: nowrap;
+    }
+
+    /* Quota Graph Styles */
+    .quota-row {
+      padding: 11px 0;
+      border-bottom: 1px dashed #1e2636;
+    }
+    .quota-row:last-child { border-bottom: none; }
+    .quota-hdr {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 6px;
+      font-size: 12px;
+    }
+    .quota-agent { font-weight: 800; margin-right: 6px; }
+    .quota-cycle {
+      font-size: 10.5px;
+      color: var(--color-amber);
+      font-weight: 700;
+      margin-right: 6px;
+    }
+    .quota-nums { font-size: 11.5px; }
+    .quota-bar-track {
+      position: relative;
+      height: 14px;
+      background: #05070a;
+      border: 1.5px solid #1e2636;
+      box-shadow: inset 1px 1px 0 0 #000;
+      display: flex;
+    }
+    .quota-bar-used {
+      height: 100%;
+      background-image: repeating-linear-gradient(
+        90deg,
+        transparent,
+        transparent 6px,
+        rgba(0, 0, 0, 0.35) 6px,
+        rgba(0, 0, 0, 0.35) 8px
+      );
+    }
+    .quota-bar-rem {
+      height: 100%;
+      background: repeating-linear-gradient(
+        90deg,
+        rgba(80, 250, 123, 0.22),
+        rgba(80, 250, 123, 0.22) 6px,
+        rgba(80, 250, 123, 0.05) 6px,
+        rgba(80, 250, 123, 0.05) 8px
+      );
+    }
+    .quota-target-line {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: var(--color-red);
+      z-index: 2;
+    }
+    .quota-sub {
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 6px;
+      font-size: 11px;
+      color: var(--text-secondary);
+      margin-top: 5px;
+    }
+
+    /* GitHub Contribution Chart & Tables */
+    .stacked-bar {
+      display: flex;
+      height: 14px;
+      background: #05070b;
+      border: 1.5px solid #1e2636;
+      box-shadow: 2px 2px 0 0 #000;
+      margin-bottom: 14px;
+    }
+    .hm-wrap { overflow-x: auto; margin-bottom: 16px; }
+    .hm-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 4px;
+      min-width: 680px;
+    }
+    .hm-org {
+      width: 190px;
+      font-size: 11.5px;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+    .hm-cells {
+      display: grid;
+      grid-template-columns: repeat(24, 1fr);
+      gap: 3px;
+      flex: 1;
+    }
+    .hm-hdr {
+      font-size: 10px;
+      color: var(--text-secondary);
+      text-align: center;
+    }
+    .hm-cell {
+      height: 14px;
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+    .hm-empty { background: #070a10; }
+
+    .table-wrap { overflow-x: auto; }
+    table.ag-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 11.5px;
+      margin-top: 6px;
+    }
+    table.ag-table th, table.ag-table td {
+      text-align: left;
+      padding: 8px 6px;
+      border-bottom: 1px solid #19202e;
+    }
+    table.ag-table th {
+      color: var(--color-amber);
+      font-size: 10.5px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      border-bottom: 1.5px solid #1e2636;
+    }
+    .org-push-row {
+      padding: 7px 0;
+      border-bottom: 1px dashed #19202e;
+      font-size: 11.5px;
+    }
+    .org-push-row:last-child { border-bottom: none; }
+    .org-push-hdr {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    /* North Star Gate Cards */
+    .ns-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(310px, 1fr));
+      gap: 12px;
+    }
+    .ns-card {
+      background: #080b11;
+      border: 1.5px solid #1e2636;
+      box-shadow: 2px 2px 0 0 #000;
+      padding: 14px;
+    }
+    .ns-card:hover { border-color: var(--phosphor); }
+    .ns-title {
+      font-size: 12.5px;
+      font-weight: 800;
+      color: #fff;
+      margin-bottom: 8px;
       display: flex;
       justify-content: space-between;
       align-items: center;
       gap: 6px;
     }
-    .gpu-id {
-      color: var(--cyan);
-      font-weight: 700;
-      font-size: 13px;
-      letter-spacing: 0.05em;
-    }
-    .gpu-meta {
-      display: flex;
-      justify-content: space-between;
-      font-size: 11px;
-      color: var(--text-secondary);
-      border-bottom: 1px dashed #1e2636;
-      padding-bottom: 5px;
-    }
-    .gpu-gauge-row {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 11px;
-    }
-    .gauge-label {
-      width: 38px;
-      color: var(--text-secondary);
-      font-weight: 700;
-    }
-    .gauge-val {
-      color: var(--text-primary);
-      font-size: 11px;
-      white-space: nowrap;
-    }
-    .gpu-foot {
-      display: flex;
-      justify-content: space-between;
-      font-size: 11px;
-      color: var(--text-secondary);
-      border-top: 1px dashed #1e2636;
-      padding-top: 5px;
-    }
-    .seg-bar {
-      font-family: var(--font-mono);
-      letter-spacing: 1px;
-      font-size: 12px;
-    }
-    .seg-green { color: var(--phosphor); }
-    .seg-cyan { color: var(--cyan); }
-    .seg-amber { color: var(--amber); }
-    .table-wrap {
-      overflow-x: auto;
-    }
-    table.crt-table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 12px;
-    }
-    table.crt-table th {
-      text-align: left;
-      padding: 8px 10px;
-      background: #080b11;
-      color: var(--hot);
-      border-bottom: 1.5px solid var(--border-accent);
-      font-size: 11px;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      white-space: nowrap;
-    }
-    table.crt-table td {
-      padding: 7px 10px;
-      border-bottom: 1px solid #161d2a;
-      color: var(--text-primary);
-      vertical-align: middle;
-    }
-    table.crt-table tr:hover td {
-      background: rgba(80, 250, 123, 0.04);
-    }
-    .dim-note {
-      color: var(--text-muted);
-      font-size: 11px;
-    }
-    code {
-      color: var(--cyan);
-      font-family: var(--font-mono);
-    }
+    .ns-desc { font-size: 11.5px; color: var(--text-secondary); line-height: 1.5; }
+
     ul.missions { list-style: none; }
     ul.missions li {
       padding: 8px 0;
-      border-bottom: 1px dashed #1e2636;
-      font-size: 12.5px;
+      border-bottom: 1px dashed #19202e;
+      font-size: 12px;
     }
     ul.missions li:last-child { border-bottom: none; }
-    pre.raw-term {
-      background: #05070a;
+
+    pre {
+      background: #05070b;
       border: 1.5px solid #1e2636;
-      box-shadow: inset 2px 2px 0 0 #000;
-      padding: 14px;
+      box-shadow: inset 1px 1px 0 0 #000;
+      padding: 12px;
       overflow-x: auto;
-      font-size: 11.5px;
+      font-size: 11px;
       color: #cbd5e1;
       line-height: 1.45;
     }
-    footer.window-statusbar {
+
+    /* Bottom Statusbar Dock */
+    .window-statusbar {
       margin-top: 28px;
-      padding: 12px 18px;
+      padding: 12px 20px;
       background: var(--bg-titlebar);
-      border-top: 2px solid var(--border-accent);
+      border-top: 2px solid var(--border-accent-color);
       box-shadow: 0 -2px 0 0 #000;
       display: flex;
       justify-content: space-between;
@@ -359,529 +512,628 @@
       font-size: 11px;
       color: var(--text-secondary);
     }
-    footer.window-statusbar a {
-      color: var(--hot);
-      text-decoration: none;
-    }
   </style>
 </head>
-<body>
+<body class="terminal-body">
   <header class="window-titlebar">
-    <div class="titlebar-left">
-      <a href="https://openooda.org" class="brand-box">[openOODA]</a>
-      <span class="window-title">sys@openooda:~# status // LIVE TELEMETRY</span>
-    </div>
-    <div class="titlebar-right">
-      <span class="term-badge badge-cyan">[ FLEET: 913.2 tok/s ]</span>
-      <span class="term-badge badge-green">[ 5 GPUs: 20/77808 MB ]</span>
-      <span class="term-badge badge-green">[ 32 + 32 = 64 ABI ]</span>
-      <span class="term-badge badge-green">[ AUTO-REFRESH 5M ]</span>
+    <a href="https://openooda.org" class="header-brand">
+      <span class="crest-box">OO</span>
+      <span>openOODA // STATUS</span>
+    </a>
+    <span class="window-title">sys@openooda:~# status // LIVE TELEMETRY (v0.3.0)</span>
+    <div class="header-right">
+      <span class="term-badge term-badge-cyan">[ ⚡ FLEET: 3,003,289.5 TOK/S LIVE ]</span>
+      <span class="term-badge">[ 5 GPUs // 76GB VRAM ]</span>
+      <span class="term-badge">[ 32 + 32 = 64 ABI ]</span>
+      <span class="term-status-online">[ ZERO-TRUST VERIFIED ]</span>
     </div>
   </header>
 
-  <main class="container">
-    <div class="sub-bar">
-      <div>TELEMETRY EPOCH: <strong>2026-11-04 08:16:00 HST</strong> (2026-11-04 18:16:00 UTC) // RELEASE: <code>v0.3.1</code></div>
-      <div>ZERO-TRUST PRIVACY GATE: <strong>[ PASS // 0 LEAKED IPS OR HOSTNAMES ]</strong></div>
+  <div class="container">
+    <div class="cmd-banner">
+      <div>
+        <span class="cmd-prompt">sys@openooda:~#</span>
+        <code>eco-status --zero-trust --gpus=5 --tok-rate</code>
+        <span class="muted" style="margin-left:8px;">// Last Sync: <strong>2026-11-04 08:16:43 HST</strong> (2026-11-04 18:16:43 UTC)</span>
+      </div>
+      <div>
+        <span class="term-badge term-badge-green">[ AUTO-REFRESH: 300S ]</span>
+        <span class="term-badge term-badge-amber">[ PEAK FLEET CAPACITY: 3,004,025.2 TOK/S ]</span>
+      </div>
     </div>
 
-    <div class="kpi-grid">
-      <div class="stat-card cyan">
-        <div class="stat-label">Fleet Throughput</div>
-        <div class="stat-val cyan-val">913.2 tok/s</div>
-        <div class="stat-sub">Peak Cap: 1514.8 tok/s &middot; 12 Panes</div>
+    <div class="grid">
+      <div class="stat-card stat-card-highlight">
+        <div class="stat-label">Total Fleet tok/sec</div>
+        <div class="stat-val" style="color:var(--phosphor);">3,003,289.5 <span style="font-size:0.85rem;">tok/s</span></div>
+        <div class="stat-sub">Peak Burst: 3,004,025.2 tok/s</div>
       </div>
-      <div class="stat-card accent">
-        <div class="stat-label">5-GPU Cluster VRAM</div>
-        <div class="stat-val green-val">20 / 77808 MB</div>
-        <div class="stat-sub">GPU-00..04 &middot; 32&deg;C &middot; 41.0W</div>
+      <div class="stat-card stat-card-highlight">
+        <div class="stat-label">5-GPU Buildbox Grid</div>
+        <div class="stat-val" style="color:var(--color-cyan);">5 / 5 ONLINE</div>
+        <div class="stat-sub">20 MB / 76 GB VRAM · ooaid</div>
       </div>
-      <div class="stat-card accent">
-        <div class="stat-label">Usable Repositories</div>
+      <div class="stat-card">
+        <div class="stat-label">Usable / Total Repos</div>
         <div class="stat-val">360 / 377</div>
-        <div class="stat-sub">95.5% USABLE (17 Scaffolds)</div>
+        <div class="stat-sub">95.5% [████████]</div>
       </div>
       <div class="stat-card">
-        <div class="stat-label">Organizations (Root+L0–L7)</div>
-        <div class="stat-val">9 / 385</div>
-        <div class="stat-sub">9 Orgs &middot; 385 Total Git Repos</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-label">.oo Pages / LOC</div>
+        <div class="stat-label">9 Orgs · .oo Pages</div>
         <div class="stat-val">15346</div>
-        <div class="stat-sub">168241 lines (&le;240/page)</div>
+        <div class="stat-sub">168239 LOC (≤240/page)</div>
       </div>
       <div class="stat-card">
-        <div class="stat-label">KVM &amp; 64-Bit ABI</div>
+        <div class="stat-label">Compiled Binaries</div>
+        <div class="stat-val">476</div>
+        <div class="stat-sub">102/102 KVM MicroVMs</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Capability Register</div>
         <div class="stat-val">32 + 32 = 64</div>
-        <div class="stat-sub">102/102 MicroVM &middot; 476 Bins</div>
+        <div class="stat-sub">13 HW + 19 SW · 1-Cycle</div>
       </div>
     </div>
 
-    <div class="section-head">
-      <span class="panel-label">-- [1] LIVE 5-GPU HARDWARE TELEMETRY (GPU-00..GPU-04 // ANONYMIZED NODES) --</span>
-      <span class="term-badge badge-green">[ 5/5 OOAID INFERENCE DAEMONS ONLINE ]</span>
+    <div class="section-hdr">
+      <span>-- [01] LIVE 5-GPU CLUSTER TELEMETRY // GPU-00 THROUGH GPU-04 (ANONYMIZED ZERO-TRUST) --</span>
+      <span class="term-badge term-badge-green">[ 3 NODES · 5 GPUs · 76 GB TOTAL VRAM · 100% ONLINE ]</span>
     </div>
     <div class="panel">
+      <div style="font-size:11.5px; color:var(--text-secondary); margin-bottom:12px; display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px;">
+        <span>Live VRAM allocation, compute utilization, and local capability inference daemon (<code>ooaid</code>) state across all 5 hardware GPUs (anonymized node IDs, zero hostnames/IPs).</span>
+        <span><strong>VRAM Reserve: 20 MB Active / 77,808 MB Capacity</strong></span>
+      </div>
       <div class="gpu-grid">
-        <div class="gpu-card">
-          <div class="gpu-card-top">
-            <span class="gpu-id">GPU-00 [12GB]</span>
-            <span class="term-badge badge-green">[ OOAID ACTIVE ]</span>
+        
+      <div class="gpu-card">
+        <div class="gpu-hdr">
+          <span class="gpu-id">GPU-00 [12GB]</span>
+          <span class="term-badge term-badge-green">[ONLINE // ooaid]</span>
+        </div>
+        <div class="gpu-meta">
+          <span>NODE-01 (G0) // control/herdr</span>
+          <span>RAM: 15GiB/7.8G</span>
+        </div>
+        <div class="gpu-bar-line">
+          <span class="gpu-bar-lbl">VRAM</span>
+          <span class="seg-bar" style="color:var(--color-cyan);">█░░░░░░░░░░░</span>
+          <span class="gpu-bar-val">12 / 12,288 MB (0.1%)</span>
+        </div>
+        <div class="gpu-bar-line">
+          <span class="gpu-bar-lbl">UTIL</span>
+          <span class="seg-bar" style="color:var(--phosphor);">█░░░░░░░░░░░</span>
+          <span class="gpu-bar-val">0% COMPUTE · [READY]</span>
+        </div>
+      </div>
+      <div class="gpu-card">
+        <div class="gpu-hdr">
+          <span class="gpu-id">GPU-01 [16GB]</span>
+          <span class="term-badge term-badge-green">[ONLINE // ooaid]</span>
+        </div>
+        <div class="gpu-meta">
+          <span>NODE-02 (G0) // buildbox+gpu</span>
+          <span>RAM: 63GiB/32G</span>
+        </div>
+        <div class="gpu-bar-line">
+          <span class="gpu-bar-lbl">VRAM</span>
+          <span class="seg-bar" style="color:var(--color-cyan);">█░░░░░░░░░░░</span>
+          <span class="gpu-bar-val">2 / 16,380 MB (0.0%)</span>
+        </div>
+        <div class="gpu-bar-line">
+          <span class="gpu-bar-lbl">UTIL</span>
+          <span class="seg-bar" style="color:var(--phosphor);">█░░░░░░░░░░░</span>
+          <span class="gpu-bar-val">0% COMPUTE · [READY]</span>
+        </div>
+      </div>
+      <div class="gpu-card">
+        <div class="gpu-hdr">
+          <span class="gpu-id">GPU-02 [16GB]</span>
+          <span class="term-badge term-badge-green">[ONLINE // ooaid]</span>
+        </div>
+        <div class="gpu-meta">
+          <span>NODE-02 (G1) // buildbox+gpu</span>
+          <span>RAM: 63GiB/32G</span>
+        </div>
+        <div class="gpu-bar-line">
+          <span class="gpu-bar-lbl">VRAM</span>
+          <span class="seg-bar" style="color:var(--color-cyan);">█░░░░░░░░░░░</span>
+          <span class="gpu-bar-val">2 / 16,380 MB (0.0%)</span>
+        </div>
+        <div class="gpu-bar-line">
+          <span class="gpu-bar-lbl">UTIL</span>
+          <span class="seg-bar" style="color:var(--phosphor);">█░░░░░░░░░░░</span>
+          <span class="gpu-bar-val">0% COMPUTE · [READY]</span>
+        </div>
+      </div>
+      <div class="gpu-card">
+        <div class="gpu-hdr">
+          <span class="gpu-id">GPU-03 [16GB]</span>
+          <span class="term-badge term-badge-green">[ONLINE // ooaid]</span>
+        </div>
+        <div class="gpu-meta">
+          <span>NODE-03 (G0) // llm+replica</span>
+          <span>RAM: 31GiB/16G</span>
+        </div>
+        <div class="gpu-bar-line">
+          <span class="gpu-bar-lbl">VRAM</span>
+          <span class="seg-bar" style="color:var(--color-cyan);">█░░░░░░░░░░░</span>
+          <span class="gpu-bar-val">2 / 16,380 MB (0.0%)</span>
+        </div>
+        <div class="gpu-bar-line">
+          <span class="gpu-bar-lbl">UTIL</span>
+          <span class="seg-bar" style="color:var(--phosphor);">█░░░░░░░░░░░</span>
+          <span class="gpu-bar-val">0% COMPUTE · [READY]</span>
+        </div>
+      </div>
+      <div class="gpu-card">
+        <div class="gpu-hdr">
+          <span class="gpu-id">GPU-04 [16GB]</span>
+          <span class="term-badge term-badge-green">[ONLINE // ooaid]</span>
+        </div>
+        <div class="gpu-meta">
+          <span>NODE-03 (G1) // llm+replica</span>
+          <span>RAM: 31GiB/16G</span>
+        </div>
+        <div class="gpu-bar-line">
+          <span class="gpu-bar-lbl">VRAM</span>
+          <span class="seg-bar" style="color:var(--color-cyan);">█░░░░░░░░░░░</span>
+          <span class="gpu-bar-val">2 / 16,380 MB (0.0%)</span>
+        </div>
+        <div class="gpu-bar-line">
+          <span class="gpu-bar-lbl">UTIL</span>
+          <span class="seg-bar" style="color:var(--phosphor);">█░░░░░░░░░░░</span>
+          <span class="gpu-bar-val">0% COMPUTE · [READY]</span>
+        </div>
+      </div>
+      </div>
+    </div>
+
+    <div class="section-hdr">
+      <span>-- [02] TOKEN QUOTA REMAINING PER RESET CYCLE &amp; PER-AGENT TOK/SEC --</span>
+      <span class="term-badge term-badge-cyan">[ ⚡ TOTAL LIVE FLEET: 3,003,289.5 TOK/SEC · TARGET: 99% / ≥1% FLOOR ]</span>
+    </div>
+    <div class="panel">
+      <div style="font-size:11.5px; color:var(--text-secondary); margin-bottom:10px; display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px;">
+        <span>Segmented CRT bars show <strong>% Consumed</strong> vs. <strong>% Tokens Left in Cycle</strong>, red marker = <strong>99% Target / 1% Hard Reserve Floor</strong>, plus live per-agent <code>tok/sec</code> throughput.</span>
+        <span><strong>12 Active Herdr Panes (Root w9 + 11 Layer Panes)</strong></span>
+      </div>
+      
+      <div class="quota-row">
+        <div class="quota-hdr">
+          <div>
+            <span class="quota-agent" style="color:#50fa7b">■ devin // SWE-2 Max (10 Panes)</span>
+            <span class="quota-cycle">[ DAILY / WEEKLY CYCLE ]</span>
+            <span class="term-badge term-badge-cyan">[ ⚡ 0.0 tok/s LIVE (10 panes) ]</span>
           </div>
-          <div class="gpu-meta">
-            <span>NODE: <code>NODE-01</code> (control/herdr)</span>
-            <span>ARCH: <strong>RTX 3060</strong></span>
-          </div>
-          <div class="gpu-gauge-row">
-            <span class="gauge-label">VRAM</span>
-            <code class="seg-bar seg-cyan">█░░░░░░░░░</code>
-            <span class="gauge-val">12 / 12288 MB (0.1%)</span>
-          </div>
-          <div class="gpu-gauge-row">
-            <span class="gauge-label">UTIL</span>
-            <code class="seg-bar seg-green">░░░░░░░░░░</code>
-            <span class="gauge-val">0% COMPUTE</span>
-          </div>
-          <div class="gpu-foot">
-            <span>TEMP: <strong>40&deg;C</strong></span>
-            <span>POWER: <strong>15.5W / 170W</strong> (9%)</span>
+          <div class="quota-nums">
+            <strong style="color:var(--phosphor);">99% LEFT</strong> <span class="seg-inline" style="color:#50fa7b;">[███████████████░]</span> (24.8M rem / 250k used of ~25.0M) · <span class="muted">1% Used</span>
           </div>
         </div>
-        <div class="gpu-card">
-          <div class="gpu-card-top">
-            <span class="gpu-id">GPU-01 [16GB]</span>
-            <span class="term-badge badge-green">[ OOAID ACTIVE ]</span>
+        <div class="quota-bar-track" title="1% Used | 99% Remaining | Target: 99% (1% hard reserve floor)">
+          <div class="quota-bar-used" style="width:1%; background:#50fa7b;"></div>
+          <div class="quota-bar-rem" style="width:99%;"></div>
+          <div class="quota-target-line" style="left:99%;" title="99% Target / 1% Reserve Floor"></div>
+        </div>
+        <div class="quota-sub">
+          <span style="color:var(--hot);">[ WORKING // 100% UNTHROTTLED CAPACITY ACROSS L1–L7 ]</span>
+          <span>Resets Daily 22:00 HST (08:00 UTC) · 10 Active Herdr Panes</span>
+        </div>
+      </div>
+      <div class="quota-row">
+        <div class="quota-hdr">
+          <div>
+            <span class="quota-agent" style="color:#ff79c6">■ agy // Gemini 4 Argon (Root w9)</span>
+            <span class="quota-cycle">[ ROLLING SESSION CYCLE ]</span>
+            <span class="term-badge term-badge-cyan">[ ⚡ 239.5 tok/s LIVE (8 subagents) ]</span>
           </div>
-          <div class="gpu-meta">
-            <span>NODE: <code>NODE-02</code> (buildbox+gpu-a)</span>
-            <span>ARCH: <strong>RTX 4060 Ti</strong></span>
-          </div>
-          <div class="gpu-gauge-row">
-            <span class="gauge-label">VRAM</span>
-            <code class="seg-bar seg-cyan">█░░░░░░░░░</code>
-            <span class="gauge-val">2 / 16380 MB (0.0%)</span>
-          </div>
-          <div class="gpu-gauge-row">
-            <span class="gauge-label">UTIL</span>
-            <code class="seg-bar seg-green">░░░░░░░░░░</code>
-            <span class="gauge-val">0% COMPUTE</span>
-          </div>
-          <div class="gpu-foot">
-            <span>TEMP: <strong>32&deg;C</strong></span>
-            <span>POWER: <strong>6.3W / 120W</strong> (5%)</span>
+          <div class="quota-nums">
+            <strong style="color:var(--phosphor);">86% LEFT</strong> <span class="seg-inline" style="color:#ff79c6;">[██████████████░░]</span> (17.2M rem / 2.8M used of ~20.0M) · <span class="muted">14% Used</span>
           </div>
         </div>
-        <div class="gpu-card">
-          <div class="gpu-card-top">
-            <span class="gpu-id">GPU-02 [16GB]</span>
-            <span class="term-badge badge-green">[ OOAID ACTIVE ]</span>
+        <div class="quota-bar-track" title="14% Used | 86% Remaining | Target: 99% (1% hard reserve floor)">
+          <div class="quota-bar-used" style="width:14%; background:#ff79c6;"></div>
+          <div class="quota-bar-rem" style="width:86%;"></div>
+          <div class="quota-target-line" style="left:99%;" title="99% Target / 1% Reserve Floor"></div>
+        </div>
+        <div class="quota-sub">
+          <span style="color:var(--hot);">[ ACTIVE WATCHDOG // 86% REMAINING · >=1% HARD RESERVE FLOOR ]</span>
+          <span>Continuous Rolling Window · Root w9 Orchestrator</span>
+        </div>
+      </div>
+      <div class="quota-row">
+        <div class="quota-hdr">
+          <div>
+            <span class="quota-agent" style="color:#bd93f9">■ vibe // GLM-5.3 [high] (wF:p1)</span>
+            <span class="quota-cycle">[ MONTHLY CYCLE ]</span>
+            <span class="term-badge term-badge-cyan">[ ⚡ 3,003,050.0 tok/s LIVE (ctx 353k/800k) ]</span>
           </div>
-          <div class="gpu-meta">
-            <span>NODE: <code>NODE-02</code> (buildbox+gpu-b)</span>
-            <span>ARCH: <strong>RTX 4060 Ti</strong></span>
-          </div>
-          <div class="gpu-gauge-row">
-            <span class="gauge-label">VRAM</span>
-            <code class="seg-bar seg-cyan">█░░░░░░░░░</code>
-            <span class="gauge-val">2 / 16380 MB (0.0%)</span>
-          </div>
-          <div class="gpu-gauge-row">
-            <span class="gauge-label">UTIL</span>
-            <code class="seg-bar seg-green">░░░░░░░░░░</code>
-            <span class="gauge-val">0% COMPUTE</span>
-          </div>
-          <div class="gpu-foot">
-            <span>TEMP: <strong>28&deg;C</strong></span>
-            <span>POWER: <strong>8.0W / 120W</strong> (7%)</span>
+          <div class="quota-nums">
+            <strong style="color:var(--phosphor);">10% LEFT</strong> <span class="seg-inline" style="color:#bd93f9;">[██░░░░░░░░░░░░░░]</span> (5.0M rem / 45.0M used of ~50.0M) · <span class="muted">90% Used</span>
           </div>
         </div>
-        <div class="gpu-card">
-          <div class="gpu-card-top">
-            <span class="gpu-id">GPU-03 [16GB]</span>
-            <span class="term-badge badge-green">[ OOAID ACTIVE ]</span>
+        <div class="quota-bar-track" title="90% Used | 10% Remaining | Target: 99% (1% hard reserve floor)">
+          <div class="quota-bar-used" style="width:90%; background:#bd93f9;"></div>
+          <div class="quota-bar-rem" style="width:10%;"></div>
+          <div class="quota-target-line" style="left:99%;" title="99% Target / 1% Reserve Floor"></div>
+        </div>
+        <div class="quota-sub">
+          <span style="color:var(--hot);">[ WORKING // +9% PACE TO 99% TARGET · >=1% RESERVE FLOOR ]</span>
+          <span>Resets Dec 1 00:00 UTC · ctx 353k/800k</span>
+        </div>
+      </div>
+      <div class="quota-row">
+        <div class="quota-hdr">
+          <div>
+            <span class="quota-agent" style="color:#00e5ff">■ mcode // M3.1-Flash</span>
+            <span class="quota-cycle">[ 5H ROLLING CYCLE ]</span>
+            <span class="term-badge term-badge-cyan">[ ⚡ 0.0 tok/s LIVE (551.5 tok/s out · 1,734.5 tok/s burst) ]</span>
           </div>
-          <div class="gpu-meta">
-            <span>NODE: <code>NODE-03</code> (llm+replica-a)</span>
-            <span>ARCH: <strong>RTX 4060 Ti</strong></span>
-          </div>
-          <div class="gpu-gauge-row">
-            <span class="gauge-label">VRAM</span>
-            <code class="seg-bar seg-cyan">█░░░░░░░░░</code>
-            <span class="gauge-val">2 / 16380 MB (0.0%)</span>
-          </div>
-          <div class="gpu-gauge-row">
-            <span class="gauge-label">UTIL</span>
-            <code class="seg-bar seg-green">░░░░░░░░░░</code>
-            <span class="gauge-val">0% COMPUTE</span>
-          </div>
-          <div class="gpu-foot">
-            <span>TEMP: <strong>32&deg;C</strong></span>
-            <span>POWER: <strong>6.8W / 120W</strong> (6%)</span>
+          <div class="quota-nums">
+            <strong style="color:var(--phosphor);">0% LEFT</strong> <span class="seg-inline" style="color:#00e5ff;">[░░░░░░░░░░░░░░░░]</span> (0 rem / 5.0M used of ~5.0M) · <span class="muted">100% Used</span>
           </div>
         </div>
-        <div class="gpu-card">
-          <div class="gpu-card-top">
-            <span class="gpu-id">GPU-04 [16GB]</span>
-            <span class="term-badge badge-green">[ OOAID ACTIVE ]</span>
+        <div class="quota-bar-track" title="100% Used | 0% Remaining | Target: 99% (1% hard reserve floor)">
+          <div class="quota-bar-used" style="width:100%; background:#00e5ff;"></div>
+          <div class="quota-bar-rem" style="width:0%;"></div>
+          <div class="quota-target-line" style="left:99%;" title="99% Target / 1% Reserve Floor"></div>
+        </div>
+        <div class="quota-sub">
+          <span style="color:var(--hot);">[ PAUSED AT LIMIT // AWAITING 5H RESET ]</span>
+          <span>Resets in 1h 43m (10:00 / 15:00 HST cycle)</span>
+        </div>
+      </div>
+      <div class="quota-row">
+        <div class="quota-hdr">
+          <div>
+            <span class="quota-agent" style="color:#ffb000">■ grok // Grok-4</span>
+            <span class="quota-cycle">[ WEEKLY CYCLE ]</span>
+            <span class="term-badge term-badge-cyan">[ ⚡ 0.0 tok/s LIVE (184.2 tok/s burst) ]</span>
           </div>
-          <div class="gpu-meta">
-            <span>NODE: <code>NODE-03</code> (llm+replica-b)</span>
-            <span>ARCH: <strong>RTX 4060 Ti</strong></span>
+          <div class="quota-nums">
+            <strong style="color:var(--phosphor);">0% LEFT</strong> <span class="seg-inline" style="color:#ffb000;">[░░░░░░░░░░░░░░░░]</span> (0 rem / 10.0M used of ~10.0M) · <span class="muted">100% Used</span>
           </div>
-          <div class="gpu-gauge-row">
-            <span class="gauge-label">VRAM</span>
-            <code class="seg-bar seg-cyan">█░░░░░░░░░</code>
-            <span class="gauge-val">2 / 16380 MB (0.0%)</span>
+        </div>
+        <div class="quota-bar-track" title="100% Used | 0% Remaining | Target: 99% (1% hard reserve floor)">
+          <div class="quota-bar-used" style="width:100%; background:#ffb000;"></div>
+          <div class="quota-bar-rem" style="width:0%;"></div>
+          <div class="quota-target-line" style="left:99%;" title="99% Target / 1% Reserve Floor"></div>
+        </div>
+        <div class="quota-sub">
+          <span style="color:var(--hot);">[ STANDBY // WEEKLY QUOTA CONSUMED · HANDED OFF TO SWE-2 MAX ]</span>
+          <span>Resets Nov 6 01:17 UTC (Weekly Window)</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-hdr">
+      <span>-- [03] SANITIZED LIVE HERDR AGENT FLEET &amp; PER-PANE TOK/SEC MATRIX --</span>
+      <span class="term-badge term-badge-green">[ 12 PANES ACTIVE · 3,003,289.5 TOK/SEC AGGREGATE ]</span>
+    </div>
+    <div class="panel">
+      <div class="table-wrap">
+        <table class="ag-table">
+          <thead>
+            <tr>
+              <th>Pane</th>
+              <th>Workspace / Layer</th>
+              <th>Assigned Agent</th>
+              <th>State</th>
+              <th>Live Throughput (tok/sec)</th>
+              <th>Cycle Quota &amp; Context</th>
+              <th>Pace to 99% Target</th>
+            </tr>
+          </thead>
+          <tbody>
+            
+      <tr>
+        <td><code>w9:p1</code></td>
+        <td><strong>(Root) openOODA</strong></td>
+        <td><span style="color:#ff79c6; font-weight:700;">■ agy (Gemini 4 Argon)</span></td>
+        <td><span class="term-badge term-badge-green">[WORKING]</span></td>
+        <td><strong style="color:var(--color-cyan);">239.5 tok/s</strong> <span class="seg-inline" style="color:#ff79c6;">████████</span></td>
+        <td>Session 14% (86% rem, rolling) / 8 subagents</td>
+        <td class="muted">OK (+85% to 99%)</td>
+      </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="section-hdr">
+      <span>-- [04] GITHUB-STYLE CONTRIBUTION &amp; PUSH ACTIVITY BY AGENT (12,597 COMMITS · 3,632 TAGS) --</span>
+      <span class="term-badge">[ 3,071 AGENT-TAGGED PUSHES · 1,431 SIGNED RELEASES ]</span>
+    </div>
+    <div class="panel">
+      <div style="font-size:11.5px; color:var(--text-secondary); margin-bottom:6px; display:flex; justify-content:space-between; flex-wrap:wrap;">
+        <span><strong>Cumulative Push Share by Agent Pool</strong> (dynamically scanned across all 385 repositories in 9 organizations)</span>
+        <span><strong>1,431</strong> Agent-Signed Release Tags</span>
+      </div>
+      <div class="stacked-bar">
+        <div style="width:46.69%; background:#00e5ff;" title="mcode // M3.1-Flash: 1434 pushes (46.7%)"></div><div style="width:23.74%; background:#50fa7b;" title="devin // SWE-2 Max: 729 pushes (23.7%)"></div><div style="width:20.94%; background:#bd93f9;" title="vibe // GLM-5.3 [high]: 643 pushes (20.9%)"></div><div style="width:4.82%; background:#ffb000;" title="grok // Grok-4: 148 pushes (4.8%)"></div><div style="width:3.81%; background:#ff79c6;" title="agy // Gemini 4 Argon: 117 pushes (3.8%)"></div>
+      </div>
+
+      <div class="hm-wrap">
+        <div class="hm-row" style="margin-bottom:6px;">
+          <div class="hm-org" style="color:var(--color-amber); font-size:10.5px; text-transform:uppercase;">Org // 24h Push Grid</div>
+          <div class="hm-cells"><div class="hm-hdr">-23h</div><div class="hm-hdr">-22h</div><div class="hm-hdr">-21h</div><div class="hm-hdr">-20h</div><div class="hm-hdr">-19h</div><div class="hm-hdr">-18h</div><div class="hm-hdr">-17h</div><div class="hm-hdr">-16h</div><div class="hm-hdr">-15h</div><div class="hm-hdr">-14h</div><div class="hm-hdr">-13h</div><div class="hm-hdr">-12h</div><div class="hm-hdr">-11h</div><div class="hm-hdr">-10h</div><div class="hm-hdr">-9h</div><div class="hm-hdr">-8h</div><div class="hm-hdr">-7h</div><div class="hm-hdr">-6h</div><div class="hm-hdr">-5h</div><div class="hm-hdr">-4h</div><div class="hm-hdr">-3h</div><div class="hm-hdr">-2h</div><div class="hm-hdr">-1h</div><div class="hm-hdr">now</div></div>
+        </div>
+        
+      <div class="hm-row">
+        <div class="hm-org">openOODA <span class="muted">(115)</span></div>
+        <div class="hm-cells"><div class="hm-cell" style="background:#ff79c6; opacity:0.45;" title="openOODA (-23h): 4 pushes (agy:4)"></div><div class="hm-cell" style="background:#ff79c6; opacity:0.75;" title="openOODA (-22h): 5 pushes (agy:5)"></div><div class="hm-cell" style="background:#ff79c6; opacity:0.75;" title="openOODA (-21h): 5 pushes (agy:4, mcode:1)"></div><div class="hm-cell" style="background:#ff79c6; opacity:0.75;" title="openOODA (-20h): 5 pushes (agy:4, mcode:1)"></div><div class="hm-cell" style="background:#ff79c6; opacity:0.45;" title="openOODA (-19h): 4 pushes (agy:4)"></div><div class="hm-cell" style="background:#ff79c6; opacity:0.45;" title="openOODA (-18h): 4 pushes (agy:4)"></div><div class="hm-cell" style="background:#ff79c6; opacity:0.45;" title="openOODA (-17h): 4 pushes (agy:4)"></div><div class="hm-cell" style="background:#00e5ff; opacity:0.45;" title="openOODA (-16h): 4 pushes (mcode:2, agy:2)"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell" style="background:#ff79c6; opacity:0.45;" title="openOODA (-13h): 1 pushes (agy:1)"></div><div class="hm-cell" style="background:#ff79c6; opacity:0.75;" title="openOODA (-12h): 9 pushes (agy:9)"></div><div class="hm-cell" style="background:#ff79c6; opacity:0.45;" title="openOODA (-11h): 2 pushes (agy:2)"></div><div class="hm-cell" style="background:#ff79c6; opacity:0.45;" title="openOODA (-10h): 2 pushes (agy:2)"></div><div class="hm-cell" style="background:#ff79c6; opacity:0.45;" title="openOODA (-9h): 2 pushes (agy:2)"></div><div class="hm-cell" style="background:#ff79c6; opacity:0.45;" title="openOODA (-8h): 2 pushes (agy:2)"></div><div class="hm-cell" style="background:#ff79c6; opacity:0.45;" title="openOODA (-7h): 2 pushes (agy:2)"></div><div class="hm-cell" style="background:#ff79c6; opacity:0.45;" title="openOODA (-6h): 2 pushes (agy:2)"></div><div class="hm-cell" style="background:#ff79c6; opacity:0.45;" title="openOODA (-5h): 2 pushes (agy:2)"></div><div class="hm-cell" style="background:#ff79c6; opacity:0.45;" title="openOODA (-4h): 3 pushes (agy:3)"></div><div class="hm-cell" style="background:#ff79c6; opacity:0.45;" title="openOODA (-3h): 2 pushes (agy:2)"></div><div class="hm-cell" style="background:#ff79c6; opacity:0.45;" title="openOODA (-2h): 4 pushes (agy:4)"></div><div class="hm-cell" style="background:#ff79c6; opacity:0.75;" title="openOODA (-1h): 11 pushes (agy:11)"></div><div class="hm-cell" style="background:#ff79c6; opacity:1.0;" title="openOODA (-0h): 30 pushes (agy:30)"></div></div>
+      </div>
+      <div class="hm-row">
+        <div class="hm-org">openOODA-core <span class="muted">(20)</span></div>
+        <div class="hm-cells"><div class="hm-cell" style="background:#bd93f9; opacity:0.45;" title="openOODA-core (-23h): 3 pushes (vibe:3)"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell" style="background:#00e5ff; opacity:0.45;" title="openOODA-core (-21h): 1 pushes (mcode:1)"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell" style="background:#bd93f9; opacity:0.45;" title="openOODA-core (-19h): 1 pushes (vibe:1)"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell" style="background:#bd93f9; opacity:0.45;" title="openOODA-core (-17h): 2 pushes (vibe:2)"></div><div class="hm-cell" style="background:#bd93f9; opacity:0.45;" title="openOODA-core (-16h): 1 pushes (vibe:1)"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell" style="background:#bd93f9; opacity:0.75;" title="openOODA-core (-1h): 8 pushes (vibe:7, mcode:1)"></div><div class="hm-cell hm-empty" title="0 pushes"></div></div>
+      </div>
+      <div class="hm-row">
+        <div class="hm-org">openOODA-kernel <span class="muted">(266)</span></div>
+        <div class="hm-cells"><div class="hm-cell" style="background:#bd93f9; opacity:1.0;" title="openOODA-kernel (-23h): 34 pushes (vibe:34)"></div><div class="hm-cell" style="background:#bd93f9; opacity:1.0;" title="openOODA-kernel (-22h): 34 pushes (vibe:34)"></div><div class="hm-cell" style="background:#bd93f9; opacity:1.0;" title="openOODA-kernel (-21h): 50 pushes (vibe:42, mcode:8)"></div><div class="hm-cell" style="background:#bd93f9; opacity:0.75;" title="openOODA-kernel (-20h): 17 pushes (vibe:17)"></div><div class="hm-cell" style="background:#bd93f9; opacity:0.75;" title="openOODA-kernel (-19h): 17 pushes (vibe:17)"></div><div class="hm-cell" style="background:#bd93f9; opacity:1.0;" title="openOODA-kernel (-18h): 34 pushes (vibe:34)"></div><div class="hm-cell" style="background:#bd93f9; opacity:0.75;" title="openOODA-kernel (-17h): 17 pushes (vibe:17)"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell" style="background:#bd93f9; opacity:0.75;" title="openOODA-kernel (-12h): 16 pushes (vibe:16)"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell" style="background:#00e5ff; opacity:0.75;" title="openOODA-kernel (-0h): 15 pushes (mcode:8, vibe:7)"></div></div>
+      </div>
+      <div class="hm-row">
+        <div class="hm-org">openOODA-OS <span class="muted">(355)</span></div>
+        <div class="hm-cells"><div class="hm-cell" style="background:#bd93f9; opacity:1.0;" title="openOODA-OS (-23h): 107 pushes (vibe:54, grok:53)"></div><div class="hm-cell" style="background:#bd93f9; opacity:1.0;" title="openOODA-OS (-22h): 37 pushes (vibe:19, grok:18)"></div><div class="hm-cell" style="background:#bd93f9; opacity:1.0;" title="openOODA-OS (-21h): 37 pushes (vibe:19, grok:18)"></div><div class="hm-cell" style="background:#bd93f9; opacity:1.0;" title="openOODA-OS (-20h): 36 pushes (vibe:18, grok:18)"></div><div class="hm-cell" style="background:#bd93f9; opacity:1.0;" title="openOODA-OS (-19h): 38 pushes (vibe:20, grok:18)"></div><div class="hm-cell" style="background:#bd93f9; opacity:0.75;" title="openOODA-OS (-18h): 16 pushes (vibe:9, grok:7)"></div><div class="hm-cell" style="background:#bd93f9; opacity:0.75;" title="openOODA-OS (-17h): 22 pushes (vibe:11, grok:11)"></div><div class="hm-cell" style="background:#bd93f9; opacity:0.75;" title="openOODA-OS (-16h): 10 pushes (vibe:6, grok:4)"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell" style="background:#bd93f9; opacity:0.75;" title="openOODA-OS (-12h): 12 pushes (vibe:12)"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell" style="background:#bd93f9; opacity:0.75;" title="openOODA-OS (-2h): 6 pushes (vibe:6)"></div><div class="hm-cell" style="background:#50fa7b; opacity:1.0;" title="openOODA-OS (-1h): 32 pushes (devin:20, vibe:12)"></div><div class="hm-cell hm-empty" title="0 pushes"></div></div>
+      </div>
+      <div class="hm-row">
+        <div class="hm-org">openOODA-tools <span class="muted">(1508)</span></div>
+        <div class="hm-cells"><div class="hm-cell" style="background:#50fa7b; opacity:0.75;" title="openOODA-tools (-23h): 5 pushes (devin:5)"></div><div class="hm-cell" style="background:#00e5ff; opacity:1.0;" title="openOODA-tools (-22h): 258 pushes (mcode:258)"></div><div class="hm-cell" style="background:#00e5ff; opacity:1.0;" title="openOODA-tools (-21h): 538 pushes (mcode:538)"></div><div class="hm-cell" style="background:#00e5ff; opacity:1.0;" title="openOODA-tools (-20h): 258 pushes (mcode:258)"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell" style="background:#00e5ff; opacity:0.45;" title="openOODA-tools (-17h): 4 pushes (mcode:4)"></div><div class="hm-cell" style="background:#00e5ff; opacity:1.0;" title="openOODA-tools (-16h): 315 pushes (mcode:315)"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell" style="background:#00e5ff; opacity:0.45;" title="openOODA-tools (-12h): 2 pushes (mcode:2)"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell" style="background:#00e5ff; opacity:0.75;" title="openOODA-tools (-2h): 7 pushes (mcode:7)"></div><div class="hm-cell" style="background:#00e5ff; opacity:0.75;" title="openOODA-tools (-1h): 24 pushes (mcode:24)"></div><div class="hm-cell" style="background:#50fa7b; opacity:1.0;" title="openOODA-tools (-0h): 95 pushes (devin:80, vibe:12, mcode:3)"></div></div>
+      </div>
+      <div class="hm-row">
+        <div class="hm-org">openOODA-DE <span class="muted">(214)</span></div>
+        <div class="hm-cells"><div class="hm-cell" style="background:#bd93f9; opacity:0.75;" title="openOODA-DE (-23h): 21 pushes (vibe:21)"></div><div class="hm-cell" style="background:#bd93f9; opacity:1.0;" title="openOODA-DE (-22h): 40 pushes (vibe:40)"></div><div class="hm-cell" style="background:#bd93f9; opacity:0.75;" title="openOODA-DE (-21h): 20 pushes (vibe:20)"></div><div class="hm-cell" style="background:#bd93f9; opacity:0.75;" title="openOODA-DE (-20h): 19 pushes (vibe:19)"></div><div class="hm-cell" style="background:#bd93f9; opacity:0.75;" title="openOODA-DE (-19h): 15 pushes (vibe:15)"></div><div class="hm-cell" style="background:#bd93f9; opacity:0.75;" title="openOODA-DE (-18h): 15 pushes (vibe:15)"></div><div class="hm-cell" style="background:#bd93f9; opacity:1.0;" title="openOODA-DE (-17h): 27 pushes (vibe:27)"></div><div class="hm-cell" style="background:#bd93f9; opacity:0.45;" title="openOODA-DE (-16h): 3 pushes (vibe:3)"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell" style="background:#50fa7b; opacity:0.45;" title="openOODA-DE (-2h): 4 pushes (devin:4)"></div><div class="hm-cell" style="background:#50fa7b; opacity:0.45;" title="openOODA-DE (-1h): 2 pushes (devin:2)"></div><div class="hm-cell" style="background:#50fa7b; opacity:1.0;" title="openOODA-DE (-0h): 27 pushes (devin:27)"></div></div>
+      </div>
+      <div class="hm-row">
+        <div class="hm-org">openOODA-apps <span class="muted">(199)</span></div>
+        <div class="hm-cells"><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell" style="background:#50fa7b; opacity:1.0;" title="openOODA-apps (-22h): 34 pushes (devin:34)"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell" style="background:#50fa7b; opacity:0.75;" title="openOODA-apps (-20h): 17 pushes (devin:17)"></div><div class="hm-cell" style="background:#50fa7b; opacity:0.75;" title="openOODA-apps (-19h): 17 pushes (devin:17)"></div><div class="hm-cell" style="background:#50fa7b; opacity:1.0;" title="openOODA-apps (-18h): 34 pushes (devin:34)"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell" style="background:#50fa7b; opacity:0.75;" title="openOODA-apps (-16h): 17 pushes (devin:17)"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell" style="background:#50fa7b; opacity:0.45;" title="openOODA-apps (-2h): 1 pushes (devin:1)"></div><div class="hm-cell" style="background:#50fa7b; opacity:0.75;" title="openOODA-apps (-1h): 21 pushes (devin:21)"></div><div class="hm-cell" style="background:#50fa7b; opacity:0.75;" title="openOODA-apps (-0h): 10 pushes (devin:10)"></div></div>
+      </div>
+      <div class="hm-row">
+        <div class="hm-org">openOODA-cloud <span class="muted">(171)</span></div>
+        <div class="hm-cells"><div class="hm-cell" style="background:#50fa7b; opacity:1.0;" title="openOODA-cloud (-23h): 36 pushes (devin:36)"></div><div class="hm-cell" style="background:#50fa7b; opacity:1.0;" title="openOODA-cloud (-22h): 38 pushes (devin:38)"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell" style="background:#50fa7b; opacity:0.75;" title="openOODA-cloud (-20h): 19 pushes (devin:19)"></div><div class="hm-cell" style="background:#50fa7b; opacity:0.75;" title="openOODA-cloud (-19h): 19 pushes (devin:19)"></div><div class="hm-cell" style="background:#50fa7b; opacity:1.0;" title="openOODA-cloud (-18h): 38 pushes (devin:38)"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell" style="background:#50fa7b; opacity:0.75;" title="openOODA-cloud (-16h): 20 pushes (devin:20)"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div></div>
+      </div>
+      <div class="hm-row">
+        <div class="hm-org">openOODA-agents <span class="muted">(223)</span></div>
+        <div class="hm-cells"><div class="hm-cell" style="background:#50fa7b; opacity:1.0;" title="openOODA-agents (-23h): 51 pushes (devin:51)"></div><div class="hm-cell" style="background:#50fa7b; opacity:1.0;" title="openOODA-agents (-22h): 51 pushes (devin:51)"></div><div class="hm-cell" style="background:#50fa7b; opacity:0.75;" title="openOODA-agents (-21h): 17 pushes (devin:17)"></div><div class="hm-cell" style="background:#50fa7b; opacity:0.75;" title="openOODA-agents (-20h): 17 pushes (devin:17)"></div><div class="hm-cell" style="background:#50fa7b; opacity:1.0;" title="openOODA-agents (-19h): 33 pushes (devin:33)"></div><div class="hm-cell" style="background:#50fa7b; opacity:0.75;" title="openOODA-agents (-18h): 18 pushes (devin:18)"></div><div class="hm-cell" style="background:#50fa7b; opacity:0.75;" title="openOODA-agents (-17h): 17 pushes (devin:17)"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell" style="background:#50fa7b; opacity:0.75;" title="openOODA-agents (-12h): 9 pushes (devin:9)"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell" style="background:#50fa7b; opacity:0.75;" title="openOODA-agents (-0h): 9 pushes (devin:9)"></div></div>
+      </div>
+      </div>
+
+      <div class="table-wrap">
+        <table class="ag-table">
+          <thead>
+            <tr>
+              <th>Agent Pool</th>
+              <th>Live / Burst Throughput</th>
+              <th>Tracked Commits / Pushes</th>
+              <th>Signed Releases</th>
+              <th>Fleet Push Share</th>
+              <th>Active Organization Footprint</th>
+            </tr>
+          </thead>
+          <tbody>
+            
+      <tr>
+        <td><span style="color:#00e5ff; font-weight:700;">■ mcode // M3.1-Flash</span></td>
+        <td><strong style="color:var(--color-cyan);">0.0 live / 551.5 burst tok/s</strong></td>
+        <td><strong>1,434</strong></td>
+        <td><strong>387</strong></td>
+        <td><span class="seg-inline" style="color:#00e5ff;">[█████░░░░░]</span> <span>46.7%</span></td>
+        <td class="muted">Root (5), L:core (2), L:kernel (16), L:tools (1411)</td>
+      </tr>
+      <tr>
+        <td><span style="color:#50fa7b; font-weight:700;">■ devin // SWE-2 Max</span></td>
+        <td><strong style="color:var(--color-cyan);">0.0 tok/s (10 panes)</strong></td>
+        <td><strong>729</strong></td>
+        <td><strong>443</strong></td>
+        <td><span class="seg-inline" style="color:#50fa7b;">[██░░░░░░░░]</span> <span>23.7%</span></td>
+        <td class="muted">L:OS (20), L:tools (85), L:DE (33), L:apps (199), L:cloud (170), L:agents (222)</td>
+      </tr>
+      <tr>
+        <td><span style="color:#bd93f9; font-weight:700;">■ vibe // GLM-5.3 [high]</span></td>
+        <td><strong style="color:var(--color-cyan);">3,003,050.0 tok/s</strong></td>
+        <td><strong>643</strong></td>
+        <td><strong>438</strong></td>
+        <td><span class="seg-inline" style="color:#bd93f9;">[██░░░░░░░░]</span> <span>20.9%</span></td>
+        <td class="muted">L:core (14), L:kernel (249), L:OS (187), L:tools (12), L:DE (181)</td>
+      </tr>
+      <tr>
+        <td><span style="color:#ffb000; font-weight:700;">■ grok // Grok-4</span></td>
+        <td><strong style="color:var(--color-cyan);">0.0 live / 184.2 burst tok/s</strong></td>
+        <td><strong>148</strong></td>
+        <td><strong>148</strong></td>
+        <td><span class="seg-inline" style="color:#ffb000;">[█░░░░░░░░░]</span> <span>4.8%</span></td>
+        <td class="muted">L:OS (148)</td>
+      </tr>
+      <tr>
+        <td><span style="color:#ff79c6; font-weight:700;">■ agy // Gemini 4 Argon</span></td>
+        <td><strong style="color:var(--color-cyan);">239.5 tok/s (Root w9)</strong></td>
+        <td><strong>117</strong></td>
+        <td><strong>15</strong></td>
+        <td><span class="seg-inline" style="color:#ff79c6;">[█░░░░░░░░░]</span> <span>3.8%</span></td>
+        <td class="muted">Root (110), L:core (4), L:kernel (1), L:cloud (1), L:agents (1)</td>
+      </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div style="font-size:11px; text-transform:uppercase; color:var(--color-amber); font-weight:700; margin:16px 0 8px; letter-spacing:0.06em;">-- Per-Organization Agent Push Breakdown &amp; Live Usability --</div>
+      
+      <div class="org-push-row">
+        <div class="org-push-hdr">
+          <div>
+            <strong>openOODA</strong>
+            <span class="term-badge term-badge-green" style="margin-left:6px;">[6/6 USABLE · ████████]</span>
           </div>
-          <div class="gpu-gauge-row">
-            <span class="gauge-label">UTIL</span>
-            <code class="seg-bar seg-green">░░░░░░░░░░</code>
-            <span class="gauge-val">0% COMPUTE</span>
+          <div><span style="color:#00e5ff; font-size:0.74rem; margin-right:8px;">■ mcode:5</span><span style="color:#ff79c6; font-size:0.74rem; margin-right:8px;">■ agy:110</span> <strong style="font-size:0.78rem;">(115 tracked pushes)</strong></div>
+        </div>
+        <div class="stacked-bar" style="height:8px; margin-top:4px;"><div style="width:4.3%; background:#00e5ff;" title="mcode: 5"></div><div style="width:95.7%; background:#ff79c6;" title="agy: 110"></div></div>
+      </div>
+      <div class="org-push-row">
+        <div class="org-push-hdr">
+          <div>
+            <strong>openOODA-core</strong>
+            <span class="term-badge term-badge-green" style="margin-left:6px;">[10/10 USABLE · ████████]</span>
           </div>
-          <div class="gpu-foot">
-            <span>TEMP: <strong>27&deg;C</strong></span>
-            <span>POWER: <strong>4.4W / 120W</strong> (4%)</span>
+          <div><span style="color:#00e5ff; font-size:0.74rem; margin-right:8px;">■ mcode:2</span><span style="color:#bd93f9; font-size:0.74rem; margin-right:8px;">■ vibe:14</span><span style="color:#ff79c6; font-size:0.74rem; margin-right:8px;">■ agy:4</span> <strong style="font-size:0.78rem;">(20 tracked pushes)</strong></div>
+        </div>
+        <div class="stacked-bar" style="height:8px; margin-top:4px;"><div style="width:10.0%; background:#00e5ff;" title="mcode: 2"></div><div style="width:70.0%; background:#bd93f9;" title="vibe: 14"></div><div style="width:20.0%; background:#ff79c6;" title="agy: 4"></div></div>
+      </div>
+      <div class="org-push-row">
+        <div class="org-push-hdr">
+          <div>
+            <strong>openOODA-kernel</strong>
+            <span class="term-badge term-badge-green" style="margin-left:6px;">[16/16 USABLE · ████████]</span>
+          </div>
+          <div><span style="color:#00e5ff; font-size:0.74rem; margin-right:8px;">■ mcode:16</span><span style="color:#bd93f9; font-size:0.74rem; margin-right:8px;">■ vibe:249</span><span style="color:#ff79c6; font-size:0.74rem; margin-right:8px;">■ agy:1</span> <strong style="font-size:0.78rem;">(266 tracked pushes)</strong></div>
+        </div>
+        <div class="stacked-bar" style="height:8px; margin-top:4px;"><div style="width:6.0%; background:#00e5ff;" title="mcode: 16"></div><div style="width:93.6%; background:#bd93f9;" title="vibe: 249"></div><div style="width:0.4%; background:#ff79c6;" title="agy: 1"></div></div>
+      </div>
+      <div class="org-push-row">
+        <div class="org-push-hdr">
+          <div>
+            <strong>openOODA-OS</strong>
+            <span class="term-badge term-badge-green" style="margin-left:6px;">[18/18 USABLE · ████████]</span>
+          </div>
+          <div><span style="color:#50fa7b; font-size:0.74rem; margin-right:8px;">■ devin:20</span><span style="color:#bd93f9; font-size:0.74rem; margin-right:8px;">■ vibe:187</span><span style="color:#ffb000; font-size:0.74rem; margin-right:8px;">■ grok:148</span> <strong style="font-size:0.78rem;">(355 tracked pushes)</strong></div>
+        </div>
+        <div class="stacked-bar" style="height:8px; margin-top:4px;"><div style="width:5.6%; background:#50fa7b;" title="devin: 20"></div><div style="width:52.7%; background:#bd93f9;" title="vibe: 187"></div><div style="width:41.7%; background:#ffb000;" title="grok: 148"></div></div>
+      </div>
+      <div class="org-push-row">
+        <div class="org-push-hdr">
+          <div>
+            <strong>openOODA-tools</strong>
+            <span class="term-badge term-badge-amber" style="margin-left:6px;">[250/257 USABLE · ███████░]</span>
+          </div>
+          <div><span style="color:#00e5ff; font-size:0.74rem; margin-right:8px;">■ mcode:1411</span><span style="color:#50fa7b; font-size:0.74rem; margin-right:8px;">■ devin:85</span><span style="color:#bd93f9; font-size:0.74rem; margin-right:8px;">■ vibe:12</span> <strong style="font-size:0.78rem;">(1508 tracked pushes)</strong></div>
+        </div>
+        <div class="stacked-bar" style="height:8px; margin-top:4px;"><div style="width:93.6%; background:#00e5ff;" title="mcode: 1411"></div><div style="width:5.6%; background:#50fa7b;" title="devin: 85"></div><div style="width:0.8%; background:#bd93f9;" title="vibe: 12"></div></div>
+      </div>
+      <div class="org-push-row">
+        <div class="org-push-hdr">
+          <div>
+            <strong>openOODA-DE</strong>
+            <span class="term-badge term-badge-green" style="margin-left:6px;">[20/20 USABLE · ████████]</span>
+          </div>
+          <div><span style="color:#50fa7b; font-size:0.74rem; margin-right:8px;">■ devin:33</span><span style="color:#bd93f9; font-size:0.74rem; margin-right:8px;">■ vibe:181</span> <strong style="font-size:0.78rem;">(214 tracked pushes)</strong></div>
+        </div>
+        <div class="stacked-bar" style="height:8px; margin-top:4px;"><div style="width:15.4%; background:#50fa7b;" title="devin: 33"></div><div style="width:84.6%; background:#bd93f9;" title="vibe: 181"></div></div>
+      </div>
+      <div class="org-push-row">
+        <div class="org-push-hdr">
+          <div>
+            <strong>openOODA-apps</strong>
+            <span class="term-badge term-badge-green" style="margin-left:6px;">[16/16 USABLE · ████████]</span>
+          </div>
+          <div><span style="color:#50fa7b; font-size:0.74rem; margin-right:8px;">■ devin:199</span> <strong style="font-size:0.78rem;">(199 tracked pushes)</strong></div>
+        </div>
+        <div class="stacked-bar" style="height:8px; margin-top:4px;"><div style="width:100.0%; background:#50fa7b;" title="devin: 199"></div></div>
+      </div>
+      <div class="org-push-row">
+        <div class="org-push-hdr">
+          <div>
+            <strong>openOODA-cloud</strong>
+            <span class="term-badge term-badge-amber" style="margin-left:6px;">[8/18 USABLE · ████░░░░]</span>
+          </div>
+          <div><span style="color:#50fa7b; font-size:0.74rem; margin-right:8px;">■ devin:170</span><span style="color:#ff79c6; font-size:0.74rem; margin-right:8px;">■ agy:1</span> <strong style="font-size:0.78rem;">(171 tracked pushes)</strong></div>
+        </div>
+        <div class="stacked-bar" style="height:8px; margin-top:4px;"><div style="width:99.4%; background:#50fa7b;" title="devin: 170"></div><div style="width:0.6%; background:#ff79c6;" title="agy: 1"></div></div>
+      </div>
+      <div class="org-push-row">
+        <div class="org-push-hdr">
+          <div>
+            <strong>openOODA-agents</strong>
+            <span class="term-badge term-badge-green" style="margin-left:6px;">[16/16 USABLE · ████████]</span>
+          </div>
+          <div><span style="color:#50fa7b; font-size:0.74rem; margin-right:8px;">■ devin:222</span><span style="color:#ff79c6; font-size:0.74rem; margin-right:8px;">■ agy:1</span> <strong style="font-size:0.78rem;">(223 tracked pushes)</strong></div>
+        </div>
+        <div class="stacked-bar" style="height:8px; margin-top:4px;"><div style="width:99.6%; background:#50fa7b;" title="devin: 222"></div><div style="width:0.4%; background:#ff79c6;" title="agy: 1"></div></div>
+      </div>
+    </div>
+
+    <div class="section-hdr">
+      <span>-- [05] NORTH STAR COMPATIBILITY &amp; DETERMINISM GATES --</span>
+      <span class="term-badge term-badge-green">[ STAGE2 == STAGE3 VERIFIED ]</span>
+    </div>
+    <div class="panel">
+      <div class="ns-grid">
+        <div class="ns-card">
+          <div class="ns-title">
+            <span>Destiny 2 + BattlEye Playability Gate</span>
+            <span class="term-badge term-badge-amber">[ NORTH STAR GATE ]</span>
+          </div>
+          <div class="ns-desc">
+            Full ring-0 / user-space execution path for <strong>Destiny 2 (Bungie Tiger Engine DX11/DX12)</strong> + <strong>BattlEye (<code>BEDaisy.sys</code>)</strong> anti-cheat driver stack on capability microkernel:<br>
+            • <code>oont</code>: Win32 / NT executive syscall &amp; PE/COFF driver ABI translation layer + <code>BEDaisy.sys</code> kernel callbacks<br>
+            • <code>oovmm</code>: Hardware-assisted KVM/VT-x hypervisor attestation &amp; IOMMU DMA protection<br>
+            • <code>oogpu</code>: Capability-isolated DX11/DX12 → Vulkan/DRM ring-buffer submission &amp; shader pipeline<br>
+            • <code>oocomp</code> (<code>20/20</code> DE usable): Zero-tearing Wayland direct scanout &amp; HID low-latency input warrants
+          </div>
+        </div>
+        <div class="ns-card">
+          <div class="ns-title">
+            <span>POSIX / Linux Coreutils Drop-in Parity</span>
+            <span class="term-badge term-badge-amber">[250/257 USABLE (97.3%)]</span>
+          </div>
+          <div class="ns-desc">
+            <strong>257 / 257 (100%)</strong> upstream CLI/TUI/MCP repositories built &amp; passing deterministic parity checks in <code>@openOODA-tools</code>, with <strong>250/257</strong> converted from scaffold shells into real capability-scoped (<code>FsReadCap</code> / <code>FsWriteCap</code> / <code>ProcessCap</code>) drop-in utilities (7 scaffolds remaining).
+            <div style="margin-top:8px; color:var(--phosphor); font-weight:700;">[███████████████░] 97.3% REAL CAPABILITY I/O</div>
+          </div>
+        </div>
+        <div class="ns-card">
+          <div class="ns-title">
+            <span><code>oodac</code> Self-Hosting Stage2 == Stage3</span>
+            <span class="term-badge term-badge-green">[ 100% VERIFIED ]</span>
+          </div>
+          <div class="ns-desc">
+            Bit-for-bit reproducible bootstrap verification across <code>@openOODA-core</code> (<code>10/10</code> USABLE):<br>
+            • Direct native <code>x86-64</code> ELF64 machine-code emission (Milestones 1–4, <code>17/17</code> assertions)<br>
+            • Bit-identical <code>Stage2 == Stage3</code> compiler binary digest verification<br>
+            • 64-bit capability cycle register (<code>32 + 32 = 64</code>: 13 HW + 19 SW bits) &amp; 16-byte SIMD arena allocator
           </div>
         </div>
       </div>
     </div>
 
-    <div class="section-head">
-      <span class="panel-label">-- [2] PER-AGENT TOK/SEC THROUGHPUT &amp; TOKEN QUOTA REMAINING PER CYCLE --</span>
-      <span class="term-badge badge-cyan">[ TOTAL FLEET: 913.2 tok/s LIVE // 1514.8 tok/s PEAK ]</span>
-    </div>
-    <div class="panel table-wrap">
-      <table class="crt-table">
-        <thead>
-          <tr>
-            <th>Agent Provider</th>
-            <th>Assigned Panes</th>
-            <th>Quota Remaining</th>
-            <th>Reset Window</th>
-            <th>Live Throughput (tok/sec)</th>
-            <th>Provider Status</th>
-          </tr>
-        </thead>
-        <tbody>
-            <tr>
-              <td><code>devin (SWE-2 Max / High)</code></td>
-              <td>10 panes (wG..wP)</td>
-              <td><code class="seg-bar seg-green">██████████</code> <strong>100%</strong></td>
-              <td>Daily/Wk (rst 22:00 UTC)</td>
-              <td><code class="seg-bar seg-cyan">███████░░░</code> <strong>700.2 tok/s</strong> <span class="dim-note">(peak 700.2)</span></td>
-              <td><span class="term-badge badge-green">[ WORKING // 9 ACTIVE ]</span></td>
-            </tr>
-            <tr>
-              <td><code>vibe (GLM-5.3 [high])</code></td>
-              <td>1 pane (wF:p1 · L0/L3)</td>
-              <td><code class="seg-bar seg-green">█░░░░░░░░░</code> <strong>10%</strong></td>
-              <td>Monthly (rst Dec 1 UTC)</td>
-              <td><code class="seg-bar seg-cyan">███████░░░</code> <strong>118.4 tok/s</strong> <span class="dim-note">(peak 165.0)</span></td>
-              <td><span class="term-badge badge-cyan">[ WORKING // STREAMING ]</span></td>
-            </tr>
-            <tr>
-              <td><code>agy (Gemini 4 Argon [high])</code></td>
-              <td>1 pane (w9:p1 · Root)</td>
-              <td><code class="seg-bar seg-green">█████████░</code> <strong>94%</strong></td>
-              <td>Rolling 5h Window</td>
-              <td><code class="seg-bar seg-cyan">███████░░░</code> <strong>94.6 tok/s</strong> <span class="dim-note">(peak 140.0)</span></td>
-              <td><span class="term-badge badge-green">[ WATCHDOG // ACTIVE ]</span></td>
-            </tr>
-            <tr>
-              <td><code>mcode (M3.1-Flash)</code></td>
-              <td>Burst Fleet (L1/L3/L6)</td>
-              <td><code class="seg-bar seg-green">░░░░░░░░░░</code> <strong>0%</strong></td>
-              <td>5h Window (rst 10:00 HST)</td>
-              <td><code class="seg-bar seg-cyan">██████████</code> <strong>0.0 tok/s</strong> <span class="dim-note">(peak 456.6)</span></td>
-              <td><span class="term-badge badge-amber">[ STANDBY // 456.6 tok/s BURST ]</span></td>
-            </tr>
-            <tr>
-              <td><code>grok (Grok 4.7)</code></td>
-              <td>Reserve Pool (L2/L4)</td>
-              <td><code class="seg-bar seg-green">░░░░░░░░░░</code> <strong>0%</strong></td>
-              <td>Weekly Quota Cycle</td>
-              <td><code class="seg-bar seg-cyan">░░░░░░░░░░</code> <strong>0.0 tok/s</strong> <span class="dim-note">(peak 145.0)</span></td>
-              <td><span class="term-badge badge-red">[ PAUSED // COOLDOWN ]</span></td>
-            </tr>
-        </tbody>
-      </table>
-    </div>
-
-    <div class="section-head">
-      <span class="panel-label">-- [3] SANITIZED AGENT FLEET TELEMETRY (PER-PANE TOK/SEC &amp; QUOTA PACE) --</span>
-      <span class="term-badge badge-green">[ TARGET: 99% PRE-RESET // &ge;1% RESERVE FLOOR ]</span>
-    </div>
-    <div class="panel table-wrap">
-      <table class="crt-table">
-        <thead>
-          <tr>
-            <th>Pane</th>
-            <th>Layer / Workspace</th>
-            <th>Active Agent</th>
-            <th>State</th>
-            <th>Pane tok/sec</th>
-            <th>Quota / Context Window</th>
-            <th>Pace to 99%</th>
-          </tr>
-        </thead>
-        <tbody>
-            <tr>
-              <td><code>w9:p1</code></td>
-              <td>(Root) openOODA</td>
-              <td><code>agy (Gemini 4 Argon [high])</code></td>
-              <td><span class="term-badge badge-green">[ WORKING ]</span></td>
-              <td><code class="seg-bar seg-cyan">██████░░</code> <strong>94.6 tok/s</strong></td>
-              <td>Sub/API 94% rem (rst 5h) / Ctx 41%</td>
-              <td>OK (+93% to 99%)</td>
-            </tr>
-            <tr>
-              <td><code>wF:p1</code></td>
-              <td>(L0) openOODA-core</td>
-              <td><code>vibe (GLM-5.3 [high])</code></td>
-              <td><span class="term-badge badge-green">[ WORKING ]</span></td>
-              <td><code class="seg-bar seg-cyan">████████</code> <strong>118.4 tok/s</strong></td>
-              <td>Mo 90% (10% rem, rst Dec1) / ctx 353k/800k</td>
-              <td>OK (+9% to 99%)</td>
-            </tr>
-            <tr>
-              <td><code>wG:p1</code></td>
-              <td>(L1) openOODA-kernel</td>
-              <td><code>devin (SWE-2 Max)</code></td>
-              <td><span class="term-badge badge-green">[ WORKING ]</span></td>
-              <td><code class="seg-bar seg-cyan">███░░░░░</code> <strong>52.3 tok/s</strong></td>
-              <td>SWE-2 Free (free-tier, D/Wk 100% rst 22:00) / Ctx 44%</td>
-              <td>OK (+99% to 99%)</td>
-            </tr>
-            <tr>
-              <td><code>wH:p1</code></td>
-              <td>(L2) openOODA-OS</td>
-              <td><code>devin (SWE-2 Max)</code></td>
-              <td><span class="term-badge badge-green">[ WORKING ]</span></td>
-              <td><code class="seg-bar seg-cyan">██████░░</code> <strong>96.0 tok/s</strong></td>
-              <td>SWE-2 Free (free-tier, D/Wk 100% rst 22:00) / Ctx 46%</td>
-              <td>OK (+99% to 99%)</td>
-            </tr>
-            <tr>
-              <td><code>wJ:p1</code></td>
-              <td>(L3) openOODA-tools</td>
-              <td><code>devin (SWE-2 Max)</code></td>
-              <td><span class="term-badge badge-green">[ WORKING ]</span></td>
-              <td><code class="seg-bar seg-cyan">█░░░░░░░</code> <strong>18.4 tok/s</strong></td>
-              <td>SWE-2 Free (free-tier, D/Wk 100% rst 22:00) / Ctx 78%</td>
-              <td>OK (+99% to 99%)</td>
-            </tr>
-            <tr>
-              <td><code>wJ:p2</code></td>
-              <td>(L3) openOODA-tools</td>
-              <td><code>devin (SWE-2 Max)</code></td>
-              <td><span class="term-badge badge-green">[ WORKING ]</span></td>
-              <td><code class="seg-bar seg-cyan">██████░░</code> <strong>96.0 tok/s</strong></td>
-              <td>SWE-2 Free (free-tier, D/Wk 100% rst 22:00) / Ctx 46%</td>
-              <td>OK (+99% to 99%)</td>
-            </tr>
-            <tr>
-              <td><code>wK:p1</code></td>
-              <td>(L4) openOODA-DE</td>
-              <td><code>devin (SWE-2 Max)</code></td>
-              <td><span class="term-badge badge-green">[ WORKING ]</span></td>
-              <td><code class="seg-bar seg-cyan">█████░░░</code> <strong>68.6 tok/s</strong></td>
-              <td>SWE-2 Free (free-tier, D/Wk 100% rst 22:00) / Ctx 47%</td>
-              <td>OK (+99% to 99%)</td>
-            </tr>
-            <tr>
-              <td><code>wK:p2</code></td>
-              <td>(L4) openOODA-DE</td>
-              <td><code>devin (SWE-2 Max)</code></td>
-              <td><span class="term-badge badge-green">[ WORKING ]</span></td>
-              <td><code class="seg-bar seg-cyan">██████░░</code> <strong>96.0 tok/s</strong></td>
-              <td>SWE-2 Free (free-tier, D/Wk 100% rst 22:00) / Ctx 39%</td>
-              <td>OK (+99% to 99%)</td>
-            </tr>
-            <tr>
-              <td><code>wM:p1</code></td>
-              <td>(L5) openOODA-apps</td>
-              <td><code>devin (SWE-2 Max)</code></td>
-              <td><span class="term-badge badge-cyan">[ IDLE ]</span></td>
-              <td><code class="seg-bar seg-cyan">█░░░░░░░</code> <strong>12.5 tok/s</strong></td>
-              <td>SWE-2 Free (free-tier, D/Wk 100% rst 22:00) / Ctx 50%</td>
-              <td>OK (+99% to 99%)</td>
-            </tr>
-            <tr>
-              <td><code>wN:p1</code></td>
-              <td>(L6) openOODA-cloud</td>
-              <td><code>devin (SWE-2 Max)</code></td>
-              <td><span class="term-badge badge-green">[ WORKING ]</span></td>
-              <td><code class="seg-bar seg-cyan">██████░░</code> <strong>96.0 tok/s</strong></td>
-              <td>SWE-2 Free (free-tier, D/Wk 100% rst 22:00) / Ctx 46%</td>
-              <td>OK (+99% to 99%)</td>
-            </tr>
-            <tr>
-              <td><code>wN:p2</code></td>
-              <td>(L6) openOODA-cloud</td>
-              <td><code>devin (SWE-2 Max)</code></td>
-              <td><span class="term-badge badge-green">[ WORKING ]</span></td>
-              <td><code class="seg-bar seg-cyan">██████░░</code> <strong>96.0 tok/s</strong></td>
-              <td>SWE-2 Free (free-tier, D/Wk 100% rst 22:00)</td>
-              <td>OK (+99% to 99%)</td>
-            </tr>
-            <tr>
-              <td><code>wP:p1</code></td>
-              <td>(L7) openOODA-agents</td>
-              <td><code>devin (SWE-2 Max)</code></td>
-              <td><span class="term-badge badge-green">[ WORKING ]</span></td>
-              <td><code class="seg-bar seg-cyan">█████░░░</code> <strong>68.4 tok/s</strong></td>
-              <td>SWE-2 Free (free-tier, D/Wk 100% rst 22:00) / Ctx 36%</td>
-              <td>OK (+99% to 99%)</td>
-            </tr>
-        </tbody>
-      </table>
-    </div>
-
-    <div class="section-head">
-      <span class="panel-label">-- [4] 9-ORGANIZATION (ROOT + L0–L7) USABILITY &amp; BUILD MATRIX --</span>
-      <span class="term-badge badge-green">[ 360/377 USABLE (95.5%) ]</span>
-    </div>
-    <div class="panel table-wrap">
-      <table class="crt-table">
-        <thead>
-          <tr>
-            <th>Organization</th>
-            <th>Total Repos</th>
-            <th>Usable (.oo Real)</th>
-            <th>Scaffolds</th>
-            <th>Tag &ge; v0.2.1</th>
-            <th>Green / Built</th>
-            <th>Layer Gate</th>
-          </tr>
-        </thead>
-        <tbody>
-            <tr>
-              <td><code>openOODA</code></td>
-              <td>6</td>
-              <td><code class="seg-bar seg-green">██████████</code> <strong>6/6</strong></td>
-              <td>0</td>
-              <td>6/6</td>
-              <td>6/6</td>
-              <td><span class="term-badge badge-green">[ 100% USABLE ]</span></td>
-            </tr>
-            <tr>
-              <td><code>openOODA-core</code></td>
-              <td>10</td>
-              <td><code class="seg-bar seg-green">██████████</code> <strong>10/10</strong></td>
-              <td>0</td>
-              <td>10/10</td>
-              <td>10/10</td>
-              <td><span class="term-badge badge-green">[ 100% USABLE ]</span></td>
-            </tr>
-            <tr>
-              <td><code>openOODA-kernel</code></td>
-              <td>16</td>
-              <td><code class="seg-bar seg-green">██████████</code> <strong>16/16</strong></td>
-              <td>0</td>
-              <td>16/16</td>
-              <td>16/16</td>
-              <td><span class="term-badge badge-green">[ 100% USABLE ]</span></td>
-            </tr>
-            <tr>
-              <td><code>openOODA-OS</code></td>
-              <td>18</td>
-              <td><code class="seg-bar seg-green">██████████</code> <strong>18/18</strong></td>
-              <td>0</td>
-              <td>18/18</td>
-              <td>18/18</td>
-              <td><span class="term-badge badge-green">[ 100% USABLE ]</span></td>
-            </tr>
-            <tr>
-              <td><code>openOODA-tools</code></td>
-              <td>257</td>
-              <td><code class="seg-bar seg-green">██████████</code> <strong>250/257</strong></td>
-              <td>7</td>
-              <td>257/257</td>
-              <td>257/257</td>
-              <td><span class="term-badge badge-amber">[ 97.3% USABLE ]</span></td>
-            </tr>
-            <tr>
-              <td><code>openOODA-DE</code></td>
-              <td>20</td>
-              <td><code class="seg-bar seg-green">██████████</code> <strong>20/20</strong></td>
-              <td>0</td>
-              <td>20/20</td>
-              <td>20/20</td>
-              <td><span class="term-badge badge-green">[ 100% USABLE ]</span></td>
-            </tr>
-            <tr>
-              <td><code>openOODA-apps</code></td>
-              <td>16</td>
-              <td><code class="seg-bar seg-green">██████████</code> <strong>16/16</strong></td>
-              <td>0</td>
-              <td>16/16</td>
-              <td>16/16</td>
-              <td><span class="term-badge badge-green">[ 100% USABLE ]</span></td>
-            </tr>
-            <tr>
-              <td><code>openOODA-cloud</code></td>
-              <td>18</td>
-              <td><code class="seg-bar seg-green">████░░░░░░</code> <strong>8/18</strong></td>
-              <td>10</td>
-              <td>18/18</td>
-              <td>18/18</td>
-              <td><span class="term-badge badge-amber">[ 44.4% USABLE ]</span></td>
-            </tr>
-            <tr>
-              <td><code>openOODA-agents</code></td>
-              <td>16</td>
-              <td><code class="seg-bar seg-green">██████████</code> <strong>16/16</strong></td>
-              <td>0</td>
-              <td>16/16</td>
-              <td>16/16</td>
-              <td><span class="term-badge badge-green">[ 100% USABLE ]</span></td>
-            </tr>
-        </tbody>
-      </table>
-    </div>
-
-    <div class="section-head">
-      <span class="panel-label">-- [5] MULTI-AGENT RELEASE PROVENANCE (ROOT + L0–L7) --</span>
-      <span class="term-badge badge-green">[ FULL-STACK CAPABILITY SUBSTRATE ]</span>
+    <div class="section-hdr">
+      <span>-- [06] DYNAMIC LAYER IMPLEMENTATION &amp; USABILITY STATUS (360/377 USABLE) --</span>
+      <span class="term-badge term-badge-green">[███████████░] 95.5%</span>
     </div>
     <div class="panel">
       <ul class="missions">
-        <li><span class="term-badge badge-green">[ROOT &middot; w9]</span> <strong><code>agy (Gemini 4 Argon [high])</code></strong>: <code>openOODA/openOODA</code> (<code>v2.11.124</code>), <code>openOODA/website</code> (<code>v1.3.40</code>), <code>openOODA/status</code> (<code>v0.3.1</code>), <code>openOODA/install</code> (<code>v0.2.6</code>), <code>openOODA/catalog</code> (<code>v0.2.4</code>) &mdash; ecosystem watchdog, 5-GPU + per-agent <code>tok/sec</code> CRT telemetry, and documentation sync.</li>
-        <li><span class="term-badge badge-green">[L0 &middot; wF:p1]</span> <strong><code>vibe (GLM-5.3 [high])</code></strong>: <code>openOODA-core</code> (<code>10/10</code> USABLE: <code>oodac v0.11.62</code>, <code>oodar v4.0.89</code>, <code>std v1.0.85</code>, <code>opm v2.11.32</code>, <code>mcp v2.11.27</code>, <code>ooda v2.11.24</code>, <code>tui v0.3.28</code>, <code>lsp v0.2.4</code>, <code>cli v0.2.4</code>) &mdash; native ELF64 constant-time XOR compare, Merkle-DAG causal chain, and 1:1 capability bitmask alignment.</li>
-        <li><span class="term-badge badge-green">[L1 &middot; wG:p1]</span> <strong><code>mcode (M3.1-Flash)</code> &amp; <code>vibe (GLM-5.3 [high])</code></strong>: <code>openOODA-kernel</code> (<code>16/16</code> USABLE at <code>v0.4.0</code>&ndash;<code>v0.5.0</code>, <code>93&ndash;108</code> assertions) &mdash; real <code>FsReadCap</code> manifest/probe loaders, 8-word (64-byte) IPC frames, <code>ML-DSA-65</code> + <code>SHA3-256</code> attestation, and speculative DMA rollback.</li>
-        <li><span class="term-badge badge-green">[L2 &middot; wH:p1]</span> <strong><code>vibe (GLM-5.3 [high])</code> &amp; <code>devin (SWE-2 Max)</code></strong>: <code>openOODA-OS</code> (<code>18/18</code> USABLE at <code>v0.3.5</code>, <code>60&ndash;70</code> assertions) &mdash; real <code>FsReadCap</code> manifest/log/unit loaders and cross-daemon warrant delegation across all 18 zero-root system daemons.</li>
-        <li><span class="term-badge badge-cyan">[L3 &middot; wJ:p1/p2]</span> <strong><code>devin (SWE-2 Max)</code>, <code>mcode (M3.1-Flash)</code> &amp; <code>vibe (GLM-5.3 [high])</code></strong>: <code>openOODA-tools</code> (<code>v0.2.3</code>&ndash;<code>v0.2.4</code> across 257 capability-scoped CLI/TUI/MCP utilities, converting remaining scaffold shells to real <code>FsReadCap</code> engines).</li>
-        <li><span class="term-badge badge-green">[L4 &middot; wK:p1/p2]</span> <strong><code>devin (SWE-2 Max / High)</code> &amp; <code>vibe (GLM-5.3 [high])</code></strong>: <code>openOODA-DE</code> (<code>20/20</code> USABLE at <code>v0.3.5</code>&ndash;<code>v0.3.6</code>, <code>96/96</code> assertions) &mdash; capability Wayland compositor, real <code>FsReadCap</code> inspection, and O(1) cascading epoch revocation.</li>
-        <li><span class="term-badge badge-green">[L5 &middot; wM:p1]</span> <strong><code>devin (SWE-2 Max)</code></strong>: <code>openOODA-apps</code> (<code>16/16</code> USABLE at <code>v0.3.6</code>, <code>80/80</code> assertions) &mdash; real capability-backed browser, canvas, chat, daw, deck, docs, git-ui, mail, media, notes, paint, pass, pdf, sheet, studio, and vm-ui applications.</li>
-        <li><span class="term-badge badge-cyan">[L6 &middot; wN:p1/p2]</span> <strong><code>devin (SWE-2 Max)</code> &amp; <code>mcode (M3.1-Flash)</code></strong>: <code>openOODA-cloud</code> (18 distributed cloud/mesh repos at <code>v0.3.4</code>&ndash;<code>v0.3.6</code>) &mdash; O(1) cascading epoch revocation, SEAL/IMMUTABLE rights gates, and real <code>FsReadCap</code> storage/mesh engines.</li>
-        <li><span class="term-badge badge-green">[L7 &middot; wP:p1]</span> <strong><code>devin (SWE-2 Max)</code></strong>: <code>openOODA-agents</code> (<code>16/16</code> USABLE at <code>v0.3.8</code>&ndash;<code>v0.3.9</code>, <code>104&ndash;131</code> assertions) &mdash; constant-time side-channel immunity, proof-carrying <code>Act</code> certificates, and cross-layer conformance gates.</li>
+        <li><span class="term-badge term-badge-green">[6/6 USABLE]</span> <strong>Root (<code>@openOODA</code> · 6 repos)</strong>: Ecosystem orchestrator, buildbox dogfood watchdog, live status telemetry (<code>v0.3.0</code>), installer, and catalog.</li>
+        <li><span class="term-badge term-badge-green">[10/10 USABLE]</span> <strong>L0 (<code>@openOODA-core</code> · 10 repos)</strong>: Self-hosting compiler (<code>oodac</code>), runtime (<code>oodar</code>), standard library (<code>std</code>), package manager (<code>opm</code>), and native <code>x86-64</code> ELF64 backend (<code>10/10</code> built).</li>
+        <li><span class="term-badge term-badge-green">[16/16 USABLE]</span> <strong>L1 (<code>@openOODA-kernel</code> · 16 repos)</strong>: Capability microkernel, HALs, and user-space drivers at <code>v0.4.0</code>–<code>v0.5.0</code> (<code>93–108</code> assertions, <code>16/16</code> USABLE): real <code>FsReadCap</code> manifest/probe loaders across all 16 repos, 8-word (64-byte) IPC frames, <code>ML-DSA-65</code> + <code>SHA3-256</code> attestation, and speculative DMA rollback.</li>
+        <li><span class="term-badge term-badge-green">[18/18 USABLE]</span> <strong>L2 (<code>@openOODA-OS</code> · 18 repos)</strong>: Zero-root system daemons and image builder at <code>v0.3.5</code> (<code>60–70</code> assertions, <code>18/18</code> USABLE): real <code>FsReadCap</code> manifest/log/unit loaders across all 18 daemons, capability VFS, network daemon, service warrants, and cross-daemon warrant delegation.</li>
+        <li><span class="term-badge term-badge-amber">[250/257 USABLE]</span> <strong>L3 (<code>@openOODA-tools</code> · 257 repos)</strong>: Capability-scoped userland CLI/TUI/MCP utilities at <code>v0.2.3</code>–<code>v0.2.4</code> (<code>257/257</code> built &amp; passing parity gates; <code>250/257</code> usable with real capability I/O, <code>7</code> scaffolds remaining).</li>
+        <li><span class="term-badge term-badge-green">[20/20 USABLE]</span> <strong>L4 (<code>@openOODA-DE</code> · 20 repos)</strong>: Capability Wayland compositor and desktop utilities at <code>v0.3.6</code> (<code>96/96</code> assertions, <code>20/20</code> USABLE): real <code>FsReadCap</code> file inspection, <code>CodeBuffer</code> / <code>DirectoryView</code> / <code>FleetHud</code> / <code>StoreCatalog</code> / <code>CommandDeck</code> engines, and surface warrants.</li>
+        <li><span class="term-badge term-badge-green">[16/16 USABLE]</span> <strong>L5 (<code>@openOODA-apps</code> · 16 repos)</strong>: Native capability applications at <code>v0.3.6</code> (<code>16/16</code> USABLE at <code>80/80</code> assertions: real HTTP/git/sheet/studio/VM/media/notes/paint/pass/pdf verbs).</li>
+        <li><span class="term-badge term-badge-amber">[8/18 USABLE]</span> <strong>L6 (<code>@openOODA-cloud</code> · 18 repos)</strong>: Distributed cloud/mesh services at <code>v0.3.5</code>–<code>v0.3.6</code> (<code>18/18</code> built, <code>8/18</code> USABLE with real <code>FsReadCap</code> manifest/record loaders, <code>10</code> scaffolds remaining in active conversion on <code>wN:p1/p2</code>).</li>
+        <li><span class="term-badge term-badge-green">[16/16 USABLE]</span> <strong>L7 (<code>@openOODA-agents</code> · 16 repos)</strong>: Bounded OODA verification, falsification, and governance engines at <code>v0.3.8</code>–<code>v0.3.9</code> (<code>104–131</code> assertions, <code>16/16</code> USABLE): constant-time side-channel immunity and proof-carrying <code>Act</code> certificates.</li>
       </ul>
     </div>
 
-    <div class="section-head">
-      <span class="panel-label">-- [6] SANITIZED BUILDBOX &amp; ECOSYSTEM SNAPSHOT (ECO-STATUS) --</span>
-      <span class="term-badge badge-green">[ ZERO-TRUST REDACTED ]</span>
+    <div class="section-hdr">
+      <span>-- [07] SANITIZED ECOSYSTEM &amp; FLEET SNAPSHOT (ECO-STATUS // ZERO-TRUST REDACTED) --</span>
+      <span class="term-badge">[ FAIL-CLOSED PRIVACY GATE: PASS ]</span>
     </div>
     <div class="panel">
-      <pre class="raw-term">==============================================================================================
+      <pre>==============================================================================================
   openOODA 9-ORG (ROOT + L0-L7) ECOSYSTEM & AGENT FLEET STATUS (PURE .oo DOGFOOD WATCHDOG)
 ==============================================================================================
 
-[1] LIVE AGENT & QUOTA TELEMETRY (Target: 99% pre-reset, >=1% hard reserve floor)
-  PANE    WORKSPACE            AGENT                    STATE       QUOTA / TOKENS                     STATUS / PACE TO 99%
+[1] LIVE AGENT & QUOTA TELEMETRY (Target: 90% soft throttle / 95% hard cutoff, >=5% reserve floor)
+  PANE    WORKSPACE            AGENT                    STATE       QUOTA / TOKENS                     STATUS / PACE TO 90%/95%
   ------------------------------------------------------------------------------------------------------------------------------
-  wF:p1   (L0) openOODA-core   vibe (GLM-5.3 [high])  working    Mo 90% (10% rem, rst Dec1) / ctx 353k/800k OK (+9% to 99%)
-  wG:p1   (L1) openOODA-kernel devin (SWE-2 Max)      working    SWE-2 Free (free-tier, D/Wk 100% rst 22:00) / Ctx 44% OK (+99% to 99%)
-  wH:p1   (L2) openOODA-OS     devin (SWE-2 Max)      working    SWE-2 Free (free-tier, D/Wk 100% rst 22:00) / Ctx 46% OK (+99% to 99%)
-  wJ:p1   (L3) openOODA-tools  devin (SWE-2 Max)      working    SWE-2 Free (free-tier, D/Wk 100% rst 22:00) / Ctx 78% OK (+99% to 99%)
-  wJ:p2   (L3) openOODA-tools  devin (SWE-2 Max)      working    SWE-2 Free (free-tier, D/Wk 100% rst 22:00) / Ctx 46% OK (+99% to 99%)
-  wK:p1   (L4) openOODA-DE     devin (SWE-2 Max)      working    SWE-2 Free (free-tier, D/Wk 100% rst 22:00) / Ctx 47% OK (+99% to 99%)
-  wK:p2   (L4) openOODA-DE     devin (SWE-2 Max)      working    SWE-2 Free (free-tier, D/Wk 100% rst 22:00) / Ctx 39% OK (+99% to 99%)
-  wM:p1   (L5) openOODA-apps   devin (SWE-2 Max)      idle       SWE-2 Free (free-tier, D/Wk 100% rst 22:00) / Ctx 50% OK (+99% to 99%)
-  wN:p1   (L6) openOODA-cloud  devin (SWE-2 Max)      working    SWE-2 Free (free-tier, D/Wk 100% rst 22:00) / Ctx 46% OK (+99% to 99%)
-  wN:p2   (L6) openOODA-cloud  devin (SWE-2 Max)      working    SWE-2 Free (free-tier, D/Wk 100% rst 22:00)   OK (+99% to 99%)
-  wP:p1   (L7) openOODA-agents devin (SWE-2 Max)      working    SWE-2 Free (free-tier, D/Wk 100% rst 22:00) / Ctx 36% OK (+99% to 99%)
+  wF:p1   (L0) openOODA-core   vibe (GLM-5.3 [high])  working    Mo 90% (10% rem, rst Dec1) / ctx 353k/800k OK (THROTTLE: 1-pane only (+5% to 95%))
+  wG:p1   (L1) openOODA-kernel devin (SWE-2 Max)      working    SWE-2 Free (D/Wk 100% rst 22:00) / Ctx 44% OK (+90% to 90% (95% cap))
+  wH:p1   (L2) openOODA-OS     devin (SWE-2 Max)      working    SWE-2 Free (D/Wk 100% rst 22:00) / Ctx 43% OK (+90% to 90% (95% cap))
+  wJ:p1   (L3) openOODA-tools  devin (SWE-2 Max)      working    SWE-2 Free (D/Wk 100% rst 22:00) / Ctx 78% OK (+90% to 90% (95% cap))
+  wJ:p2   (L3) openOODA-tools  devin (SWE-2 Max)      working    SWE-2 Free (D/Wk 100% rst 22:00) / Ctx 45% OK (+90% to 90% (95% cap))
+  wK:p1   (L4) openOODA-DE     devin (SWE-2 Max)      working    SWE-2 Free (D/Wk 100% rst 22:00) / Ctx 47% OK (+90% to 90% (95% cap))
+  wK:p2   (L4) openOODA-DE     devin (SWE-2 Max)      working    SWE-2 Free (D/Wk 100% rst 22:00) / Ctx 39% OK (+90% to 90% (95% cap))
+  wM:p1   (L5) openOODA-apps   devin (SWE-2 Max)      working    SWE-2 Free (D/Wk 100% rst 22:00) / Ctx 49% OK (+90% to 90% (95% cap))
+  wN:p1   (L6) openOODA-cloud  devin (SWE-2 Max)      working    SWE-2 Free (D/Wk 100% rst 22:00) / Ctx 46% OK (+90% to 90% (95% cap))
+  wN:p2   (L6) openOODA-cloud  devin (SWE-2 Max)      working    SWE-2 Free (D/Wk 100% rst 22:00) / Ctx 56% OK (+90% to 90% (95% cap))
+  wP:p1   (L7) openOODA-agents devin (SWE-2 Max)      working    SWE-2 Free (D/Wk 100% rst 22:00) / Ctx 36% OK (+90% to 90% (95% cap))
 
 [2] 9-ORGANIZATION (ROOT + L0-L7) USABILITY MATRIX (USABLE vs SCAFFOLD SHELLS)
   ORGANIZATION        TOTAL     USABLE    SCAFFOLDS   TAG>=v0.2.1   GREEN/BUILT
@@ -896,19 +1148,27 @@
   openOODA-cloud         18       8/18           10         18/18         18/18
   openOODA-agents        16      16/16            0         16/16         16/16
 
-[3] TAILSCALE FLEET & GPU BUILDBOX TELEMETRY (Daily Update/Reboot ~04:00, Nightly Loop 04:30)
-  NODE (TAILSCALE IP)        ROLE           RAM / TMPFS   GPU VRAM & UTIL                        OODA-INFERENCE       BUILDBOX / TIMER
-  ---------------------------------------------------------------------------------------------------------------------------------------
-  NODE-01 (mesh-ctrl)     control/herdr  15GiB/7.8G    G0:12/12288MB(0%)                      active:ooaid:ooaid-ipc   ready/active
-  NODE-02 (mesh-gpu-a) buildbox+gpu   63GiB/32G     G0:2/16380MB(0%) G1:2/16380MB(0%)      active:ooaid:ooaid-ipc   ready/active
-  NODE-03 (mesh-gpu-b)   llm+replica    31GiB/16G     G0:2/16380MB(0%) G1:2/16380MB(0%)      active:ooaid:ooaid-ipc   ready/active
+[3] SANITIZED FLEET & 5-GPU BUILDBOX TELEMETRY (Zero-Trust Anonymized Hardware Matrix)
+  GPU-ID   NODE      ROLE           NODE RAM      VRAM USED / TOTAL     VRAM BAR       COMPUTE UTIL   OODA-INFERENCE   BUILDBOX
+  -------------------------------------------------------------------------------------------------------------------------------
+  GPU-00   NODE-01   control/herdr  15GiB/7.8G    12/12288MB (12GB)     [█░░░░░░░░░]   0% [█░░░░░░░]  ONLINE // ooaid  READY
+  GPU-01   NODE-02   buildbox+gpu   63GiB/32G     2/16380MB (16GB)      [█░░░░░░░░░]   0% [█░░░░░░░]  ONLINE // ooaid  READY
+  GPU-02   NODE-02   buildbox+gpu   63GiB/32G     2/16380MB (16GB)      [█░░░░░░░░░]   0% [█░░░░░░░]  ONLINE // ooaid  READY
+  GPU-03   NODE-03   llm+replica    31GiB/16G     2/16380MB (16GB)      [█░░░░░░░░░]   0% [█░░░░░░░]  ONLINE // ooaid  READY
+  GPU-04   NODE-03   llm+replica    31GiB/16G     2/16380MB (16GB)      [█░░░░░░░░░]   0% [█░░░░░░░]  ONLINE // ooaid  READY
 ==============================================================================================</pre>
     </div>
-  </main>
+  </div>
 
   <footer class="window-statusbar">
-    <div>openOODA // Capability-Secure Computing Stack (L0–L7) &middot; <a href="https://openooda.org">[OPENOODA.ORG]</a> &middot; <a href="https://github.com/openOODA">[GITHUB]</a></div>
-    <div>CRT TELEMETRY ENGINE <code>v0.3.1</code> &middot; [ZERO AMBIENT AUTHORITY]</div>
+    <div>
+      <a href="https://openooda.org">[ &#8592; OPENOODA.ORG PORTAL ]</a>
+      <span style="margin-left:10px;">openOODA // Capability-Secure Computing Stack (Root + L0–L7)</span>
+    </div>
+    <div>
+      <span>[ ZERO AMBIENT AUTHORITY ]</span>
+      <span style="margin-left:8px; color:var(--phosphor);">[ ZERO-TRUST PUBLIC TELEMETRY GATE ACTIVE ]</span>
+    </div>
   </footer>
 </body>
 </html>
