@@ -122,7 +122,7 @@
   <header>
     <div class="brand">open<span>OODA</span> · Architecture &amp; Build Status</div>
     <div class="badge-live">● AUTO-REFRESH 5M</div>
-    <div class="timestamps">Last Updated: <strong>2026-11-04 07:00:13 HST</strong> (2026-11-04 17:00:13 UTC)</div>
+    <div class="timestamps">Last Updated: <strong>2026-11-04 07:06:05 HST</strong> (2026-11-04 17:06:05 UTC)</div>
   </header>
 
   <div class="grid">
@@ -138,8 +138,8 @@
     </div>
     <div class="stat-card">
       <div class="stat-label">.oo Pages / LOC</div>
-      <div class="stat-val">15148</div>
-      <div class="stat-sub">152048 lines (≤240/page)</div>
+      <div class="stat-val">15152</div>
+      <div class="stat-sub">152345 lines (≤240/page)</div>
     </div>
     <div class="stat-card">
       <div class="stat-label">Compiled Binaries</div>
@@ -163,11 +163,26 @@
     <ul class="missions">
       <li><span class="tag tag-done">VERIFIED</span><strong>L0 (<code>@openOODA-core</code> · 10 repos)</strong>: Self-hosting compiler (<code>oodac</code>), direct <code>x86-64</code> ELF64 machine-code emission (Milestones 1–4, <code>17/17</code> assertions), 16-byte SIMD arena allocator, and 64-bit capability cycle register (<code>32 + 32 = 64</code>).</li>
       <li><span class="tag tag-done">v0.4.0</span><strong>L1 (<code>@openOODA-kernel</code> · 16 repos)</strong>: Capability microkernel, HALs, and user-space drivers at <code>v0.4.0</code> (<code>93/93</code> assertions): 8-word (64-byte) IPC frames, <code>ML-DSA-65</code> + <code>SHA3-256</code> attestation, <code>2f+1</code> quorum, speculative DMA rollback, and constant-time digest verification.</li>
-      <li><span class="tag tag-done">v0.3.4</span><strong>L2 (<code>@openOODA-OS</code> · 18 repos)</strong>: Zero-root system daemons and image builder at <code>v0.3.3</code>–<code>v0.3.4</code> (<code>60–65</code> assertions): capability VFS, network daemon, service warrants, Merkle-DAG causal audit chain, and cross-daemon warrant delegation.</li>
-      <li><span class="tag tag-done">v0.2.3</span><strong>L3 (<code>@openOODA-tools</code> · 257 repos)</strong>: Capability-scoped userland CLI/TUI/MCP utilities (<code>257/257</code> passing upstream parity and deterministic build checks).</li>
-      <li><span class="tag tag-done">v0.3.4</span><strong>L4 (<code>@openOODA-DE</code> · 20 repos)</strong>: Capability Wayland compositor and desktop utilities at <code>v0.3.4</code> (<code>92/92</code> assertions): 8-word Wayland IPC frames, 16-byte SIMD damage rects, surface warrants, and cross-client capability attenuation.</li>
-      <li><span class="tag tag-done">v0.3.4</span><strong>L5 (<code>@openOODA-apps</code> · 16 repos) &amp; L6 (<code>@openOODA-cloud</code> · 18 repos)</strong>: Native applications (<code>76/76</code> assertions) and distributed cloud/mesh services (<code>93–118</code> assertions) at <code>v0.3.4</code>, verified across <code>102/102</code> KVM microVM checks.</li>
-      <li><span class="tag tag-done">v0.3.9</span><strong>L7 (<code>@openOODA-agents</code> · 16 repos)</strong>: Bounded OODA verification, falsification, and governance engines at <code>v0.3.8</code>–<code>v0.3.9</code> (<code>100–131</code> assertions): proof-carrying <code>Act</code> certificates, counterexample-guided synthesis, and cross-layer conformance gates.</li>
+      <li><span class="tag tag-done">v0.3.5</span><strong>L2 (<code>@openOODA-OS</code> · 18 repos)</strong>: Zero-root system daemons and image builder at <code>v0.3.4</code>–<code>v0.3.5</code> (<code>60–69</code> assertions): real <code>FsReadCap</code> manifest/log/unit loaders, capability VFS, network daemon, service warrants, Merkle-DAG causal audit chain, and cross-daemon warrant delegation.</li>
+      <li><span class="tag tag-done">v0.2.4</span><strong>L3 (<code>@openOODA-tools</code> · 257 repos)</strong>: Capability-scoped userland CLI/TUI/MCP utilities at <code>v0.2.3</code>–<code>v0.2.4</code> (<code>257/257</code> passing upstream parity and deterministic build checks, with real capability-backed filesystem and process tools).</li>
+      <li><span class="tag tag-done">v0.3.6</span><strong>L4 (<code>@openOODA-DE</code> · 20 repos)</strong>: Capability Wayland compositor and desktop utilities at <code>v0.3.5</code>–<code>v0.3.6</code> (<code>96/96</code> assertions): <code>CodeBuffer</code> / <code>DirectoryView</code> engines, O(1) cascading epoch revocation, 8-word Wayland IPC frames, and surface warrants.</li>
+      <li><span class="tag tag-done">v0.3.6</span><strong>L5 (<code>@openOODA-apps</code> · 16 repos) &amp; L6 (<code>@openOODA-cloud</code> · 18 repos)</strong>: Native applications at <code>v0.3.5</code>–<code>v0.3.6</code> (<code>80/80</code> assertions, real HTTP/git/sheet/studio/VM verbs) and distributed cloud/mesh services at <code>v0.3.5</code> (<code>93–118</code> assertions), verified across <code>102/102</code> KVM microVM checks.</li>
+      <li><span class="tag tag-done">v0.3.9</span><strong>L7 (<code>@openOODA-agents</code> · 16 repos)</strong>: Bounded OODA verification, falsification, and governance engines at <code>v0.3.8</code>–<code>v0.3.9</code> (<code>104–131</code> assertions): constant-time side-channel immunity, proof-carrying <code>Act</code> certificates, counterexample-guided synthesis, and cross-layer conformance gates.</li>
+    </ul>
+  </div>
+
+  <h2>Multi-Agent Release Provenance (Root + L0–L7)</h2>
+  <div class="panel">
+    <ul class="missions">
+      <li><span class="tag tag-active">Root · w9</span><strong><code>agy (Gemini 4 Argon [high])</code></strong>: <code>openOODA/openOODA</code> (<code>v2.11.120</code>), <code>openOODA/website</code> (<code>v1.3.38</code>), <code>openOODA/status</code> (<code>v0.2.7</code>), <code>openOODA/install</code> (<code>v0.2.6</code>), <code>openOODA/catalog</code> (<code>v0.2.4</code>) — ecosystem watchdog, live quota/usability telemetry, and documentation sync.</li>
+      <li><span class="tag tag-done">L0 · wF:p1</span><strong><code>vibe (GLM-5.3 [high])</code></strong>: <code>openOODA-core</code> (<code>oodac v0.11.62</code>, <code>oodar v4.0.89</code>, <code>std v1.0.85</code>, <code>opm v2.11.32</code>, <code>mcp v2.11.27</code>, <code>ooda v2.11.24</code>, <code>tui v0.3.28</code>, <code>lsp v0.2.4</code>, <code>cli v0.2.4</code>) — native ELF64 constant-time XOR compare, Merkle-DAG causal chain, and 1:1 capability bitmask alignment.</li>
+      <li><span class="tag tag-done">L1 · wG:p1</span><strong><code>vibe (GLM-5.3 [high])</code> &amp; <code>mcode (M3.1-Flash)</code></strong>: <code>openOODA-kernel</code> (16/16 repos at <code>v0.4.0</code>) — branchless constant-time XOR digest verification, 64-byte cache-line stride timing immunity gate, and real hardware capability driver engines.</li>
+      <li><span class="tag tag-done">L2 · wH:p1</span><strong><code>vibe (GLM-5.3 [high])</code> &amp; <code>devin (SWE-2 Max)</code></strong>: <code>openOODA-OS</code> (<code>v0.3.4</code>–<code>v0.3.5</code> across <code>ooinit</code>, <code>ooaid</code>, <code>oodevd</code>, <code>oodnsd</code>, <code>oohealthd</code>, <code>oologd</code>, <code>oonetd</code>, <code>oopolicyd</code>, <code>oosvc-mgr</code>, and VFS/session daemons) — real <code>FsReadCap</code> manifest/log/unit loaders and cross-daemon warrant delegation.</li>
+      <li><span class="tag tag-done">L3 · wJ:p1</span><strong><code>mcode (M3.1-Flash)</code></strong>: <code>openOODA-tools</code> (<code>v0.2.4</code> on <code>ooless</code>, <code>ooln</code>, <code>oomkdir</code>, <code>oomv</code>, <code>oopatch</code>, <code>oopkill</code>, <code>oorm</code>, <code>oosort</code>, <code>oossh</code>, <code>oostat</code>, <code>oosysctl</code>, <code>oouniq</code>, <code>oowc</code>, <code>ooxargs</code> + 257/257 fleet parity gates).</li>
+      <li><span class="tag tag-done">L4 · wK:p1</span><strong><code>devin (SWE-2 Max)</code> &amp; <code>vibe (GLM-5.3 [high])</code></strong>: <code>openOODA-DE</code> (<code>v0.3.5</code>–<code>v0.3.6</code> on <code>ooedit</code>, <code>oofiles</code>, <code>ooterm</code>, <code>ootaskmgr</code>, <code>ootoast</code>, <code>ooview</code>, <code>oowall</code>, <code>oowm</code>) — real <code>CodeBuffer</code> &amp; <code>DirectoryView</code> engines and O(1) cascading epoch revocation.</li>
+      <li><span class="tag tag-done">L5 · wM:p1</span><strong><code>devin (SWE-2 Max)</code></strong>: <code>openOODA-apps</code> (<code>v0.3.5</code>–<code>v0.3.6</code> on <code>oobrowser</code>, <code>oogit-ui</code>, <code>oosheet</code>, <code>oostudio</code>, <code>oovm-ui</code>, <code>oocanvas</code>, <code>oomedia</code>, <code>oonotes</code>, <code>oopaint</code>, <code>oopass</code>, <code>oopdf</code>) — real capability-backed document/git/sheet/inspection verbs.</li>
+      <li><span class="tag tag-done">L6 · wN:p1</span><strong><code>mcode (M3.1-Flash)</code> &amp; <code>devin (SWE-2 Max)</code></strong>: <code>openOODA-cloud</code> (18/18 repos at <code>v0.3.4</code>–<code>v0.3.5</code>) — O(1) cascading epoch revocation, SEAL/IMMUTABLE rights gates, and real distributed storage/mesh verbs.</li>
+      <li><span class="tag tag-done">L7 · wP:p1</span><strong><code>devin (SWE-2 Max)</code></strong>: <code>openOODA-agents</code> (16/16 repos at <code>v0.3.8</code>–<code>v0.3.9</code>) — constant-time side-channel &amp; cache-line timing immunity gate and cross-layer L0–L7 conformance verification.</li>
     </ul>
   </div>
 
@@ -180,13 +195,16 @@
 [1] LIVE AGENT & QUOTA TELEMETRY (Target: 99% pre-reset, >=1% hard reserve floor)
   PANE    WORKSPACE            AGENT                    STATE       QUOTA / TOKENS                     STATUS / PACE TO 99%
   ------------------------------------------------------------------------------------------------------------------------------
-  wF:p1   (L0) openOODA-core   vibe (GLM-5.3 [high])  working    Mo 89% (11% rem, rst Dec1) / ctx 229k/800k OK (+10% to 99%)
-  wG:p1   (L1) openOODA-kernel mcode (M3.1-Flash)     working    5h 50% (50% rem, rst 10:00) / Ctx 69%  OK (+49% to 99%)
+  wF:p1   (L0) openOODA-core   vibe (GLM-5.3 [high])  working    Mo 90% (10% rem, rst Dec1) / ctx 234k/800k OK (+9% to 99%)
+  wG:p1   (L1) openOODA-kernel mcode (M3.1-Flash)     working    5h 67% (33% rem, rst 10:00) / Ctx 63%  OK (+32% to 99%)
   wH:p1   (L2) openOODA-OS     devin (SWE-2 Free)     working    SWE-2 Free ($0, D/Wk 100% rst 22:00) / Ctx 42% OK (+99% to 99%)
-  wJ:p1   (L3) openOODA-tools  mcode (M3.1-Flash)     working    5h 50% (50% rem, rst 10:00) / Ctx 81%  OK (+49% to 99%)
-  wK:p1   (L4) openOODA-DE     devin (SWE-2 Free)     working    SWE-2 Free ($0, D/Wk 100% rst 22:00) / Ctx 55% OK (+99% to 99%)
-  wM:p1   (L5) openOODA-apps   devin (SWE-2 Free)     working    SWE-2 Free ($0, D/Wk 100% rst 22:00) / Ctx 60% OK (+99% to 99%)
-  wN:p1   (L6) openOODA-cloud  mcode (M3.1-Flash)     working    5h 50% (50% rem, rst 10:00) / Ctx 58%  OK (+49% to 99%)
+  wJ:p1   (L3) openOODA-tools  mcode (M3.1-Flash)     working    5h 67% (33% rem, rst 10:00) / Ctx 67%  OK (+32% to 99%)
+  wJ:p2   (L3) openOODA-tools  mcode (M3.1-Flash)     working    5h 67% (33% rem, rst 10:00) / Ctx 67%  OK (+32% to 99%)
+  wK:p1   (L4) openOODA-DE     devin (SWE-2 Free)     working    SWE-2 Free ($0, D/Wk 100% rst 22:00) / Ctx 53% OK (+99% to 99%)
+  wK:p2   (L4) openOODA-DE     devin (SWE-2 Free)     working    SWE-2 Free ($0, D/Wk 100% rst 22:00) / Ctx 54% OK (+99% to 99%)
+  wM:p1   (L5) openOODA-apps   devin (SWE-2 Free)     idle       SWE-2 Free ($0, D/Wk 100% rst 22:00) / Ctx 57% OK (+99% to 99%)
+  wN:p1   (L6) openOODA-cloud  mcode (M3.1-Flash)     working    5h 67% (33% rem, rst 10:00) / Ctx 48%  OK (+32% to 99%)
+  wN:p2   (L6) openOODA-cloud  mcode (M3.1-Flash)     working    5h 67% (33% rem, rst 10:00) / Ctx 73%  OK (+32% to 99%)
   wP:p1   (L7) openOODA-agents devin (SWE-2 Free)     working    SWE-2 Free ($0, D/Wk 100% rst 22:00) / Ctx 49% OK (+99% to 99%)
 
 [2] 9-ORGANIZATION (ROOT + L0-L7) USABILITY MATRIX (USABLE vs SCAFFOLD SHELLS)
@@ -195,11 +213,11 @@
   openOODA                6        6/6            0           6/6           6/6
   openOODA-core          10      10/10            0         10/10         10/10
   openOODA-kernel        16       2/16           14         16/16         16/16
-  openOODA-OS            18      17/18            1         18/18         17/18
+  openOODA-OS            18      17/18            1         18/18         18/18
   openOODA-tools        257    118/257          139       257/257       257/257
-  openOODA-DE            20       4/20           16         20/20         20/20
+  openOODA-DE            20       5/20           15         20/20         19/20
   openOODA-apps          16      16/16            0         16/16         16/16
-  openOODA-cloud         18       0/18           18         18/18         18/18
+  openOODA-cloud         18       1/18           17         18/18         18/18
   openOODA-agents        16      16/16            0         16/16         16/16
 
 [3] TAILSCALE FLEET & GPU BUILDBOX TELEMETRY (Daily Update/Reboot ~04:00, Nightly Loop 04:30)
