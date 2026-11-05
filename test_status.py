@@ -207,6 +207,7 @@ class TestStatusPageOverflowAndTelemetry(unittest.TestCase):
         self.assertIn("<code>wQ:p2</code>", self.html, "wQ:p2 must be present in the Herdr pane matrix")
         self.assertIn("idlescreen (ooda)", self.html, "idlescreen (ooda) workspace must be present in the Herdr pane matrix")
         self.assertIn("18 Layer/Project Panes", self.html, "18 Layer/Project Panes summary must be present")
+        self.assertIn("Pro · 100% remaining (resets 22:00 HST / 08:00 UTC)", self.html, "Devin Pro · 100% remaining reset schedule must be displayed")
 
 
 if __name__ == "__main__":
