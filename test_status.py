@@ -203,6 +203,10 @@ class TestStatusPageOverflowAndTelemetry(unittest.TestCase):
         used_pct = int(m.group(2))
         self.assertEqual(rem_pct, 100, f"Expected Devin promo rem_pct == 100%, got {rem_pct}%")
         self.assertEqual(used_pct, 0, f"Expected Devin promo used_pct == 0%, got {used_pct}%")
+        self.assertIn("<code>wQ:p1</code>", self.html, "wQ:p1 must be present in the Herdr pane matrix")
+        self.assertIn("<code>wQ:p2</code>", self.html, "wQ:p2 must be present in the Herdr pane matrix")
+        self.assertIn("idlescreen (ooda)", self.html, "idlescreen (ooda) workspace must be present in the Herdr pane matrix")
+        self.assertIn("18 Layer/Project Panes", self.html, "18 Layer/Project Panes summary must be present")
 
 
 if __name__ == "__main__":
