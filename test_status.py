@@ -3,13 +3,12 @@
 
 import os
 import re
-import shutil
 import unittest
 from html.parser import HTMLParser
 
 STATUS_DIR = os.path.dirname(os.path.abspath(__file__))
 INDEX_HTML = os.path.join(STATUS_DIR, "index.html")
-ECO_SYNC_BIN = shutil.which("eco-sync-status") or os.path.expanduser("~/.local/bin/eco-sync-status")
+GENERATOR_SRC = os.path.join(STATUS_DIR, "ooda_theme.py")
 
 
 class CardStructureParser(HTMLParser):
@@ -75,8 +74,8 @@ class TestStatusPageOverflowAndTelemetry(unittest.TestCase):
     def setUpClass(cls):
         with open(INDEX_HTML, "r", encoding="utf-8") as f:
             cls.html = f.read()
-        with open(ECO_SYNC_BIN, "r", encoding="utf-8") as f:
-            cls.sync_script = f.read()
+        with open(GENERATOR_SRC, "r", encoding="utf-8") as f:
+            cls.generator_src = f.read()
         style_match = re.search(r"<style>(.*?)</style>", cls.html, re.S)
         cls.css = style_match.group(1) if style_match else ""
 
@@ -161,7 +160,7 @@ class TestStatusPageOverflowAndTelemetry(unittest.TestCase):
     def test_04_interactive_sort_and_throttle_rules_preserved(self):
         """Verify window.sortQuotaGraph and 90% Soft Throttle / 95% Hard Cutoff rules are preserved."""
         self.assertIn("window.sortQuotaGraph", self.html)
-        self.assertIn("window.sortQuotaGraph", self.sync_script)
+        self.assertIn("window.sortQuotaGraph", self.generator_src)
 
         parser = CardStructureParser()
         parser.feed(self.html)
