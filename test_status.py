@@ -184,18 +184,25 @@ class TestStatusPageOverflowAndTelemetry(unittest.TestCase):
         matches = forbidden.findall(self.html)
         self.assertEqual(matches, [], f"Zero-Trust privacy gate violation: {matches}")
 
-    def test_06_devin_zero_trust_shadow_quota_accounting(self):
-        """Verify Devin displays Zero-Trust Local Shadow Quota instead of 0% used / 100% left."""
-        self.assertIn("API REPORTS 0% (LAG/PROMO) · SHADOW QUOTA:", self.html)
-        self.assertIn("USED — THROTTLED", self.html)
-        self.assertNotIn("100% UNTHROTTLED CAPACITY ACROSS L1–L7", self.html)
-        self.assertNotIn("SWE-2 Free (", self.html)
+    def test_06_devin_swe2_max_and_swe2_flash_free_promo_telemetry(self):
+        """Verify Devin displays Nov 4 SWE-2 Max + SWE-2 Flash Max (3x speed) Free Unlimited Promo thru Nov 30 with live burn."""
+        self.assertIn(
+            "[ FREE UNLIMITED PROMO THRU NOV 30 // SWE-2 MAX + SWE-2 FLASH MAX (3X SPEED) ]",
+            self.html,
+        )
+        self.assertIn("SWE-2 Max + SWE-2 Flash Max", self.html)
+        self.assertIn("FREE PROMO Nov30 (23.0M+ burn)", self.html)
+        burn_m = re.search(r"24h burn:\s*([0-9.]+)M\+", self.html)
+        self.assertIsNotNone(burn_m, "Devin live 24h burn must be displayed")
+        self.assertGreaterEqual(float(burn_m.group(1)), 23.0, "Expected Devin 24h burn >= 23.0M+")
+        self.assertNotIn("SHADOW QUOTA:", self.html)
+        self.assertNotIn("API REPORTS 0% (LAG/PROMO)", self.html)
         m = re.search(r'<div class="quota-row" data-name="devin" data-rem-pct="(\d+)" data-used-pct="(\d+)"', self.html)
         self.assertIsNotNone(m, "Devin quota-row must exist with data-rem-pct and data-used-pct")
         rem_pct = int(m.group(1))
         used_pct = int(m.group(2))
-        self.assertGreaterEqual(used_pct, 85, f"Expected Devin shadow used_pct >= 85%, got {used_pct}%")
-        self.assertLessEqual(rem_pct, 15, f"Expected Devin shadow rem_pct <= 15%, got {rem_pct}%")
+        self.assertEqual(rem_pct, 100, f"Expected Devin promo rem_pct == 100%, got {rem_pct}%")
+        self.assertEqual(used_pct, 0, f"Expected Devin promo used_pct == 0%, got {used_pct}%")
 
 
 if __name__ == "__main__":
