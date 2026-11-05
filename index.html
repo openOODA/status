@@ -682,7 +682,7 @@
     </a>
     <span class="window-title">sys@openooda:~# status // LIVE TELEMETRY (v0.3.6)</span>
     <div class="header-right">
-      <span class="term-badge term-badge-cyan">[ ⚡ FLEET: 286.5 TOK/S LIVE ]</span>
+      <span class="term-badge term-badge-cyan">[ ⚡ FLEET: 954.2 TOK/S LIVE ]</span>
       <span class="term-badge">[ 5 GPUs // 76GB VRAM ]</span>
       <span class="term-badge">[ 32 + 32 = 64 ABI ]</span>
       <span class="term-status-online">[ ZERO-TRUST VERIFIED ]</span>
@@ -694,19 +694,19 @@
       <div>
         <span class="cmd-prompt">sys@openooda:~#</span>
         <code>eco-status --zero-trust --gpus=5 --tok-rate</code>
-        <span class="muted" style="margin-left:8px;">// Last Sync: <strong>2026-11-04 16:33:41 HST</strong> (2026-11-05 02:33:41 UTC)</span>
+        <span class="muted" style="margin-left:8px;">// Last Sync: <strong>2026-11-04 17:00:13 HST</strong> (2026-11-05 03:00:13 UTC)</span>
       </div>
       <div>
         <span class="term-badge term-badge-green">[ AUTO-REFRESH: 300S ]</span>
-        <span class="term-badge term-badge-amber">[ PEAK FLEET CAPACITY: 1,022.2 TOK/S ]</span>
+        <span class="term-badge term-badge-amber">[ PEAK FLEET CAPACITY: 1,769.7 TOK/S ]</span>
       </div>
     </div>
 
     <div class="grid">
       <div class="stat-card stat-card-highlight">
         <div class="stat-label">Total Fleet tok/sec</div>
-        <div class="stat-val" style="color:var(--phosphor);">286.5 <span style="font-size:0.85rem;">tok/s</span></div>
-        <div class="stat-sub">Peak Burst: 1,022.2 tok/s</div>
+        <div class="stat-val" style="color:var(--phosphor);">954.2 <span style="font-size:0.85rem;">tok/s</span></div>
+        <div class="stat-sub">Peak Burst: 1,769.7 tok/s</div>
       </div>
       <div class="stat-card stat-card-highlight">
         <div class="stat-label">5-GPU Buildbox Grid</div>
@@ -720,8 +720,8 @@
       </div>
       <div class="stat-card">
         <div class="stat-label">9 Orgs · .oo Pages</div>
-        <div class="stat-val">15376</div>
-        <div class="stat-sub">170672 LOC (≤240/page)</div>
+        <div class="stat-val">15722</div>
+        <div class="stat-sub">205571 LOC (≤240/page)</div>
       </div>
       <div class="stat-card">
         <div class="stat-label">Compiled Binaries</div>
@@ -881,12 +881,12 @@
 
     <div class="section-hdr">
       <span>-- [02] TOKEN QUOTA REMAINING PER RESET CYCLE &amp; PER-AGENT TOK/SEC --</span>
-      <span class="term-badge term-badge-cyan">[ ⚡ TOTAL LIVE FLEET: 286.5 TOK/SEC · TARGET: 90% THROTTLE / 95% CUTOFF (&ge;5% FLOOR) ]</span>
+      <span class="term-badge term-badge-cyan">[ ⚡ TOTAL LIVE FLEET: 954.2 TOK/SEC · TARGET: 90% THROTTLE / 95% CUTOFF (&ge;5% FLOOR) ]</span>
     </div>
     <div class="panel">
       <div style="font-size:11.5px; color:var(--text-secondary); margin-bottom:10px; display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px;">
         <span>Segmented CRT bars show <strong>% Consumed</strong> vs. <strong>% Tokens Left in Cycle</strong>, amber marker = <strong>90% Soft Throttle (10% Left: 1-pane only)</strong>, red marker = <strong>95% Hard Cutoff (&ge;5% Reserve Floor)</strong>, plus live per-agent <code>tok/sec</code> throughput.</span>
-        <span><strong>9 Herdr Panes (Root w9 + 8 Layer Panes · 0 Devin Active)</strong></span>
+        <span><strong>9 Herdr Panes (Root w9 + 8 Layer Panes · 1 Devin Active)</strong></span>
       </div>
       <div class="sort-bar" role="toolbar" aria-label="Sort Token Quota Remaining Graph">
         <span class="sort-label">// SORT BY:</span>
@@ -920,12 +920,12 @@
           <span>Resets Nov 6 01:17 UTC (Weekly Window)</span>
         </div>
       </div>
-      <div class="quota-row" data-name="devin" data-rem-pct="8" data-used-pct="92" data-reset-sec="19574" data-tps="0.0" data-capacity="25000000">
+      <div class="quota-row" data-name="devin" data-rem-pct="8" data-used-pct="92" data-reset-sec="17979" data-tps="18.0" data-capacity="25000000">
         <div class="quota-hdr">
           <div>
-            <span class="quota-agent" style="color:#50fa7b">■ devin // SWE-2 Max (0/7 Panes Active)</span>
+            <span class="quota-agent" style="color:#50fa7b">■ devin // SWE-2 Max (1/1 Panes Active)</span>
             <span class="quota-cycle">[ DAILY / WEEKLY SHADOW QUOTA ]</span>
-            <span class="term-badge term-badge-cyan">[ ⚡ 0.0 tok/s LIVE (7d burn: 54.9M) ]</span>
+            <span class="term-badge term-badge-cyan">[ ⚡ 18.0 tok/s LIVE (7d burn: 58.6M) ]</span>
           </div>
           <div class="quota-nums">
             <strong style="color:var(--phosphor);">8% LEFT</strong> <span class="seg-inline" style="color:#50fa7b;">[█░░░░░░░░░░░░░░░]</span> (2.0M rem / 23.0M used of ~25.0M) · <span class="muted">92% Used</span>
@@ -939,15 +939,15 @@
         </div>
         <div class="quota-sub">
           <span style="color:var(--hot);">[ ⚠️ API REPORTS 0% (LAG/PROMO) · SHADOW QUOTA: 92% USED — THROTTLED ]</span>
-          <span>Resets Daily 22:00 HST (08:00 UTC) · 7d Burn: 54.9M · Throttled (0 Active)</span>
+          <span>Resets Daily 22:00 HST (08:00 UTC) · 7d Burn: 58.6M · Throttled (1 Active)</span>
         </div>
       </div>
-      <div class="quota-row" data-name="vibe" data-rem-pct="10" data-used-pct="90" data-reset-sec="2267000" data-tps="191.5" data-capacity="50000000">
+      <div class="quota-row" data-name="vibe" data-rem-pct="10" data-used-pct="90" data-reset-sec="2267000" data-tps="83.4" data-capacity="50000000">
         <div class="quota-hdr">
           <div>
             <span class="quota-agent" style="color:#bd93f9">■ vibe // GLM-5.3 [high] (wF:p1)</span>
             <span class="quota-cycle">[ MONTHLY CYCLE ]</span>
-            <span class="term-badge term-badge-cyan">[ ⚡ 191.5 tok/s LIVE (ctx 359k/800k) ]</span>
+            <span class="term-badge term-badge-cyan">[ ⚡ 83.4 tok/s LIVE (ctx 430k/800k) ]</span>
           </div>
           <div class="quota-nums">
             <strong style="color:var(--phosphor);">10% LEFT</strong> <span class="seg-inline" style="color:#bd93f9;">[██░░░░░░░░░░░░░░]</span> (5.0M rem / 45.0M used of ~50.0M) · <span class="muted">90% Used</span>
@@ -961,7 +961,29 @@
         </div>
         <div class="quota-sub">
           <span style="color:var(--hot);">[ THROTTLE: 1-PANE ONLY // +5% TO 95% CUTOFF · >=5% RESERVE FLOOR ]</span>
-          <span>Resets Dec 1 00:00 UTC · ctx 359k/800k</span>
+          <span>Resets Dec 1 00:00 UTC · ctx 430k/800k</span>
+        </div>
+      </div>
+      <div class="quota-row" data-name="mcode" data-rem-pct="81" data-used-pct="19" data-reset-sec="7179" data-tps="757.8" data-capacity="5000000">
+        <div class="quota-hdr">
+          <div>
+            <span class="quota-agent" style="color:#00e5ff">■ mcode // M3.1-Flash</span>
+            <span class="quota-cycle">[ 5H ROLLING CYCLE ]</span>
+            <span class="term-badge term-badge-cyan">[ ⚡ 757.8 tok/s LIVE (631.3 tok/s out · 1,594.1 tok/s burst) ]</span>
+          </div>
+          <div class="quota-nums">
+            <strong style="color:var(--phosphor);">81% LEFT</strong> <span class="seg-inline" style="color:#00e5ff;">[█████████████░░░]</span> (4.0M rem / 950k used of ~5.0M) · <span class="muted">19% Used</span>
+          </div>
+        </div>
+        <div class="quota-bar-track" title="19% Used | 81% Remaining | Soft Throttle: 90% (10% left) | Hard Cutoff: 95% (>=5% reserve floor)">
+          <div class="quota-bar-used" style="width:19%; background:#00e5ff;"></div>
+          <div class="quota-bar-rem" style="width:81%;"></div>
+          <div class="quota-throttle-line" style="left:90%;" title="90% Soft Throttle (10% Left: 1-Pane Only)"></div>
+          <div class="quota-target-line" style="left:95%;" title="95% Hard Dispatch Cutoff / >=5% Reserve Floor"></div>
+        </div>
+        <div class="quota-sub">
+          <span style="color:var(--hot);">[ ACTIVE // +71% TO 90% THROTTLE (95% CAP) ]</span>
+          <span>Resets in 1h 59m (10:00 / 15:00 HST cycle)</span>
         </div>
       </div>
       <div class="quota-row" data-name="agy" data-rem-pct="86" data-used-pct="14" data-reset-sec="18000" data-tps="95.0" data-capacity="20000000">
@@ -986,34 +1008,12 @@
           <span>Continuous Rolling Window · Root w9 Orchestrator</span>
         </div>
       </div>
-      <div class="quota-row" data-name="mcode" data-rem-pct="100" data-used-pct="0" data-reset-sec="8774" data-tps="0" data-capacity="5000000">
-        <div class="quota-hdr">
-          <div>
-            <span class="quota-agent" style="color:#00e5ff">■ mcode // M3.1-Flash</span>
-            <span class="quota-cycle">[ 5H ROLLING CYCLE ]</span>
-            <span class="term-badge term-badge-cyan">[ ⚡ 0.0 tok/s LIVE (551.5 tok/s out · 1,734.5 tok/s burst) ]</span>
-          </div>
-          <div class="quota-nums">
-            <strong style="color:var(--phosphor);">100% LEFT</strong> <span class="seg-inline" style="color:#00e5ff;">[████████████████]</span> (5.0M rem / 0 used of ~5.0M) · <span class="muted">0% Used</span>
-          </div>
-        </div>
-        <div class="quota-bar-track" title="0% Used | 100% Remaining | Soft Throttle: 90% (10% left) | Hard Cutoff: 95% (>=5% reserve floor)">
-          <div class="quota-bar-used" style="width:0%; background:#00e5ff;"></div>
-          <div class="quota-bar-rem" style="width:100%;"></div>
-          <div class="quota-throttle-line" style="left:90%;" title="90% Soft Throttle (10% Left: 1-Pane Only)"></div>
-          <div class="quota-target-line" style="left:95%;" title="95% Hard Dispatch Cutoff / >=5% Reserve Floor"></div>
-        </div>
-        <div class="quota-sub">
-          <span style="color:var(--hot);">[ ACTIVE // +90% TO 90% THROTTLE (95% CAP) ]</span>
-          <span>Resets in 2h 26m (10:00 / 15:00 HST cycle)</span>
-        </div>
-      </div>
       </div>
     </div>
 
     <div class="section-hdr">
       <span>-- [03] SANITIZED LIVE HERDR AGENT FLEET &amp; PER-PANE TOK/SEC MATRIX --</span>
-      <span class="term-badge term-badge-green">[ 9 PANES (0 DEVIN ACTIVE) · 286.5 TOK/SEC AGGREGATE // 90% THROTTLE / 95% CAP ]</span>
+      <span class="term-badge term-badge-green">[ 9 PANES (1 DEVIN ACTIVE) · 954.2 TOK/SEC AGGREGATE // 90% THROTTLE / 95% CAP ]</span>
     </div>
     <div class="panel">
       <div class="table-wrap">
@@ -1044,73 +1044,73 @@
         <td><code>wF:p1</code></td>
         <td><strong>(L0) openOODA-core</strong></td>
         <td><span style="color:#bd93f9; font-weight:700;">■ vibe (GLM-5.3 [high])</span></td>
-        <td><span class="term-badge term-badge-amber">[IDLE]</span></td>
-        <td><strong style="color:var(--color-cyan);">191.5 tok/s</strong> <span class="seg-inline" style="color:#bd93f9;">███████░</span></td>
-        <td>Mo 90% (10% rem, rst Dec1) / ctx 359k/800k</td>
+        <td><span class="term-badge term-badge-green">[WORKING]</span></td>
+        <td><strong style="color:var(--color-cyan);">83.4 tok/s</strong> <span class="seg-inline" style="color:#bd93f9;">███░░░░░</span></td>
+        <td>Mo 90% (10% rem, rst Dec1) / ctx 430k/800k</td>
         <td class="muted">OK (THROTTLE: 1-pane only (+5% to 95%))</td>
       </tr>
       <tr>
         <td><code>wG:p1</code></td>
         <td><strong>(L1) openOODA-kernel</strong></td>
-        <td><span style="color:#50fa7b; font-weight:700;">■ devin (SWE-2 Max)</span></td>
-        <td><span class="term-badge term-badge-amber">[IDLE]</span></td>
-        <td><strong style="color:var(--color-cyan);">0.0 tok/s</strong> <span class="seg-inline" style="color:#50fa7b;">░░░░░░░░</span></td>
-        <td>Shadow 92% (8% rem, API:0% lag, rst 22h) / Ctx 32%</td>
-        <td class="muted">OK (THROTTLE: 1-pane only (+3% to 95%))</td>
+        <td><span style="color:#00e5ff; font-weight:700;">■ mcode (M3.1-Flash)</span></td>
+        <td><span class="term-badge term-badge-green">[WORKING]</span></td>
+        <td><strong style="color:var(--color-cyan);">126.3 tok/s</strong> <span class="seg-inline" style="color:#00e5ff;">█████░░░</span></td>
+        <td>5h 19% (81% rem, rst 10:00) / Ctx 62%</td>
+        <td class="muted">OK (+71% to 90% (95% cap))</td>
       </tr>
       <tr>
         <td><code>wH:p1</code></td>
         <td><strong>(L2) openOODA-OS</strong></td>
         <td><span style="color:#50fa7b; font-weight:700;">■ devin (SWE-2 Max)</span></td>
-        <td><span class="term-badge term-badge-amber">[IDLE]</span></td>
-        <td><strong style="color:var(--color-cyan);">0.0 tok/s</strong> <span class="seg-inline" style="color:#50fa7b;">░░░░░░░░</span></td>
-        <td>Shadow 92% (8% rem, API:0% lag, rst 22h) / Ctx 73%</td>
+        <td><span class="term-badge term-badge-green">[WORKING]</span></td>
+        <td><strong style="color:var(--color-cyan);">18.0 tok/s</strong> <span class="seg-inline" style="color:#50fa7b;">█░░░░░░░</span></td>
+        <td>Shadow 92% (8% rem, API:0% lag, rst 22h) / Ctx 43%</td>
         <td class="muted">OK (THROTTLE: 1-pane only (+3% to 95%))</td>
       </tr>
       <tr>
         <td><code>wJ:p1</code></td>
         <td><strong>(L3) openOODA-tools</strong></td>
-        <td><span style="color:#50fa7b; font-weight:700;">■ devin (SWE-2 Max)</span></td>
-        <td><span class="term-badge term-badge-amber">[IDLE]</span></td>
-        <td><strong style="color:var(--color-cyan);">0.0 tok/s</strong> <span class="seg-inline" style="color:#50fa7b;">░░░░░░░░</span></td>
-        <td>Shadow 92% (8% rem, API:0% lag, rst 22h) / Ctx 76%</td>
-        <td class="muted">OK (THROTTLE: 1-pane only (+3% to 95%))</td>
+        <td><span style="color:#00e5ff; font-weight:700;">■ mcode (M3.1-Flash)</span></td>
+        <td><span class="term-badge term-badge-green">[WORKING]</span></td>
+        <td><strong style="color:var(--color-cyan);">126.3 tok/s</strong> <span class="seg-inline" style="color:#00e5ff;">█████░░░</span></td>
+        <td>5h 19% (81% rem, rst 10:00) / Ctx 60%</td>
+        <td class="muted">OK (+71% to 90% (95% cap))</td>
       </tr>
       <tr>
         <td><code>wK:p1</code></td>
         <td><strong>(L4) openOODA-DE</strong></td>
-        <td><span style="color:#50fa7b; font-weight:700;">■ devin (SWE-2 Max)</span></td>
-        <td><span class="term-badge term-badge-amber">[IDLE]</span></td>
-        <td><strong style="color:var(--color-cyan);">0.0 tok/s</strong> <span class="seg-inline" style="color:#50fa7b;">░░░░░░░░</span></td>
-        <td>Shadow 92% (8% rem, API:0% lag, rst 22h) / Ctx 37%</td>
-        <td class="muted">OK (THROTTLE: 1-pane only (+3% to 95%))</td>
+        <td><span style="color:#00e5ff; font-weight:700;">■ mcode (M3.1-Flash)</span></td>
+        <td><span class="term-badge term-badge-green">[WORKING]</span></td>
+        <td><strong style="color:var(--color-cyan);">126.3 tok/s</strong> <span class="seg-inline" style="color:#00e5ff;">█████░░░</span></td>
+        <td>5h 19% (81% rem, rst 10:00) / Ctx 58%</td>
+        <td class="muted">OK (+71% to 90% (95% cap))</td>
       </tr>
       <tr>
         <td><code>wM:p1</code></td>
         <td><strong>(L5) openOODA-apps</strong></td>
-        <td><span style="color:#50fa7b; font-weight:700;">■ devin (SWE-2 Max)</span></td>
-        <td><span class="term-badge term-badge-amber">[IDLE]</span></td>
-        <td><strong style="color:var(--color-cyan);">0.0 tok/s</strong> <span class="seg-inline" style="color:#50fa7b;">░░░░░░░░</span></td>
-        <td>Shadow 92% (8% rem, API:0% lag, rst 22h) / Ctx 28%</td>
-        <td class="muted">OK (THROTTLE: 1-pane only (+3% to 95%))</td>
+        <td><span style="color:#00e5ff; font-weight:700;">■ mcode (M3.1-Flash)</span></td>
+        <td><span class="term-badge term-badge-green">[WORKING]</span></td>
+        <td><strong style="color:var(--color-cyan);">126.3 tok/s</strong> <span class="seg-inline" style="color:#00e5ff;">█████░░░</span></td>
+        <td>5h 19% (81% rem, rst 10:00) / Ctx 66%</td>
+        <td class="muted">OK (+71% to 90% (95% cap))</td>
       </tr>
       <tr>
         <td><code>wN:p1</code></td>
         <td><strong>(L6) openOODA-cloud</strong></td>
-        <td><span style="color:#50fa7b; font-weight:700;">■ devin (SWE-2 Max)</span></td>
-        <td><span class="term-badge term-badge-amber">[IDLE]</span></td>
-        <td><strong style="color:var(--color-cyan);">0.0 tok/s</strong> <span class="seg-inline" style="color:#50fa7b;">░░░░░░░░</span></td>
-        <td>Shadow 92% (8% rem, API:0% lag, rst 22h) / Ctx 41%</td>
-        <td class="muted">OK (THROTTLE: 1-pane only (+3% to 95%))</td>
+        <td><span style="color:#00e5ff; font-weight:700;">■ mcode (M3.1-Flash)</span></td>
+        <td><span class="term-badge term-badge-green">[WORKING]</span></td>
+        <td><strong style="color:var(--color-cyan);">126.3 tok/s</strong> <span class="seg-inline" style="color:#00e5ff;">█████░░░</span></td>
+        <td>5h 19% (81% rem, rst 10:00) / Ctx 73%</td>
+        <td class="muted">OK (+71% to 90% (95% cap))</td>
       </tr>
       <tr>
         <td><code>wP:p1</code></td>
         <td><strong>(L7) openOODA-agents</strong></td>
-        <td><span style="color:#50fa7b; font-weight:700;">■ devin (SWE-2 Max)</span></td>
-        <td><span class="term-badge term-badge-amber">[IDLE]</span></td>
-        <td><strong style="color:var(--color-cyan);">0.0 tok/s</strong> <span class="seg-inline" style="color:#50fa7b;">░░░░░░░░</span></td>
-        <td>Shadow 92% (8% rem, API:0% lag, rst 22h) / Ctx 28%</td>
-        <td class="muted">OK (THROTTLE: 1-pane only (+3% to 95%))</td>
+        <td><span style="color:#00e5ff; font-weight:700;">■ mcode (M3.1-Flash)</span></td>
+        <td><span class="term-badge term-badge-green">[WORKING]</span></td>
+        <td><strong style="color:var(--color-cyan);">126.3 tok/s</strong> <span class="seg-inline" style="color:#00e5ff;">█████░░░</span></td>
+        <td>5h 19% (81% rem, rst 10:00) / Ctx 62%</td>
+        <td class="muted">OK (+71% to 90% (95% cap))</td>
       </tr>
           </tbody>
         </table>
@@ -1118,16 +1118,16 @@
     </div>
 
     <div class="section-hdr">
-      <span>-- [04] GITHUB-STYLE CONTRIBUTION &amp; PUSH ACTIVITY BY AGENT (12,722 COMMITS · 3,721 TAGS) --</span>
-      <span class="term-badge">[ 3,175 AGENT-TAGGED PUSHES · 1,492 SIGNED RELEASES ]</span>
+      <span>-- [04] GITHUB-STYLE CONTRIBUTION &amp; PUSH ACTIVITY BY AGENT (12,724 COMMITS · 3,722 TAGS) --</span>
+      <span class="term-badge">[ 3,177 AGENT-TAGGED PUSHES · 1,493 SIGNED RELEASES ]</span>
     </div>
     <div class="panel">
       <div style="font-size:11.5px; color:var(--text-secondary); margin-bottom:6px; display:flex; justify-content:space-between; flex-wrap:wrap;">
         <span><strong>Cumulative Push Share by Agent Pool</strong> (dynamically scanned across all 385 repositories in 9 organizations)</span>
-        <span><strong>1,492</strong> Agent-Signed Release Tags</span>
+        <span><strong>1,493</strong> Agent-Signed Release Tags</span>
       </div>
       <div class="stacked-bar">
-        <div style="width:45.17%; background:#00e5ff;" title="mcode // M3.1-Flash: 1434 pushes (45.2%)"></div><div style="width:24.63%; background:#50fa7b;" title="devin // SWE-2 Max: 782 pushes (24.6%)"></div><div style="width:20.76%; background:#bd93f9;" title="vibe // GLM-5.3 [high]: 659 pushes (20.8%)"></div><div style="width:4.66%; background:#ffb000;" title="grok // Grok-4: 148 pushes (4.7%)"></div><div style="width:4.79%; background:#ff79c6;" title="agy // Gemini 4 Argon: 152 pushes (4.8%)"></div>
+        <div style="width:45.14%; background:#00e5ff;" title="mcode // M3.1-Flash: 1434 pushes (45.1%)"></div><div style="width:24.61%; background:#50fa7b;" title="devin // SWE-2 Max: 782 pushes (24.6%)"></div><div style="width:20.77%; background:#bd93f9;" title="vibe // GLM-5.3 [high]: 660 pushes (20.8%)"></div><div style="width:4.66%; background:#ffb000;" title="grok // Grok-4: 148 pushes (4.7%)"></div><div style="width:4.82%; background:#ff79c6;" title="agy // Gemini 4 Argon: 153 pushes (4.8%)"></div>
       </div>
 
       <div class="hm-wrap">
@@ -1137,32 +1137,32 @@
         </div>
         
       <div class="hm-row">
-        <div class="hm-org">openOODA <span class="muted">(147)</span></div>
-        <div class="hm-cells"><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell" style="background:#ff79c6; opacity:0.45;" title="openOODA (-21h): 2 pushes (agy:2)"></div><div class="hm-cell" style="background:#ff79c6; opacity:0.75;" title="openOODA (-20h): 9 pushes (agy:9)"></div><div class="hm-cell" style="background:#ff79c6; opacity:0.45;" title="openOODA (-19h): 2 pushes (agy:2)"></div><div class="hm-cell" style="background:#ff79c6; opacity:0.45;" title="openOODA (-18h): 2 pushes (agy:2)"></div><div class="hm-cell" style="background:#ff79c6; opacity:0.45;" title="openOODA (-17h): 2 pushes (agy:2)"></div><div class="hm-cell" style="background:#ff79c6; opacity:0.45;" title="openOODA (-16h): 2 pushes (agy:2)"></div><div class="hm-cell" style="background:#ff79c6; opacity:0.45;" title="openOODA (-15h): 2 pushes (agy:2)"></div><div class="hm-cell" style="background:#ff79c6; opacity:0.45;" title="openOODA (-14h): 2 pushes (agy:2)"></div><div class="hm-cell" style="background:#ff79c6; opacity:0.45;" title="openOODA (-13h): 2 pushes (agy:2)"></div><div class="hm-cell" style="background:#ff79c6; opacity:0.45;" title="openOODA (-12h): 3 pushes (agy:3)"></div><div class="hm-cell" style="background:#ff79c6; opacity:0.45;" title="openOODA (-11h): 4 pushes (agy:4)"></div><div class="hm-cell" style="background:#ff79c6; opacity:0.45;" title="openOODA (-10h): 2 pushes (agy:2)"></div><div class="hm-cell" style="background:#ff79c6; opacity:0.75;" title="openOODA (-9h): 16 pushes (agy:16)"></div><div class="hm-cell" style="background:#ff79c6; opacity:1.0;" title="openOODA (-8h): 36 pushes (agy:36)"></div><div class="hm-cell" style="background:#ff79c6; opacity:0.75;" title="openOODA (-7h): 6 pushes (agy:6)"></div><div class="hm-cell" style="background:#ff79c6; opacity:0.45;" title="openOODA (-6h): 2 pushes (agy:2)"></div><div class="hm-cell" style="background:#ff79c6; opacity:0.45;" title="openOODA (-5h): 2 pushes (agy:2)"></div><div class="hm-cell" style="background:#ff79c6; opacity:0.45;" title="openOODA (-4h): 2 pushes (agy:2)"></div><div class="hm-cell" style="background:#ff79c6; opacity:0.45;" title="openOODA (-3h): 2 pushes (agy:2)"></div><div class="hm-cell" style="background:#ff79c6; opacity:0.45;" title="openOODA (-2h): 2 pushes (agy:2)"></div><div class="hm-cell" style="background:#ff79c6; opacity:0.45;" title="openOODA (-1h): 2 pushes (agy:2)"></div><div class="hm-cell" style="background:#ff79c6; opacity:0.45;" title="openOODA (-0h): 2 pushes (agy:2)"></div></div>
+        <div class="hm-org">openOODA <span class="muted">(148)</span></div>
+        <div class="hm-cells"><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell" style="background:#ff79c6; opacity:0.45;" title="openOODA (-21h): 3 pushes (agy:3)"></div><div class="hm-cell" style="background:#ff79c6; opacity:0.75;" title="openOODA (-20h): 8 pushes (agy:8)"></div><div class="hm-cell" style="background:#ff79c6; opacity:0.45;" title="openOODA (-19h): 2 pushes (agy:2)"></div><div class="hm-cell" style="background:#ff79c6; opacity:0.45;" title="openOODA (-18h): 2 pushes (agy:2)"></div><div class="hm-cell" style="background:#ff79c6; opacity:0.45;" title="openOODA (-17h): 2 pushes (agy:2)"></div><div class="hm-cell" style="background:#ff79c6; opacity:0.45;" title="openOODA (-16h): 2 pushes (agy:2)"></div><div class="hm-cell" style="background:#ff79c6; opacity:0.45;" title="openOODA (-15h): 2 pushes (agy:2)"></div><div class="hm-cell" style="background:#ff79c6; opacity:0.45;" title="openOODA (-14h): 2 pushes (agy:2)"></div><div class="hm-cell" style="background:#ff79c6; opacity:0.45;" title="openOODA (-13h): 3 pushes (agy:3)"></div><div class="hm-cell" style="background:#ff79c6; opacity:0.45;" title="openOODA (-12h): 3 pushes (agy:3)"></div><div class="hm-cell" style="background:#ff79c6; opacity:0.45;" title="openOODA (-11h): 4 pushes (agy:4)"></div><div class="hm-cell" style="background:#ff79c6; opacity:0.45;" title="openOODA (-10h): 4 pushes (agy:4)"></div><div class="hm-cell" style="background:#ff79c6; opacity:0.75;" title="openOODA (-9h): 19 pushes (agy:19)"></div><div class="hm-cell" style="background:#ff79c6; opacity:1.0;" title="openOODA (-8h): 32 pushes (agy:32)"></div><div class="hm-cell" style="background:#ff79c6; opacity:0.75;" title="openOODA (-7h): 5 pushes (agy:5)"></div><div class="hm-cell" style="background:#ff79c6; opacity:0.45;" title="openOODA (-6h): 2 pushes (agy:2)"></div><div class="hm-cell" style="background:#ff79c6; opacity:0.45;" title="openOODA (-5h): 2 pushes (agy:2)"></div><div class="hm-cell" style="background:#ff79c6; opacity:0.45;" title="openOODA (-4h): 2 pushes (agy:2)"></div><div class="hm-cell" style="background:#ff79c6; opacity:0.45;" title="openOODA (-3h): 2 pushes (agy:2)"></div><div class="hm-cell" style="background:#ff79c6; opacity:0.45;" title="openOODA (-2h): 2 pushes (agy:2)"></div><div class="hm-cell" style="background:#ff79c6; opacity:0.45;" title="openOODA (-1h): 2 pushes (agy:2)"></div><div class="hm-cell" style="background:#ff79c6; opacity:0.45;" title="openOODA (-0h): 2 pushes (agy:2)"></div></div>
       </div>
       <div class="hm-row">
-        <div class="hm-org">openOODA-core <span class="muted">(23)</span></div>
-        <div class="hm-cells"><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell" style="background:#bd93f9; opacity:0.75;" title="openOODA-core (-9h): 8 pushes (vibe:7, mcode:1)"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell" style="background:#ff79c6; opacity:0.45;" title="openOODA-core (-7h): 3 pushes (agy:3)"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div></div>
+        <div class="hm-org">openOODA-core <span class="muted">(24)</span></div>
+        <div class="hm-cells"><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell" style="background:#bd93f9; opacity:0.75;" title="openOODA-core (-9h): 8 pushes (vibe:7, mcode:1)"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell" style="background:#ff79c6; opacity:0.45;" title="openOODA-core (-7h): 3 pushes (agy:3)"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell" style="background:#bd93f9; opacity:0.45;" title="openOODA-core (-0h): 1 pushes (vibe:1)"></div></div>
       </div>
       <div class="hm-row">
         <div class="hm-org">openOODA-kernel <span class="muted">(266)</span></div>
-        <div class="hm-cells"><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell" style="background:#bd93f9; opacity:0.75;" title="openOODA-kernel (-21h): 16 pushes (vibe:16)"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell" style="background:#00e5ff; opacity:0.75;" title="openOODA-kernel (-8h): 15 pushes (mcode:8, vibe:7)"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div></div>
+        <div class="hm-cells"><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell" style="background:#bd93f9; opacity:0.75;" title="openOODA-kernel (-21h): 16 pushes (vibe:16)"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell" style="background:#00e5ff; opacity:0.75;" title="openOODA-kernel (-9h): 15 pushes (mcode:8, vibe:7)"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div></div>
       </div>
       <div class="hm-row">
         <div class="hm-org">openOODA-OS <span class="muted">(355)</span></div>
-        <div class="hm-cells"><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell" style="background:#bd93f9; opacity:0.75;" title="openOODA-OS (-21h): 12 pushes (vibe:12)"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell" style="background:#bd93f9; opacity:0.75;" title="openOODA-OS (-10h): 6 pushes (vibe:6)"></div><div class="hm-cell" style="background:#50fa7b; opacity:1.0;" title="openOODA-OS (-9h): 32 pushes (devin:20, vibe:12)"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div></div>
+        <div class="hm-cells"><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell" style="background:#bd93f9; opacity:0.75;" title="openOODA-OS (-21h): 12 pushes (vibe:12)"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell" style="background:#bd93f9; opacity:0.45;" title="openOODA-OS (-11h): 1 pushes (vibe:1)"></div><div class="hm-cell" style="background:#bd93f9; opacity:0.75;" title="openOODA-OS (-10h): 12 pushes (vibe:11, devin:1)"></div><div class="hm-cell" style="background:#50fa7b; opacity:1.0;" title="openOODA-OS (-9h): 25 pushes (devin:19, vibe:6)"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div></div>
       </div>
       <div class="hm-row">
         <div class="hm-org">openOODA-tools <span class="muted">(1574)</span></div>
-        <div class="hm-cells"><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell" style="background:#00e5ff; opacity:0.45;" title="openOODA-tools (-21h): 2 pushes (mcode:2)"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell" style="background:#00e5ff; opacity:0.75;" title="openOODA-tools (-10h): 13 pushes (mcode:13)"></div><div class="hm-cell" style="background:#00e5ff; opacity:0.75;" title="openOODA-tools (-9h): 21 pushes (mcode:21)"></div><div class="hm-cell" style="background:#50fa7b; opacity:1.0;" title="openOODA-tools (-8h): 158 pushes (devin:130, vibe:28)"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div></div>
+        <div class="hm-cells"><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell" style="background:#00e5ff; opacity:0.45;" title="openOODA-tools (-21h): 2 pushes (mcode:2)"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell" style="background:#00e5ff; opacity:0.75;" title="openOODA-tools (-11h): 5 pushes (mcode:5)"></div><div class="hm-cell" style="background:#00e5ff; opacity:0.75;" title="openOODA-tools (-10h): 11 pushes (mcode:11)"></div><div class="hm-cell" style="background:#50fa7b; opacity:1.0;" title="openOODA-tools (-9h): 56 pushes (devin:38, mcode:18)"></div><div class="hm-cell" style="background:#50fa7b; opacity:1.0;" title="openOODA-tools (-8h): 120 pushes (devin:92, vibe:28)"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div></div>
       </div>
       <div class="hm-row">
         <div class="hm-org">openOODA-DE <span class="muted">(214)</span></div>
-        <div class="hm-cells"><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell" style="background:#50fa7b; opacity:0.45;" title="openOODA-DE (-10h): 4 pushes (devin:4)"></div><div class="hm-cell" style="background:#50fa7b; opacity:0.45;" title="openOODA-DE (-9h): 2 pushes (devin:2)"></div><div class="hm-cell" style="background:#50fa7b; opacity:1.0;" title="openOODA-DE (-8h): 27 pushes (devin:27)"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div></div>
+        <div class="hm-cells"><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell" style="background:#50fa7b; opacity:0.45;" title="openOODA-DE (-11h): 3 pushes (devin:3)"></div><div class="hm-cell" style="background:#50fa7b; opacity:0.45;" title="openOODA-DE (-10h): 1 pushes (devin:1)"></div><div class="hm-cell" style="background:#50fa7b; opacity:0.75;" title="openOODA-DE (-9h): 21 pushes (devin:21)"></div><div class="hm-cell" style="background:#50fa7b; opacity:0.75;" title="openOODA-DE (-8h): 8 pushes (devin:8)"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div></div>
       </div>
       <div class="hm-row">
         <div class="hm-org">openOODA-apps <span class="muted">(199)</span></div>
-        <div class="hm-cells"><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell" style="background:#50fa7b; opacity:0.75;" title="openOODA-apps (-10h): 5 pushes (devin:5)"></div><div class="hm-cell" style="background:#50fa7b; opacity:1.0;" title="openOODA-apps (-9h): 27 pushes (devin:27)"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div></div>
+        <div class="hm-cells"><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell" style="background:#50fa7b; opacity:0.45;" title="openOODA-apps (-11h): 1 pushes (devin:1)"></div><div class="hm-cell" style="background:#50fa7b; opacity:0.45;" title="openOODA-apps (-10h): 4 pushes (devin:4)"></div><div class="hm-cell" style="background:#50fa7b; opacity:1.0;" title="openOODA-apps (-9h): 27 pushes (devin:27)"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div></div>
       </div>
       <div class="hm-row">
         <div class="hm-org">openOODA-cloud <span class="muted">(174)</span></div>
@@ -1170,7 +1170,7 @@
       </div>
       <div class="hm-row">
         <div class="hm-org">openOODA-agents <span class="muted">(223)</span></div>
-        <div class="hm-cells"><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell" style="background:#50fa7b; opacity:0.75;" title="openOODA-agents (-20h): 9 pushes (devin:9)"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell" style="background:#50fa7b; opacity:0.75;" title="openOODA-agents (-9h): 9 pushes (devin:9)"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div></div>
+        <div class="hm-cells"><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell" style="background:#50fa7b; opacity:0.75;" title="openOODA-agents (-21h): 9 pushes (devin:9)"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell" style="background:#50fa7b; opacity:0.75;" title="openOODA-agents (-9h): 9 pushes (devin:9)"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div></div>
       </div>
       </div>
 
@@ -1190,15 +1190,15 @@
             
       <tr>
         <td><span style="color:#00e5ff; font-weight:700;">■ mcode // M3.1-Flash</span></td>
-        <td><strong style="color:var(--color-cyan);">0.0 live / 551.5 burst tok/s</strong></td>
+        <td><strong style="color:var(--color-cyan);">757.8 live / 631.3 burst tok/s</strong></td>
         <td><strong>1,434</strong></td>
         <td><strong>387</strong></td>
-        <td><span class="seg-inline" style="color:#00e5ff;">[█████░░░░░]</span> <span>45.2%</span></td>
+        <td><span class="seg-inline" style="color:#00e5ff;">[█████░░░░░]</span> <span>45.1%</span></td>
         <td class="muted">Root (5), L:core (2), L:kernel (16), L:tools (1411)</td>
       </tr>
       <tr>
         <td><span style="color:#50fa7b; font-weight:700;">■ devin // SWE-2 Max</span></td>
-        <td><strong style="color:var(--color-cyan);">0.0 tok/s (0/7 active)</strong></td>
+        <td><strong style="color:var(--color-cyan);">18.0 tok/s (1/1 active)</strong></td>
         <td><strong>782</strong></td>
         <td><strong>489</strong></td>
         <td><span class="seg-inline" style="color:#50fa7b;">[██░░░░░░░░]</span> <span>24.6%</span></td>
@@ -1206,11 +1206,11 @@
       </tr>
       <tr>
         <td><span style="color:#bd93f9; font-weight:700;">■ vibe // GLM-5.3 [high]</span></td>
-        <td><strong style="color:var(--color-cyan);">191.5 tok/s</strong></td>
-        <td><strong>659</strong></td>
-        <td><strong>442</strong></td>
+        <td><strong style="color:var(--color-cyan);">83.4 tok/s</strong></td>
+        <td><strong>660</strong></td>
+        <td><strong>443</strong></td>
         <td><span class="seg-inline" style="color:#bd93f9;">[██░░░░░░░░]</span> <span>20.8%</span></td>
-        <td class="muted">L:core (14), L:kernel (249), L:OS (187), L:tools (28), L:DE (181)</td>
+        <td class="muted">L:core (15), L:kernel (249), L:OS (187), L:tools (28), L:DE (181)</td>
       </tr>
       <tr>
         <td><span style="color:#ffb000; font-weight:700;">■ grok // Grok-4</span></td>
@@ -1223,10 +1223,10 @@
       <tr>
         <td><span style="color:#ff79c6; font-weight:700;">■ agy // Gemini 4 Argon</span></td>
         <td><strong style="color:var(--color-cyan);">95.0 tok/s (Root w9)</strong></td>
-        <td><strong>152</strong></td>
+        <td><strong>153</strong></td>
         <td><strong>26</strong></td>
         <td><span class="seg-inline" style="color:#ff79c6;">[█░░░░░░░░░]</span> <span>4.8%</span></td>
-        <td class="muted">Root (142), L:core (7), L:kernel (1), L:cloud (1), L:agents (1)</td>
+        <td class="muted">Root (143), L:core (7), L:kernel (1), L:cloud (1), L:agents (1)</td>
       </tr>
           </tbody>
         </table>
@@ -1240,9 +1240,9 @@
             <strong>openOODA</strong>
             <span class="term-badge term-badge-green" style="margin-left:6px;">[6/6 USABLE · ████████]</span>
           </div>
-          <div><span style="color:#00e5ff; font-size:0.74rem; margin-right:8px;">■ mcode:5</span><span style="color:#ff79c6; font-size:0.74rem; margin-right:8px;">■ agy:142</span> <strong style="font-size:0.78rem;">(147 tracked pushes)</strong></div>
+          <div><span style="color:#00e5ff; font-size:0.74rem; margin-right:8px;">■ mcode:5</span><span style="color:#ff79c6; font-size:0.74rem; margin-right:8px;">■ agy:143</span> <strong style="font-size:0.78rem;">(148 tracked pushes)</strong></div>
         </div>
-        <div class="stacked-bar" style="height:8px; margin-top:4px;"><div style="width:3.4%; background:#00e5ff;" title="mcode: 5"></div><div style="width:96.6%; background:#ff79c6;" title="agy: 142"></div></div>
+        <div class="stacked-bar" style="height:8px; margin-top:4px;"><div style="width:3.4%; background:#00e5ff;" title="mcode: 5"></div><div style="width:96.6%; background:#ff79c6;" title="agy: 143"></div></div>
       </div>
       <div class="org-push-row">
         <div class="org-push-hdr">
@@ -1250,9 +1250,9 @@
             <strong>openOODA-core</strong>
             <span class="term-badge term-badge-green" style="margin-left:6px;">[10/10 USABLE · ████████]</span>
           </div>
-          <div><span style="color:#00e5ff; font-size:0.74rem; margin-right:8px;">■ mcode:2</span><span style="color:#bd93f9; font-size:0.74rem; margin-right:8px;">■ vibe:14</span><span style="color:#ff79c6; font-size:0.74rem; margin-right:8px;">■ agy:7</span> <strong style="font-size:0.78rem;">(23 tracked pushes)</strong></div>
+          <div><span style="color:#00e5ff; font-size:0.74rem; margin-right:8px;">■ mcode:2</span><span style="color:#bd93f9; font-size:0.74rem; margin-right:8px;">■ vibe:15</span><span style="color:#ff79c6; font-size:0.74rem; margin-right:8px;">■ agy:7</span> <strong style="font-size:0.78rem;">(24 tracked pushes)</strong></div>
         </div>
-        <div class="stacked-bar" style="height:8px; margin-top:4px;"><div style="width:8.7%; background:#00e5ff;" title="mcode: 2"></div><div style="width:60.9%; background:#bd93f9;" title="vibe: 14"></div><div style="width:30.4%; background:#ff79c6;" title="agy: 7"></div></div>
+        <div class="stacked-bar" style="height:8px; margin-top:4px;"><div style="width:8.3%; background:#00e5ff;" title="mcode: 2"></div><div style="width:62.5%; background:#bd93f9;" title="vibe: 15"></div><div style="width:29.2%; background:#ff79c6;" title="agy: 7"></div></div>
       </div>
       <div class="org-push-row">
         <div class="org-push-hdr">
@@ -1400,14 +1400,14 @@
 [1] LIVE AGENT & QUOTA TELEMETRY (Target: 90% soft throttle / 95% hard cutoff, >=5% reserve floor)
   PANE    WORKSPACE            AGENT                    STATE       QUOTA / TOKENS                     STATUS / PACE TO 90%/95%
   ------------------------------------------------------------------------------------------------------------------------------
-  wF:p1   (L0) openOODA-core   vibe (GLM-5.3 [high])  idle       Mo 90% (10% rem, rst Dec1) / ctx 359k/800k OK (THROTTLE: 1-pane only (+5% to 95%))
-  wG:p1   (L1) openOODA-kernel devin (SWE-2 Max)      idle       Shadow 92% (8% rem, API:0% lag, rst 22h) / Ctx 32% OK (THROTTLE: 1-pane only (+3% to 95%))
-  wH:p1   (L2) openOODA-OS     devin (SWE-2 Max)      idle       Shadow 92% (8% rem, API:0% lag, rst 22h) / Ctx 73% OK (THROTTLE: 1-pane only (+3% to 95%))
-  wJ:p1   (L3) openOODA-tools  devin (SWE-2 Max)      idle       Shadow 92% (8% rem, API:0% lag, rst 22h) / Ctx 76% OK (THROTTLE: 1-pane only (+3% to 95%))
-  wK:p1   (L4) openOODA-DE     devin (SWE-2 Max)      idle       Shadow 92% (8% rem, API:0% lag, rst 22h) / Ctx 37% OK (THROTTLE: 1-pane only (+3% to 95%))
-  wM:p1   (L5) openOODA-apps   devin (SWE-2 Max)      idle       Shadow 92% (8% rem, API:0% lag, rst 22h) / Ctx 28% OK (THROTTLE: 1-pane only (+3% to 95%))
-  wN:p1   (L6) openOODA-cloud  devin (SWE-2 Max)      idle       Shadow 92% (8% rem, API:0% lag, rst 22h) / Ctx 41% OK (THROTTLE: 1-pane only (+3% to 95%))
-  wP:p1   (L7) openOODA-agents devin (SWE-2 Max)      idle       Shadow 92% (8% rem, API:0% lag, rst 22h) / Ctx 28% OK (THROTTLE: 1-pane only (+3% to 95%))
+  wF:p1   (L0) openOODA-core   vibe (GLM-5.3 [high])  working    Mo 90% (10% rem, rst Dec1) / ctx 430k/800k OK (THROTTLE: 1-pane only (+5% to 95%))
+  wG:p1   (L1) openOODA-kernel mcode (M3.1-Flash)     working    5h 19% (81% rem, rst 10:00) / Ctx 62%  OK (+71% to 90% (95% cap))
+  wH:p1   (L2) openOODA-OS     devin (SWE-2 Max)      working    Shadow 92% (8% rem, API:0% lag, rst 22h) / Ctx 43% OK (THROTTLE: 1-pane only (+3% to 95%))
+  wJ:p1   (L3) openOODA-tools  mcode (M3.1-Flash)     working    5h 19% (81% rem, rst 10:00) / Ctx 60%  OK (+71% to 90% (95% cap))
+  wK:p1   (L4) openOODA-DE     mcode (M3.1-Flash)     working    5h 19% (81% rem, rst 10:00) / Ctx 58%  OK (+71% to 90% (95% cap))
+  wM:p1   (L5) openOODA-apps   mcode (M3.1-Flash)     working    5h 19% (81% rem, rst 10:00) / Ctx 66%  OK (+71% to 90% (95% cap))
+  wN:p1   (L6) openOODA-cloud  mcode (M3.1-Flash)     working    5h 19% (81% rem, rst 10:00) / Ctx 73%  OK (+71% to 90% (95% cap))
+  wP:p1   (L7) openOODA-agents mcode (M3.1-Flash)     working    5h 19% (81% rem, rst 10:00) / Ctx 62%  OK (+71% to 90% (95% cap))
   Quota Pacing Policy: 90% Soft Throttle (1-pane max) / 95% Hard Cutoff (>=5% reserve floor)
 
 [2] 9-ORGANIZATION (ROOT + L0-L7) USABILITY MATRIX (USABLE vs SCAFFOLD SHELLS)
