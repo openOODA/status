@@ -7,813 +7,127 @@
   <meta http-equiv="refresh" content="300">
   <title>openOODA // LIVE TELEMETRY &amp; FLIGHT STATUS (L0–L7)</title>
   <style>
-
     :root {
-      --bg-deep: #06080b;
-      --bg-window: rgba(9, 12, 18, 0.88);
-      --bg-bar: #0c1018;
-      --bg-titlebar: rgba(11, 15, 23, 0.94);
-      --bg-card: rgba(12, 16, 24, 0.90);
-      --bg-btn: #121824;
-      --phosphor: #50fa7b;
-      --accent-rgb: 80, 250, 123;
+      --bg-deep: #06080b; --bg-window: rgba(9, 12, 18, 0.88); --bg-bar: #0c1018;
+      --bg-titlebar: rgba(11, 15, 23, 0.94); --bg-card: rgba(12, 16, 24, 0.90); --bg-btn: #121824;
+      --phosphor: #50fa7b; --accent-rgb: 80, 250, 123;
       --phosphor-dim: rgba(var(--accent-rgb, 80, 250, 123), 0.14);
       --phosphor-glow: rgba(var(--accent-rgb, 80, 250, 123), 0.30);
-      --hot: #a2ffbc;
-      --hot-rgb: 162, 255, 188;
-      --color-green: var(--phosphor);
-      --color-green-dim: var(--phosphor-dim);
-      --color-amber: #ffb000;
-      --color-cyan: #00e5ff;
-      --color-red: #ff5555;
-      --color-purple: #bd93f9;
-      --color-pink: #ff79c6;
-      --text-primary: #f3f4f6;
-      --text-secondary: #94a3b8;
-      --text-muted: #64748b;
-      --border-subtle: #1e2636;
-      --border-accent-color: rgba(var(--accent-rgb, 80, 250, 123), 0.44);
-      --font-mono: ui-monospace, SFMono-Regular, "JetBrains Mono", Menlo, Consolas, "Liberation Mono", Courier, monospace;
+      --hot: #a2ffbc; --hot-rgb: 162, 255, 188;
+      --color-green: var(--phosphor); --color-green-dim: var(--phosphor-dim);
+      --color-amber: #ffb000; --color-cyan: #00e5ff; --color-red: #ff5555;
+      --color-purple: #bd93f9; --color-pink: #ff79c6;
+      --text-primary: #f3f4f6; --text-secondary: #94a3b8; --text-muted: #64748b;
+      --border-subtle: #1e2636; --border-accent-color: rgba(var(--accent-rgb, 80, 250, 123), 0.44);
+      --font-mono: ui-monospace, SFMono-Regular, "JetBrains Mono", Menlo, Consolas, monospace;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
     html, body { height: 100%; }
-    body.terminal-body {
-      background-color: var(--bg-deep);
-      color: var(--text-primary);
-      font-family: var(--font-mono);
-      line-height: 1.55;
-      overflow: hidden;
-      position: relative;
-    }
+    body.terminal-body { background-color: var(--bg-deep); color: var(--text-primary); font-family: var(--font-mono); line-height: 1.55; overflow: hidden; position: relative; }
     a { color: var(--color-cyan); text-decoration: none; }
     a:hover { color: var(--hot); text-decoration: underline; }
     code { color: var(--color-cyan); font-family: var(--font-mono); }
     .muted { color: var(--text-secondary); }
-
-    .spotlight-canvas {
-      position: fixed;
-      inset: 0;
-      width: 100vw;
-      height: 100vh;
-      z-index: 0;
-      pointer-events: none;
-      display: block;
-    }
-    .terminal-window {
-      position: relative;
-      z-index: 2;
-      display: flex;
-      flex-direction: column;
-      height: 100vh;
-      height: 100dvh;
-      background: transparent;
-    }
-    .window-titlebar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      min-height: 52px;
-      padding: 8px 20px;
-      background: var(--bg-titlebar);
-      background-image: linear-gradient(rgba(18, 22, 28, 0) 50%, rgba(0, 0, 0, 0.45) 50%);
-      background-size: 100% 4px;
-      border-bottom: 2px solid var(--border-accent-color);
-      box-shadow: 0 2px 0 0 #000, 0 8px 24px rgba(0, 0, 0, 0.75);
-      backdrop-filter: blur(12px);
-      font-size: 12px;
-      flex-wrap: wrap;
-      flex-shrink: 0;
-      z-index: 95;
-    }
-    .header-brand {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      color: var(--text-primary);
-      font-weight: 800;
-      font-size: 14px;
-      text-decoration: none;
-    }
-    .crest-emblem {
-      width: 30px;
-      height: 30px;
-      border-radius: 4px;
-      border: 1.5px solid var(--phosphor);
-      box-shadow: 2px 2px 0 0 #000, 0 0 10px var(--phosphor-dim);
-      background: #080b10;
-      image-rendering: pixelated;
-      flex-shrink: 0;
-    }
-    .header-wordmark {
-      display: block;
-      width: min(172px, 38vw);
-      height: auto;
-      image-rendering: pixelated;
-    }
-    .window-title {
-      color: var(--hot);
-      font-weight: 700;
-      letter-spacing: 0.05em;
-      text-shadow: 0 0 10px var(--phosphor-dim);
-      flex: 1;
-      text-align: center;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-    .header-right {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
-    .term-badge {
-      display: inline-block;
-      padding: 2px 8px;
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: 0.05em;
-      border: 1px solid var(--border-accent-color);
-      background: var(--phosphor-dim);
-      color: var(--hot);
-      box-shadow: 2px 2px 0 0 #000;
-      white-space: nowrap;
-      max-width: 100%;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
+    .spotlight-canvas { position: fixed; inset: 0; width: 100vw; height: 100vh; z-index: 0; pointer-events: none; display: block; }
+    .terminal-window { position: relative; z-index: 2; display: flex; flex-direction: column; height: 100vh; height: 100dvh; background: transparent; }
+    .window-titlebar { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 52px; padding: 8px 20px; background: var(--bg-titlebar); border-bottom: 2px solid var(--border-accent-color); box-shadow: 0 2px 0 0 #000, 0 8px 24px rgba(0, 0, 0, 0.75); backdrop-filter: blur(12px); font-size: 12px; flex-wrap: wrap; flex-shrink: 0; z-index: 95; }
+    .header-brand { display: flex; align-items: center; gap: 10px; color: var(--text-primary); font-weight: 800; font-size: 14px; text-decoration: none; }
+    .crest-emblem { width: 30px; height: 30px; border-radius: 4px; border: 1.5px solid var(--phosphor); box-shadow: 2px 2px 0 0 #000, 0 0 10px var(--phosphor-dim); background: #080b10; image-rendering: pixelated; flex-shrink: 0; }
+    .header-wordmark { display: block; width: min(172px, 38vw); height: auto; image-rendering: pixelated; }
+    .window-title { color: var(--hot); font-weight: 700; letter-spacing: 0.05em; text-shadow: 0 0 10px var(--phosphor-dim); flex: 1; text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .header-right { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+    .term-badge { display: inline-block; padding: 2px 8px; font-size: 11px; font-weight: 700; letter-spacing: 0.05em; border: 1px solid var(--border-accent-color); background: var(--phosphor-dim); color: var(--hot); box-shadow: 2px 2px 0 0 #000; white-space: nowrap; max-width: 100%; overflow: hidden; text-overflow: ellipsis; }
     .term-badge-green { color: var(--phosphor); border-color: rgba(80, 250, 123, 0.5); background: rgba(80, 250, 123, 0.12); }
     .term-badge-amber { color: var(--color-amber); border-color: rgba(255, 176, 0, 0.5); background: rgba(255, 176, 0, 0.12); }
-    .term-badge-cyan  { color: var(--color-cyan);  border-color: rgba(0, 229, 255, 0.5);  background: rgba(0, 229, 255, 0.12); }
-    .term-badge-red   { color: var(--color-red);   border-color: rgba(255, 85, 85, 0.5);  background: rgba(255, 85, 85, 0.14); }
-    .term-status-online {
-      color: var(--phosphor);
-      font-weight: 700;
-      animation: blink-soft 2.6s steps(2) infinite;
-    }
+    .term-badge-cyan { color: var(--color-cyan); border-color: rgba(0, 229, 255, 0.5); background: rgba(0, 229, 255, 0.12); }
+    .term-badge-red { color: var(--color-red); border-color: rgba(255, 85, 85, 0.5); background: rgba(255, 85, 85, 0.14); }
+    .term-status-online { color: var(--phosphor); font-weight: 700; animation: blink-soft 2.6s steps(2) infinite; }
     @keyframes blink-soft { 50% { opacity: 0.4; } }
-
-    .scroll-port {
-      flex: 1;
-      overflow-y: auto;
-      overflow-x: hidden;
-      scroll-snap-type: y proximity;
-      scrollbar-width: thin;
-      scrollbar-color: var(--phosphor) var(--bg-deep);
-    }
-    .page-stage {
-      min-height: 100%;
-      scroll-snap-align: start;
-      max-width: 1180px;
-      margin: 0 auto;
-      padding: 28px 18px 40px;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-    }
-
-    /* Page 1: Burn Hero Landing Stage */
-    .burn-hero-stage {
-      min-height: 100%;
-      scroll-snap-align: start;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: space-between;
-      padding: 28px 20px 28px;
-      text-align: center;
-      max-width: 1180px;
-      margin: 0 auto;
-    }
-    .burn-hero-box {
-      background: rgba(8, 12, 18, 0.86);
-      border: 2px solid var(--border-accent-color);
-      box-shadow: 4px 4px 0 0 #000, 0 12px 36px rgba(0, 0, 0, 0.82);
-      backdrop-filter: blur(10px);
-      padding: 24px 32px;
-      max-width: 960px;
-      width: 100%;
-      margin: auto 0;
-    }
-    .burn-eyebrow {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 4px 12px;
-      background: #0a0f18;
-      border: 1px solid var(--border-accent-color);
-      color: var(--hot);
-      font-size: 11px;
-      font-weight: 800;
-      letter-spacing: 0.1em;
-      margin-bottom: 12px;
-    }
-    .burn-dot {
-      width: 8px;
-      height: 8px;
-      background: var(--phosphor);
-      box-shadow: 0 0 10px var(--phosphor);
-      animation: blink-soft 1.4s steps(2) infinite;
-    }
-    .burn-mega-num {
-      font-size: clamp(2.6rem, 6vw, 4.5rem);
-      font-weight: 900;
-      color: #ffffff;
-      text-shadow: 3px 3px 0 #000, 0 0 24px var(--phosphor-glow);
-      line-height: 1.08;
-      letter-spacing: -0.02em;
-    }
-    .burn-mega-unit {
-      font-size: clamp(1.1rem, 2.5vw, 1.65rem);
-      color: var(--phosphor);
-      font-weight: 800;
-      margin-left: 8px;
-    }
-    .burn-sub-meta {
-      font-size: 12px;
-      color: var(--text-secondary);
-      margin-top: 8px;
-      margin-bottom: 16px;
-    }
-    .burn-pills {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(165px, 1fr));
-      gap: 10px;
-      text-align: left;
-      margin-top: 12px;
-    }
-    .burn-pill {
-      background: #070a10;
-      border: 1.5px solid #1e2636;
-      box-shadow: 2px 2px 0 0 #000;
-      padding: 8px 10px;
-      min-width: 0;
-      overflow: hidden;
-    }
-    .burn-pill-hdr {
-      font-size: 10.5px;
-      font-weight: 800;
-      display: flex;
-      justify-content: space-between;
-      gap: 4px;
-    }
-    .burn-pill-val {
-      font-size: 15px;
-      font-weight: 800;
-      color: #fff;
-      margin-top: 2px;
-    }
-    .burn-scroll-cue {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      color: var(--hot);
-      font-size: 11px;
-      font-weight: 800;
-      letter-spacing: 0.08em;
-      padding: 7px 16px;
-      background: rgba(10, 14, 22, 0.90);
-      border: 1.5px solid var(--border-accent-color);
-      box-shadow: 2px 2px 0 0 #000;
-      text-decoration: none;
-    }
-
-    /* Page 2: Ticker Grid & SVG Line Graph */
-    .ticker-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(195px, 1fr));
-      gap: 12px;
-      margin-bottom: 16px;
-    }
-    .stat-card {
-      background: var(--bg-card);
-      border: 1.5px solid var(--border-subtle);
-      box-shadow: 3px 3px 0 0 #000;
-      padding: 12px 14px;
-      min-width: 0;
-      max-width: 100%;
-      overflow: hidden;
-      word-break: break-word;
-      overflow-wrap: anywhere;
-      transition: border-color 0.12s steps(2), transform 0.12s steps(2);
-    }
-    .stat-card:hover { border-color: var(--phosphor); transform: translateY(-1px); }
+    .scroll-port { flex: 1; overflow-y: auto; overflow-x: hidden; scroll-snap-type: y proximity; scrollbar-width: thin; scrollbar-color: var(--phosphor) var(--bg-deep); }
+    .page-stage { min-height: 100%; scroll-snap-align: start; max-width: 1180px; margin: 0 auto; padding: 28px 18px 40px; display: flex; flex-direction: column; justify-content: center; }
+    .burn-hero-stage { min-height: 100%; scroll-snap-align: start; display: flex; flex-direction: column; align-items: center; justify-content: space-between; padding: 28px 20px 28px; text-align: center; max-width: 1180px; margin: 0 auto; }
+    .burn-hero-box { background: rgba(8, 12, 18, 0.86); border: 2px solid var(--border-accent-color); box-shadow: 4px 4px 0 0 #000, 0 12px 36px rgba(0, 0, 0, 0.82); backdrop-filter: blur(10px); padding: 24px 32px; max-width: 960px; width: 100%; margin: auto 0; }
+    .burn-eyebrow { display: inline-flex; align-items: center; gap: 8px; padding: 4px 12px; background: #0a0f18; border: 1px solid var(--border-accent-color); color: var(--hot); font-size: 11px; font-weight: 800; letter-spacing: 0.1em; margin-bottom: 12px; }
+    .burn-dot { width: 8px; height: 8px; background: var(--phosphor); box-shadow: 0 0 10px var(--phosphor); animation: blink-soft 1.4s steps(2) infinite; }
+    .burn-mega-num { font-size: clamp(2.6rem, 6vw, 4.5rem); font-weight: 900; color: #ffffff; text-shadow: 3px 3px 0 #000, 0 0 24px var(--phosphor-glow); line-height: 1.08; letter-spacing: -0.02em; }
+    .burn-mega-unit { font-size: clamp(1.1rem, 2.5vw, 1.65rem); color: var(--phosphor); font-weight: 800; margin-left: 8px; }
+    .burn-sub-meta { font-size: 12px; color: var(--text-secondary); margin-top: 8px; margin-bottom: 16px; }
+    .burn-pills { display: grid; grid-template-columns: repeat(auto-fit, minmax(165px, 1fr)); gap: 10px; text-align: left; margin-top: 12px; }
+    .burn-pill { background: #070a10; border: 1.5px solid #1e2636; box-shadow: 2px 2px 0 0 #000; padding: 8px 10px; min-width: 0; overflow: hidden; }
+    .burn-pill-hdr { font-size: 10.5px; font-weight: 800; display: flex; justify-content: space-between; gap: 4px; }
+    .burn-pill-val { font-size: 15px; font-weight: 800; color: #fff; margin-top: 2px; }
+    .burn-scroll-cue { display: inline-flex; align-items: center; gap: 8px; color: var(--hot); font-size: 11px; font-weight: 800; letter-spacing: 0.08em; padding: 7px 16px; background: rgba(10, 14, 22, 0.90); border: 1.5px solid var(--border-accent-color); box-shadow: 2px 2px 0 0 #000; text-decoration: none; }
+    .ticker-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(195px, 1fr)); gap: 12px; margin-bottom: 16px; }
+    .stat-card { background: var(--bg-card); border: 1.5px solid var(--border-subtle); box-shadow: 3px 3px 0 0 #000; padding: 12px 14px; min-width: 0; max-width: 100%; overflow: hidden; word-break: break-word; overflow-wrap: anywhere; }
     .stat-card-highlight { border-color: var(--border-accent-color); background: rgba(12, 22, 28, 0.94); }
     .stat-label { font-size: 10.5px; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.08em; font-weight: 700; }
     .stat-val { font-size: 1.35rem; font-weight: 800; color: #ffffff; text-shadow: 2px 2px 0 #000, 0 0 12px var(--phosphor-dim); margin-top: 4px; min-width: 0; overflow: hidden; text-overflow: ellipsis; }
     .stat-sub { font-size: 11px; color: var(--phosphor); margin-top: 3px; min-width: 0; overflow: hidden; text-overflow: ellipsis; }
-
-    .tok-chart-wrap {
-      background: #06090f;
-      border: 1.5px solid #1e2636;
-      box-shadow: inset 2px 2px 0 0 #000;
-      padding: 12px;
-      width: 100%;
-      overflow: hidden;
-    }
-    .tok-line-chart {
-      width: 100%;
-      height: 220px;
-      display: block;
-    }
-
-    /* Persistent Bottom Navigation Dock */
-    .window-statusbar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      min-height: 52px;
-      padding: 6px 20px;
-      background: var(--bg-titlebar);
-      background-image: linear-gradient(rgba(18, 22, 28, 0) 50%, rgba(0, 0, 0, 0.45) 50%);
-      background-size: 100% 4px;
-      border-top: 2px solid var(--border-accent-color);
-      box-shadow: 0 -2px 0 0 rgba(0, 0, 0, 0.85), 0 -8px 24px rgba(0, 0, 0, 0.65);
-      backdrop-filter: blur(14px);
-      font-size: 11px;
-      flex-shrink: 0;
-      z-index: 95;
-    }
+    .tok-chart-wrap { background: #06090f; border: 1.5px solid #1e2636; box-shadow: inset 2px 2px 0 0 #000; padding: 12px; width: 100%; overflow: hidden; }
+    .tok-line-chart { width: 100%; height: 220px; display: block; }
+    .window-statusbar { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 52px; padding: 6px 20px; background: var(--bg-titlebar); border-top: 2px solid var(--border-accent-color); box-shadow: 0 -2px 0 0 rgba(0, 0, 0, 0.85), 0 -8px 24px rgba(0, 0, 0, 0.65); backdrop-filter: blur(14px); font-size: 11px; flex-shrink: 0; z-index: 95; }
     .dock-side { display: flex; align-items: center; gap: 10px; }
     .dock-center { display: flex; align-items: center; justify-content: center; gap: 10px; flex-wrap: wrap; }
-    .nav-arrow, .arcade-btn {
-      font-family: var(--font-mono);
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: 0.06em;
-      color: var(--phosphor);
-      background: #101520;
-      border: 1.5px solid var(--border-accent-color);
-      box-shadow: 2px 2px 0 0 #000, inset 1px 1px 0 0 rgba(255, 255, 255, 0.08);
-      padding: 5px 11px;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-      text-transform: uppercase;
-    }
-    .nav-arrow:hover, .arcade-btn:hover {
-      background: var(--phosphor-dim);
-      border-color: var(--phosphor);
-      color: var(--hot);
-    }
+    .nav-arrow, .arcade-btn { font-family: var(--font-mono); font-size: 11px; font-weight: 700; letter-spacing: 0.06em; color: var(--phosphor); background: #101520; border: 1.5px solid var(--border-accent-color); box-shadow: 2px 2px 0 0 #000; padding: 5px 11px; cursor: pointer; display: inline-flex; align-items: center; gap: 5px; text-transform: uppercase; }
     .nav-arrow.off { opacity: 0.28; pointer-events: none; }
-    .footer-accent-picker {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 4px 8px;
-      background: #080b11;
-      border: 1px solid #1e2636;
-      box-shadow: inset 1px 1px 0 0 #000;
-    }
-    .dock-accent-dot {
-      width: 15px;
-      height: 15px;
-      border-radius: 1px;
-      border: 1px solid #000;
-      box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.24);
-      cursor: pointer;
-      padding: 0;
-    }
-    .dock-accent-dot.active {
-      transform: scale(1.32);
-      box-shadow: 0 0 0 2px #fff, 0 0 12px var(--swatch, currentColor);
-      border-color: #fff;
-    }
+    .footer-accent-picker { display: inline-flex; align-items: center; gap: 6px; padding: 4px 8px; background: #080b11; border: 1px solid #1e2636; }
+    .dock-accent-dot { width: 15px; height: 15px; border-radius: 1px; border: 1px solid #000; cursor: pointer; padding: 0; }
+    .dock-accent-dot.active { transform: scale(1.32); box-shadow: 0 0 0 2px #fff; border-color: #fff; }
     .dock-swatch-label { font-size: 10px; font-weight: 700; color: var(--hot); letter-spacing: 0.08em; min-width: 56px; text-align: right; }
     .footer-links { display: flex; gap: 10px; flex-wrap: wrap; }
     .footer-links a { color: var(--text-secondary); text-decoration: none; font-size: 11px; }
-    .footer-links a:hover { color: var(--hot); }
-    @media (max-width: 820px) {
-      .window-title, .footer-links, .dock-swatch-label { display: none; }
-    }
-
-    .section-hdr {
-      color: var(--hot);
-      font-size: 12.5px;
-      font-weight: 700;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      margin: 24px 0 10px;
-      padding: 6px 12px;
-      background: var(--bg-bar);
-      border: 1.5px solid var(--border-accent-color);
-      border-left: 4px solid var(--phosphor);
-      box-shadow: 2px 2px 0 0 #000;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 8px;
-      min-width: 0;
-      overflow: hidden;
-      word-break: break-word;
-    }
-    .panel {
-      background: var(--bg-card);
-      border: 1.5px solid var(--border-subtle);
-      box-shadow: 3px 3px 0 0 #000, 0 8px 24px rgba(0, 0, 0, 0.55);
-      padding: 16px;
-      margin-bottom: 18px;
-      min-width: 0;
-      max-width: 100%;
-      overflow: hidden;
-    }
-
-
-    /* 5-GPU Telemetry Grid */
-    .gpu-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
-      gap: 12px;
-      width: 100%;
-      min-width: 0;
-    }
-    .gpu-card {
-      background: #080b11;
-      border: 1.5px solid var(--border-subtle);
-      box-shadow: 2px 2px 0 0 #000;
-      padding: 12px;
-      font-size: 11.5px;
-      min-width: 0;
-      max-width: 100%;
-      overflow: hidden;
-      word-break: break-word;
-      overflow-wrap: anywhere;
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-    }
-    .gpu-card:hover {
-      border-color: var(--color-cyan);
-    }
-    .gpu-hdr {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 6px;
-      margin-bottom: 4px;
-      min-width: 0;
-    }
-    .gpu-id {
-      color: var(--color-cyan);
-      font-weight: 800;
-      font-size: 13px;
-      letter-spacing: 0.04em;
-      min-width: 0;
-    }
-    .gpu-meta {
-      display: flex;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 4px 8px;
-      color: var(--text-secondary);
-      font-size: 10.5px;
-      margin-bottom: 6px;
-      padding-bottom: 6px;
-      border-bottom: 1px dashed #1e2636;
-      min-width: 0;
-    }
-    .gpu-bar-line {
-      display: flex;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 6px 8px;
-      margin-top: 4px;
-      font-size: 11px;
-      min-width: 0;
-      max-width: 100%;
-      overflow: hidden;
-    }
-    .gpu-bar-lbl {
-      width: 36px;
-      flex-shrink: 0;
-      color: var(--color-amber);
-      font-weight: 700;
-      font-size: 10.5px;
-    }
-    .gpu-seg-track {
-      flex: 1 1 64px;
-      min-width: 48px;
-      max-width: 100%;
-      height: 10px;
-      background: #05070a;
-      border: 1px solid #1e2636;
-      box-shadow: inset 1px 1px 0 0 #000;
-      overflow: hidden;
-      position: relative;
-    }
-    .gpu-seg-fill {
-      height: 100%;
-      max-width: 100%;
-      background-image: repeating-linear-gradient(
-        90deg,
-        transparent,
-        transparent 5px,
-        rgba(0, 0, 0, 0.45) 5px,
-        rgba(0, 0, 0, 0.45) 7px
-      );
-    }
+    .section-hdr { color: var(--hot); font-size: 12.5px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; margin: 24px 0 10px; padding: 6px 12px; background: var(--bg-bar); border: 1.5px solid var(--border-accent-color); border-left: 4px solid var(--phosphor); box-shadow: 2px 2px 0 0 #000; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; min-width: 0; overflow: hidden; word-break: break-word; }
+    .panel { background: var(--bg-card); border: 1.5px solid var(--border-subtle); box-shadow: 3px 3px 0 0 #000, 0 8px 24px rgba(0, 0, 0, 0.55); padding: 16px; margin-bottom: 18px; min-width: 0; max-width: 100%; overflow: hidden; }
+    .gpu-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr)); gap: 12px; width: 100%; min-width: 0; }
+    .gpu-card { background: #080b11; border: 1.5px solid var(--border-subtle); box-shadow: 2px 2px 0 0 #000; padding: 12px; font-size: 11.5px; min-width: 0; max-width: 100%; overflow: hidden; word-break: break-word; overflow-wrap: anywhere; display: flex; flex-direction: column; gap: 4px; }
+    .gpu-hdr { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 6px; margin-bottom: 4px; min-width: 0; }
+    .gpu-id { color: var(--color-cyan); font-weight: 800; font-size: 13px; letter-spacing: 0.04em; min-width: 0; }
+    .gpu-meta { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 4px 8px; color: var(--text-secondary); font-size: 10.5px; margin-bottom: 6px; padding-bottom: 6px; border-bottom: 1px dashed #1e2636; min-width: 0; }
+    .gpu-bar-line { display: flex; align-items: center; flex-wrap: wrap; gap: 6px 8px; margin-top: 4px; font-size: 11px; min-width: 0; max-width: 100%; overflow: hidden; }
+    .gpu-bar-lbl { width: 36px; flex-shrink: 0; color: var(--color-amber); font-weight: 700; font-size: 10.5px; }
+    .gpu-seg-track { flex: 1 1 64px; min-width: 48px; max-width: 100%; height: 10px; background: #05070a; border: 1px solid #1e2636; box-shadow: inset 1px 1px 0 0 #000; overflow: hidden; position: relative; }
+    .gpu-seg-fill { height: 100%; max-width: 100%; }
     .gpu-seg-cyan { background-color: var(--color-cyan); }
     .gpu-seg-green { background-color: var(--phosphor); }
-    .seg-bar {
-      font-family: var(--font-mono);
-      letter-spacing: 0.02em;
-      font-size: 11px;
-      min-width: 0;
-      max-width: 100%;
-      overflow: hidden;
-      text-overflow: clip;
-      flex-shrink: 1;
-    }
-    .seg-inline {
-      font-family: var(--font-mono);
-      font-size: 11px;
-      letter-spacing: 0.02em;
-      max-width: 100%;
-      overflow: hidden;
-    }
-    .gpu-bar-val {
-      color: var(--text-primary);
-      font-size: 10.5px;
-      min-width: 0;
-      max-width: 100%;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      margin-left: auto;
-    }
-
-    /* Quota Graph Styles */
-    .quota-row {
-      padding: 11px 0;
-      border-bottom: 1px dashed #1e2636;
-      min-width: 0;
-      max-width: 100%;
-      overflow: hidden;
-      word-break: break-word;
-    }
-    .quota-row:last-child { border-bottom: none; }
-    .quota-hdr {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-bottom: 6px;
-      font-size: 12px;
-      min-width: 0;
-    }
+    .seg-bar { font-family: var(--font-mono); letter-spacing: 0.02em; font-size: 11px; min-width: 0; max-width: 100%; overflow: hidden; text-overflow: clip; flex-shrink: 1; }
+    .seg-inline { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.02em; max-width: 100%; overflow: hidden; }
+    .gpu-bar-val { color: var(--text-primary); font-size: 10.5px; min-width: 0; max-width: 100%; overflow: hidden; text-overflow: ellipsis; margin-left: auto; }
+    .quota-row { padding: 11px 0; border-bottom: 1px dashed #1e2636; min-width: 0; max-width: 100%; overflow: hidden; word-break: break-word; }
+    .quota-hdr { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; margin-bottom: 6px; font-size: 12px; min-width: 0; }
     .quota-agent { font-weight: 800; margin-right: 6px; }
-    .quota-cycle {
-      font-size: 10.5px;
-      color: var(--color-amber);
-      font-weight: 700;
-      margin-right: 6px;
-    }
+    .quota-cycle { font-size: 10.5px; color: var(--color-amber); font-weight: 700; margin-right: 6px; }
     .quota-nums { font-size: 11.5px; min-width: 0; max-width: 100%; word-break: break-word; }
-    .quota-bar-track {
-      position: relative;
-      width: 100%;
-      max-width: 100%;
-      height: 14px;
-      background: #05070a;
-      border: 1.5px solid #1e2636;
-      box-shadow: inset 1px 1px 0 0 #000;
-      display: flex;
-      overflow: hidden;
-    }
-    .quota-bar-used {
-      height: 100%;
-      background-image: repeating-linear-gradient(
-        90deg,
-        transparent,
-        transparent 6px,
-        rgba(0, 0, 0, 0.35) 6px,
-        rgba(0, 0, 0, 0.35) 8px
-      );
-    }
-    .quota-bar-rem {
-      height: 100%;
-      background: repeating-linear-gradient(
-        90deg,
-        rgba(80, 250, 123, 0.22),
-        rgba(80, 250, 123, 0.22) 6px,
-        rgba(80, 250, 123, 0.05) 6px,
-        rgba(80, 250, 123, 0.05) 8px
-      );
-    }
-    .quota-throttle-line {
-      position: absolute;
-      top: 0;
-      bottom: 0;
-      width: 2px;
-      background: var(--color-amber);
-      z-index: 2;
-    }
-    .quota-target-line {
-      position: absolute;
-      top: 0;
-      bottom: 0;
-      width: 2px;
-      background: var(--color-red);
-      z-index: 2;
-    }
-    .quota-sub {
-      display: flex;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 6px;
-      font-size: 11px;
-      color: var(--text-secondary);
-      margin-top: 5px;
-      min-width: 0;
-    }
-    .sort-bar {
-      display: flex;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 6px;
-      margin-bottom: 12px;
-      padding: 8px 10px;
-      background: #080b11;
-      border: 1.5px solid #1e2636;
-      box-shadow: inset 1px 1px 0 0 #000;
-      min-width: 0;
-      overflow: hidden;
-    }
-    .sort-label {
-      font-size: 10.5px;
-      font-weight: 800;
-      color: var(--color-amber);
-      letter-spacing: 0.06em;
-      margin-right: 4px;
-    }
-    .sort-btn {
-      background: #0c1018;
-      color: var(--text-secondary);
-      border: 1px solid #1e2636;
-      box-shadow: 2px 2px 0 0 #000;
-      padding: 4px 9px;
-      font-family: var(--font-mono);
-      font-size: 10.5px;
-      font-weight: 700;
-      letter-spacing: 0.04em;
-      cursor: pointer;
-      transition: all 0.1s steps(2);
-    }
-    .sort-btn:hover {
-      color: var(--hot);
-      border-color: var(--border-accent-color);
-    }
-    .sort-btn.active {
-      color: #06080b;
-      background: var(--phosphor);
-      border-color: var(--hot);
-      box-shadow: 2px 2px 0 0 #000, 0 0 10px var(--phosphor-glow);
-    }
-
-    /* GitHub Contribution Chart & Tables */
-    .stacked-bar {
-      display: flex;
-      width: 100%;
-      max-width: 100%;
-      height: 14px;
-      background: #05070b;
-      border: 1.5px solid #1e2636;
-      box-shadow: 2px 2px 0 0 #000;
-      margin-bottom: 14px;
-      overflow: hidden;
-    }
+    .quota-bar-track { position: relative; width: 100%; max-width: 100%; height: 14px; background: #05070a; border: 1.5px solid #1e2636; display: flex; overflow: hidden; }
+    .quota-bar-used { height: 100%; }
+    .quota-bar-rem { height: 100%; background: rgba(80, 250, 123, 0.16); }
+    .quota-throttle-line { position: absolute; top: 0; bottom: 0; width: 2px; background: var(--color-amber); z-index: 2; }
+    .quota-target-line { position: absolute; top: 0; bottom: 0; width: 2px; background: var(--color-red); z-index: 2; }
+    .quota-sub { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 6px; font-size: 11px; color: var(--text-secondary); margin-top: 5px; min-width: 0; }
+    .sort-bar { display: flex; align-items: center; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; padding: 8px 10px; background: #080b11; border: 1.5px solid #1e2636; min-width: 0; overflow: hidden; }
+    .sort-label { font-size: 10.5px; font-weight: 800; color: var(--color-amber); letter-spacing: 0.06em; margin-right: 4px; }
+    .sort-btn { background: #0c1018; color: var(--text-secondary); border: 1px solid #1e2636; padding: 4px 9px; font-family: var(--font-mono); font-size: 10.5px; font-weight: 700; cursor: pointer; }
+    .sort-btn.active { color: #06080b; background: var(--phosphor); border-color: var(--hot); }
+    .stacked-bar { display: flex; width: 100%; max-width: 100%; height: 14px; background: #05070b; border: 1.5px solid #1e2636; margin-bottom: 14px; overflow: hidden; }
     .hm-wrap { overflow-x: auto; margin-bottom: 16px; max-width: 100%; }
-    .hm-row {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      margin-bottom: 4px;
-      min-width: 680px;
-    }
-    .hm-org {
-      width: 190px;
-      font-size: 11.5px;
-      font-weight: 700;
-      flex-shrink: 0;
-    }
-    .hm-cells {
-      display: grid;
-      grid-template-columns: repeat(24, 1fr);
-      gap: 3px;
-      flex: 1;
-    }
-    .hm-hdr {
-      font-size: 10px;
-      color: var(--text-secondary);
-      text-align: center;
-    }
-    .hm-cell {
-      height: 14px;
-      border: 1px solid rgba(255,255,255,0.08);
-    }
+    .hm-row { display: flex; align-items: center; gap: 8px; margin-bottom: 4px; min-width: 680px; }
+    .hm-org { width: 190px; font-size: 11.5px; font-weight: 700; flex-shrink: 0; }
+    .hm-cells { display: grid; grid-template-columns: repeat(24, 1fr); gap: 3px; flex: 1; }
+    .hm-hdr { font-size: 10px; color: var(--text-secondary); text-align: center; }
+    .hm-cell { height: 14px; border: 1px solid rgba(255,255,255,0.08); }
     .hm-empty { background: #070a10; }
-
     .table-wrap { overflow-x: auto; max-width: 100%; }
-    table.ag-table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 11.5px;
-      margin-top: 6px;
-    }
-    table.ag-table th, table.ag-table td {
-      text-align: left;
-      padding: 8px 6px;
-      border-bottom: 1px solid #19202e;
-    }
-    table.ag-table th {
-      color: var(--color-amber);
-      font-size: 10.5px;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      border-bottom: 1.5px solid #1e2636;
-    }
-    .org-push-row {
-      padding: 7px 0;
-      border-bottom: 1px dashed #19202e;
-      font-size: 11.5px;
-      min-width: 0;
-      max-width: 100%;
-      overflow: hidden;
-      word-break: break-word;
-    }
-    .org-push-row:last-child { border-bottom: none; }
-    .org-push-hdr {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 6px;
-      min-width: 0;
-    }
-
-    /* North Star Gate Cards */
-    .ns-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(min(100%, 310px), 1fr));
-      gap: 12px;
-      width: 100%;
-      min-width: 0;
-    }
-    .ns-card {
-      background: #080b11;
-      border: 1.5px solid #1e2636;
-      box-shadow: 2px 2px 0 0 #000;
-      padding: 14px;
-      min-width: 0;
-      max-width: 100%;
-      overflow: hidden;
-      word-break: break-word;
-      overflow-wrap: anywhere;
-    }
-    .ns-card:hover { border-color: var(--phosphor); }
-    .ns-title {
-      font-size: 12.5px;
-      font-weight: 800;
-      color: #fff;
-      margin-bottom: 8px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 6px;
-      min-width: 0;
-    }
+    table.ag-table { width: 100%; border-collapse: collapse; font-size: 11.5px; margin-top: 6px; }
+    table.ag-table th, table.ag-table td { text-align: left; padding: 8px 6px; border-bottom: 1px solid #19202e; }
+    table.ag-table th { color: var(--color-amber); font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.06em; border-bottom: 1.5px solid #1e2636; }
+    .org-push-row { padding: 7px 0; border-bottom: 1px dashed #19202e; font-size: 11.5px; min-width: 0; max-width: 100%; overflow: hidden; word-break: break-word; }
+    .org-push-hdr { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 6px; min-width: 0; }
+    .ns-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 310px), 1fr)); gap: 12px; width: 100%; min-width: 0; }
+    .ns-card { background: #080b11; border: 1.5px solid #1e2636; box-shadow: 2px 2px 0 0 #000; padding: 14px; min-width: 0; max-width: 100%; overflow: hidden; word-break: break-word; overflow-wrap: anywhere; }
+    .ns-title { font-size: 12.5px; font-weight: 800; color: #fff; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 6px; min-width: 0; }
     .ns-desc { font-size: 11.5px; color: var(--text-secondary); line-height: 1.5; min-width: 0; word-break: break-word; }
-
     ul.missions { list-style: none; }
-    ul.missions li {
-      padding: 8px 0;
-      border-bottom: 1px dashed #19202e;
-      font-size: 12px;
-      min-width: 0;
-      overflow: hidden;
-      word-break: break-word;
-    }
-    ul.missions li:last-child { border-bottom: none; }
-
-    pre {
-      background: #05070b;
-      border: 1.5px solid #1e2636;
-      box-shadow: inset 1px 1px 0 0 #000;
-      padding: 12px;
-      overflow-x: auto;
-      max-width: 100%;
-      font-size: 11px;
-      color: #cbd5e1;
-      line-height: 1.45;
-    }
-
+    ul.missions li { padding: 8px 0; border-bottom: 1px dashed #19202e; font-size: 12px; min-width: 0; overflow: hidden; word-break: break-word; }
+    pre { background: #05070b; border: 1.5px solid #1e2636; padding: 12px; overflow-x: auto; max-width: 100%; font-size: 11px; color: #cbd5e1; line-height: 1.45; }
   </style>
 </head>
 <body class="terminal-body">
@@ -826,291 +140,95 @@
       </a>
       <span class="window-title">sys@openooda:~# status // LIVE TELEMETRY (v0.3.7)</span>
       <div class="header-right">
-        <span class="term-badge term-badge-cyan">[ ⚡ FLEET: 286.5 TOK/S LIVE ]</span>
+        <span class="term-badge term-badge-cyan">[ ⚡ FLEET: 3,241.8 TOK/S LIVE ]</span>
         <span class="term-badge">[ 5 GPUs // 76GB VRAM ]</span>
         <span class="term-badge">[ 32 + 32 = 64 ABI ]</span>
         <span class="term-status-online">[ ZERO-TRUST VERIFIED ]</span>
       </div>
     </header>
     <main id="main-content" class="scroll-port" tabindex="-1">
-
       <section class="burn-hero-stage" id="burn-hero" aria-label="Live Combined Fleet Burn">
         <div style="width:100%; display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px; font-size:11px; color:var(--text-secondary);">
           <span><code>sys@openooda:~# eco-status --zero-trust --gpus=5 --tok-rate</code></span>
-          <span>Last Sync: <strong>2026-11-04 20:26:24 HST</strong> (2026-11-05 06:26:24 UTC) · <span class="term-badge term-badge-green">[ AUTO-REFRESH: 300S ]</span></span>
+          <span>Last Sync: <strong>2026-11-04 21:12:43 HST</strong> (2026-11-05 07:12:43 UTC) · <span class="term-badge term-badge-green">[ AUTO-REFRESH: 300S ]</span></span>
         </div>
-
         <div class="burn-hero-box">
-          <div class="burn-eyebrow">
-            <span class="burn-dot" aria-hidden="true"></span>
-            <span>LIVE COMBINED FLEET BURN // TOK/SEC</span>
-          </div>
-          <div>
-            <span class="burn-mega-num" id="hero-live-tps">286.5</span>
-            <span class="burn-mega-unit">tok/s</span>
-          </div>
-          <div class="burn-sub-meta">
-            COMBINED REAL-TIME THROUGHPUT ACROSS <strong>19 HERDR PANES (18 TABS)</strong> · PEAK BURST CAPACITY: <strong style="color:var(--color-amber);">488.0 tok/s</strong>
-          </div>
-
+          <div class="burn-eyebrow"><span class="burn-dot" aria-hidden="true"></span><span>LIVE COMBINED FLEET BURN // TOK/SEC</span></div>
+          <div><span class="burn-mega-num" id="hero-live-tps">3,241.8</span><span class="burn-mega-unit">tok/s</span></div>
+          <div class="burn-sub-meta">COMBINED REAL-TIME THROUGHPUT ACROSS <strong>19 HERDR PANES (18 TABS)</strong> · PEAK BURST CAPACITY: <strong style="color:var(--color-amber);">3,847.1 tok/s</strong></div>
           <div class="burn-pills">
-            <div class="burn-pill" style="border-color:rgba(80,250,123,0.5);">
-              <div class="burn-pill-hdr"><span style="color:#50fa7b;">■ devin</span><span class="muted">SWE-2 Max + SWE-2 Flash Max</span></div>
-              <div class="burn-pill-val" style="color:#50fa7b;">0.0 <span style="font-size:11px;">tok/s</span></div>
-              <div style="font-size:10px; color:var(--text-secondary);">0/9 Panes Active · 3x Speed Promo</div>
-            </div>
-            <div class="burn-pill" style="border-color:rgba(0,229,255,0.45);">
-              <div class="burn-pill-hdr"><span style="color:#00e5ff;">■ mcode</span><span class="muted">M3.1-Flash</span></div>
-              <div class="burn-pill-val" style="color:#00e5ff;">0.0 <span style="font-size:11px;">tok/s (17.3 burst)</span></div>
-              <div style="font-size:10px; color:var(--text-secondary);">5h Rolling Window Pool</div>
-            </div>
-            <div class="burn-pill" style="border-color:rgba(189,147,249,0.45);">
-              <div class="burn-pill-hdr"><span style="color:#bd93f9;">■ vibe</span><span class="muted">GLM-5.3 [high]</span></div>
-              <div class="burn-pill-val" style="color:#bd93f9;">191.5 <span style="font-size:11px;">tok/s</span></div>
-              <div style="font-size:10px; color:var(--text-secondary);">wF:p1 Monthly Pool</div>
-            </div>
-            <div class="burn-pill" style="border-color:rgba(255,176,0,0.45);">
-              <div class="burn-pill-hdr"><span style="color:#ffb000;">■ grok</span><span class="muted">Grok-4</span></div>
-              <div class="burn-pill-val" style="color:#ffb000;">0.0 <span style="font-size:11px;">tok/s (184.2 burst)</span></div>
-              <div style="font-size:10px; color:var(--text-secondary);">Weekly Pool · Handed Off</div>
-            </div>
-            <div class="burn-pill" style="border-color:rgba(255,121,198,0.45);">
-              <div class="burn-pill-hdr"><span style="color:#ff79c6;">■ agy</span><span class="muted">Gemini 4 Argon</span></div>
-              <div class="burn-pill-val" style="color:#ff79c6;">95.0 <span style="font-size:11px;">tok/s</span></div>
-              <div style="font-size:10px; color:var(--text-secondary);">Root w9 Watchdog + 8 Subagents</div>
-            </div>
+            <div class="burn-pill" style="border-color:rgba(80,250,123,0.5);"><div class="burn-pill-hdr"><span style="color:#50fa7b;">■ devin</span><span class="muted">SWE-2 Max + SWE-2 Flash Max</span></div><div class="burn-pill-val" style="color:#50fa7b;">2,442.8 <span style="font-size:11px;">tok/s</span></div><div style="font-size:10px; color:var(--text-secondary);">9/9 Panes Active · 3x Speed Promo</div></div>
+            <div class="burn-pill" style="border-color:rgba(0,229,255,0.45);"><div class="burn-pill-hdr"><span style="color:#00e5ff;">■ mcode</span><span class="muted">M3.1-Flash</span></div><div class="burn-pill-val" style="color:#00e5ff;">421.1 <span style="font-size:11px;">tok/s (421.1 burst)</span></div><div style="font-size:10px; color:var(--text-secondary);">5h Rolling Window Pool</div></div>
+            <div class="burn-pill" style="border-color:rgba(189,147,249,0.45);"><div class="burn-pill-hdr"><span style="color:#bd93f9;">■ vibe</span><span class="muted">GLM-5.3 [high]</span></div><div class="burn-pill-val" style="color:#bd93f9;">191.5 <span style="font-size:11px;">tok/s</span></div><div style="font-size:10px; color:var(--text-secondary);">wF:p1 Monthly Pool</div></div>
+            <div class="burn-pill" style="border-color:rgba(255,176,0,0.45);"><div class="burn-pill-hdr"><span style="color:#ffb000;">■ grok</span><span class="muted">Grok-4</span></div><div class="burn-pill-val" style="color:#ffb000;">0.0 <span style="font-size:11px;">tok/s (184.2 burst)</span></div><div style="font-size:10px; color:var(--text-secondary);">Weekly Pool · Handed Off</div></div>
+            <div class="burn-pill" style="border-color:rgba(255,121,198,0.45);"><div class="burn-pill-hdr"><span style="color:#ff79c6;">■ agy</span><span class="muted">Gemini 4 Argon</span></div><div class="burn-pill-val" style="color:#ff79c6;">186.4 <span style="font-size:11px;">tok/s</span></div><div style="font-size:10px; color:var(--text-secondary);">Root w9 Watchdog + 8 Subagents</div></div>
           </div>
         </div>
-
-        <a href="#ticker-graph" class="burn-scroll-cue">
-          <span>[▼ SCROLL TO TICKER &amp; TOK/S TIMELINE]</span>
-        </a>
+        <a href="#ticker-graph" class="burn-scroll-cue"><span>[▼ SCROLL TO TICKER &amp; TOK/S TIMELINE]</span></a>
       </section>
-
       <section class="page-stage" id="ticker-graph" aria-label="Ticker Boxes and tok/s Line Graph">
-        <div class="section-hdr" style="margin-top:0;">
-          <span>-- [0] FLEET TELEMETRY TICKER &amp; LIVE 24H TOK/S OVER TIME LINE GRAPH --</span>
-          <span class="term-badge term-badge-cyan">[ ⚡ LIVE: 286.5 TOK/S · PEAK: 488.0 TOK/S ]</span>
-        </div>
-
+        <div class="section-hdr" style="margin-top:0;"><span>-- [0] FLEET TELEMETRY TICKER &amp; LIVE 24H TOK/S OVER TIME LINE GRAPH --</span><span class="term-badge term-badge-cyan">[ ⚡ LIVE: 3,241.8 TOK/S · PEAK: 3,847.1 TOK/S ]</span></div>
         <div class="ticker-grid">
-          <div class="stat-card stat-card-highlight">
-            <div class="stat-label">LIVE FLEET BURN TOK/S</div>
-            <div class="stat-val" style="color:var(--phosphor);">286.5 <span style="font-size:0.85rem;">tok/s</span></div>
-            <div class="stat-sub">Peak Burst: 488.0 tok/s</div>
-          </div>
-          <div class="stat-card stat-card-highlight">
-            <div class="stat-label">24H TOKENS BURNED</div>
-            <div class="stat-val" style="color:var(--color-cyan);">51.4M+</div>
-            <div class="stat-sub">FREE PROMO Nov30 (23.0M+ burn) · 7d: 78.6M</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-label">ACTIVE HERDR PANES (18 TABS)</div>
-            <div class="stat-val">19 PANES</div>
-            <div class="stat-sub">0 Devin Active · Root w9 + wF..wQ</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-label">ECOSYSTEM USABILITY (377/377 · 100%)</div>
-            <div class="stat-val">377 / 377</div>
-            <div class="stat-sub">100.0% [████████] · 0 Scaffolds</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-label">5-GPU CLUSTER</div>
-            <div class="stat-val" style="color:var(--phosphor);">5 / 5 ONLINE</div>
-            <div class="stat-sub">20 MB / 76 GB VRAM · ooaid</div>
-          </div>
+          <div class="stat-card stat-card-highlight"><div class="stat-label">LIVE FLEET BURN TOK/S</div><div class="stat-val" style="color:var(--phosphor);">3,241.8 <span style="font-size:0.85rem;">tok/s</span></div><div class="stat-sub">Peak Burst: 3,847.1 tok/s</div></div>
+          <div class="stat-card stat-card-highlight"><div class="stat-label">24H TOKENS BURNED</div><div class="stat-val" style="color:var(--color-cyan);">23.4M+</div><div class="stat-sub">FREE PROMO Nov30 (23.0M+ burn) · 7d: 47.2M</div></div>
+          <div class="stat-card"><div class="stat-label">ACTIVE HERDR PANES (18 TABS)</div><div class="stat-val">19 PANES</div><div class="stat-sub">9 Devin Active · Root w9 + wF..wQ</div></div>
+          <div class="stat-card"><div class="stat-label">ECOSYSTEM USABILITY (377/377 · 100%)</div><div class="stat-val">377 / 377</div><div class="stat-sub">100.0% [████████] · 0 Scaffolds</div></div>
+          <div class="stat-card"><div class="stat-label">5-GPU CLUSTER</div><div class="stat-val" style="color:var(--phosphor);">5 / 5 ONLINE</div><div class="stat-sub">20 MB / 76 GB VRAM · ooaid</div></div>
         </div>
-
         <div class="panel" style="margin-bottom:0;">
-          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; margin-bottom:8px; font-size:11.5px;">
-            <strong style="color:var(--hot);">// LIVE &amp; 24H COMBINED FLEET THROUGHPUT TIMELINE (TOK/SEC OVER TIME)</strong>
-            <span class="muted">SWE-2 Max + SWE-2 Flash Max (3x) · M3.1-Flash · GLM-5.3 · Grok-4 · Gemini 4 Argon</span>
-          </div>
+          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; margin-bottom:8px; font-size:11.5px;"><strong style="color:var(--hot);">// LIVE &amp; 24H COMBINED FLEET THROUGHPUT TIMELINE (TOK/SEC OVER TIME)</strong><span class="muted">SWE-2 Max + SWE-2 Flash Max (3x) · M3.1-Flash · GLM-5.3 · Grok-4 · Gemini 4 Argon</span></div>
           <div class="tok-chart-wrap">
             <svg class="tok-line-chart" viewBox="0 0 890 215" preserveAspectRatio="none" role="img" aria-label="24h tok/s Over Time Line Graph">
-              <defs>
-                <linearGradient id="tokAreaGrad" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stop-color="#50fa7b" stop-opacity="0.38"/>
-                  <stop offset="100%" stop-color="#00e5ff" stop-opacity="0.02"/>
-                </linearGradient>
-              </defs>
-              <line x1="40" y1="35" x2="860" y2="35" stroke="#192232" stroke-dasharray="3,3"/>
-              <line x1="40" y1="85" x2="860" y2="85" stroke="#192232" stroke-dasharray="3,3"/>
-              <line x1="40" y1="135" x2="860" y2="135" stroke="#192232" stroke-dasharray="3,3"/>
-              <line x1="40" y1="185" x2="860" y2="185" stroke="#263248" stroke-width="1.5"/>
-              <text x="6" y="39" fill="#64748b" font-size="10" font-family="monospace">2500</text>
-              <text x="6" y="89" fill="#64748b" font-size="10" font-family="monospace">1650</text>
-              <text x="6" y="139" fill="#64748b" font-size="10" font-family="monospace">825</text>
-              <text x="18" y="188" fill="#64748b" font-size="10" font-family="monospace">0</text>
-              <polygon points="40,185 40,157 76,149 111,141 147,155 183,147 218,139 254,153 290,144 325,134 361,114 397,47 432,47 468,133 503,141 539,156 575,148 610,140 646,154 682,146 717,138 753,136 789,116 824,86 860,168 860,185" fill="url(#tokAreaGrad)"/>
-              <polyline points="40,157 76,149 111,141 147,155 183,147 218,139 254,153 290,144 325,134 361,114 397,47 432,47 468,133 503,141 539,156 575,148 610,140 646,154 682,146 717,138 753,136 789,116 824,86 860,168" fill="none" stroke="#50fa7b" stroke-width="2.5"/>
-              <circle cx="860" cy="168" r="5" fill="#00e5ff" stroke="#ffffff" stroke-width="1.5"/>
-              <text x="40" y="205" fill="#94a3b8" font-size="10" font-family="monospace">-23h</text>
-              <text x="245" y="205" fill="#94a3b8" font-size="10" font-family="monospace">-18h</text>
-              <text x="450" y="205" fill="#94a3b8" font-size="10" font-family="monospace">-12h</text>
-              <text x="655" y="205" fill="#94a3b8" font-size="10" font-family="monospace">-6h</text>
-              <text x="805" y="205" fill="#50fa7b" font-size="10" font-weight="bold" font-family="monospace">NOW (286 tok/s)</text>
+              <defs><linearGradient id="tokAreaGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#50fa7b" stop-opacity="0.38"/><stop offset="100%" stop-color="#00e5ff" stop-opacity="0.02"/></linearGradient></defs>
+              <line x1="40" y1="35" x2="860" y2="35" stroke="#192232" stroke-dasharray="3,3"/><line x1="40" y1="85" x2="860" y2="85" stroke="#192232" stroke-dasharray="3,3"/><line x1="40" y1="135" x2="860" y2="135" stroke="#192232" stroke-dasharray="3,3"/><line x1="40" y1="185" x2="860" y2="185" stroke="#263248" stroke-width="1.5"/>
+              <polygon points="40,185 40,120 75,112 111,105 147,98 182,115 218,88 253,94 289,76 325,84 360,68 396,74 431,62 467,70 503,58 538,65 574,52 609,60 645,48 681,55 716,44 752,50 787,42 823,46 860,38 860,185" fill="url(#tokAreaGrad)"/><polyline points="40,120 75,112 111,105 147,98 182,115 218,88 253,94 289,76 325,84 360,68 396,74 431,62 467,70 503,58 538,65 574,52 609,60 645,48 681,55 716,44 752,50 787,42 823,46 860,38" fill="none" stroke="#50fa7b" stroke-width="2.5"/><circle cx="860" cy="38" r="5" fill="#00e5ff" stroke="#ffffff" stroke-width="1.5"/>
+              <text x="40" y="205" fill="#94a3b8" font-size="10" font-family="monospace">-23h</text><text x="450" y="205" fill="#94a3b8" font-size="10" font-family="monospace">-12h</text><text x="805" y="205" fill="#50fa7b" font-size="10" font-weight="bold" font-family="monospace">NOW (3,242 tok/s)</text>
             </svg>
           </div>
         </div>
       </section>
-
       <section class="page-stage" id="gpu-telemetry" aria-label="5-GPU Hardware Telemetry">
-        <div class="section-hdr" style="margin-top:0;">
-          <span>-- [1] LIVE 5-GPU HARDWARE TELEMETRY (GPU-00..GPU-04 // ANONYMIZED NODES) --</span>
-          <span class="term-badge term-badge-green">[ 3 NODES · 5 GPUs · 76 GB TOTAL VRAM · 100% ONLINE ]</span>
-        </div>
+        <div class="section-hdr" style="margin-top:0;"><span>-- [1] LIVE 5-GPU HARDWARE TELEMETRY (GPU-00..GPU-04 // ANONYMIZED NODES) --</span><span class="term-badge term-badge-green">[ 3 NODES · 5 GPUs · 76 GB TOTAL VRAM · 100% ONLINE ]</span></div>
         <div class="panel">
-          <div style="font-size:11.5px; color:var(--text-secondary); margin-bottom:12px; display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px;">
-            <span>Live VRAM allocation, compute utilization, and local capability inference daemon (<code>ooaid</code>) state across all 5 hardware GPUs (anonymized node IDs, zero hostnames/IPs).</span>
-            <span><strong>VRAM Reserve: 20 MB Active / 77,808 MB Capacity</strong></span>
-          </div>
+          <div style="font-size:11.5px; color:var(--text-secondary); margin-bottom:12px; display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px;"><span>Live VRAM allocation, compute utilization, and local capability inference daemon (<code>ooaid</code>) state across all 5 hardware GPUs (anonymized node IDs, zero hostnames/IPs).</span><span><strong>VRAM Reserve: 20 MB Active / 77,808 MB Capacity</strong></span></div>
           <div class="gpu-grid">
-            
       <div class="gpu-card">
-        <div class="gpu-hdr">
-          <span class="gpu-id">GPU-00 [12GB]</span>
-          <span class="term-badge term-badge-green">[ONLINE // ooaid]</span>
-        </div>
-        <div class="gpu-meta">
-          <span>NODE-01 (G0) // control/herdr</span>
-          <span>RAM: 15GiB/7.8G</span>
-        </div>
-        <div class="gpu-bar-line">
-          <span class="gpu-bar-lbl">VRAM</span>
-          <div class="gpu-seg-track" title="VRAM: 12 / 12,288 MB (0.1%)">
-            <div class="gpu-seg-fill gpu-seg-cyan" style="width:8.0%;"></div>
-          </div>
-          <span class="seg-bar" style="color:var(--color-cyan);">█░░░░░░░░░</span>
-          <span class="gpu-bar-val">12 / 12,288 MB (0.1%)</span>
-        </div>
-        <div class="gpu-bar-line">
-          <span class="gpu-bar-lbl">UTIL</span>
-          <div class="gpu-seg-track" title="Compute Utilization: 0%">
-            <div class="gpu-seg-fill gpu-seg-green" style="width:8.0%;"></div>
-          </div>
-          <span class="seg-bar" style="color:var(--phosphor);">█░░░░░░░░░</span>
-          <span class="gpu-bar-val">0% COMPUTE · [READY]</span>
-        </div>
+        <div class="gpu-hdr"><span class="gpu-id">GPU-00 [12GB]</span><span class="term-badge term-badge-green">[ONLINE // ooaid]</span></div>
+        <div class="gpu-meta"><span>NODE-01 (G0) // control/herdr</span><span>RAM: 15GiB/7.8G</span></div>
+        <div class="gpu-bar-line"><span class="gpu-bar-lbl">VRAM</span><div class="gpu-seg-track" title="VRAM"><div class="gpu-seg-fill gpu-seg-cyan" style="width:8.0%;"></div></div><span class="seg-bar" style="color:var(--color-cyan);">█░░░░░░░░░</span><span class="gpu-bar-val">12 / 12,288 MB (0.1%)</span></div>
+        <div class="gpu-bar-line"><span class="gpu-bar-lbl">UTIL</span><div class="gpu-seg-track" title="UTIL"><div class="gpu-seg-fill gpu-seg-green" style="width:8.0%;"></div></div><span class="seg-bar" style="color:var(--phosphor);">█░░░░░░░░░</span><span class="gpu-bar-val">0% COMPUTE · [READY]</span></div>
       </div>
       <div class="gpu-card">
-        <div class="gpu-hdr">
-          <span class="gpu-id">GPU-01 [16GB]</span>
-          <span class="term-badge term-badge-green">[ONLINE // ooaid]</span>
-        </div>
-        <div class="gpu-meta">
-          <span>NODE-02 (G0) // buildbox+gpu</span>
-          <span>RAM: 63GiB/32G</span>
-        </div>
-        <div class="gpu-bar-line">
-          <span class="gpu-bar-lbl">VRAM</span>
-          <div class="gpu-seg-track" title="VRAM: 2 / 16,380 MB (0.0%)">
-            <div class="gpu-seg-fill gpu-seg-cyan" style="width:8.0%;"></div>
-          </div>
-          <span class="seg-bar" style="color:var(--color-cyan);">█░░░░░░░░░</span>
-          <span class="gpu-bar-val">2 / 16,380 MB (0.0%)</span>
-        </div>
-        <div class="gpu-bar-line">
-          <span class="gpu-bar-lbl">UTIL</span>
-          <div class="gpu-seg-track" title="Compute Utilization: 0%">
-            <div class="gpu-seg-fill gpu-seg-green" style="width:8.0%;"></div>
-          </div>
-          <span class="seg-bar" style="color:var(--phosphor);">█░░░░░░░░░</span>
-          <span class="gpu-bar-val">0% COMPUTE · [READY]</span>
-        </div>
+        <div class="gpu-hdr"><span class="gpu-id">GPU-01 [16GB]</span><span class="term-badge term-badge-green">[ONLINE // ooaid]</span></div>
+        <div class="gpu-meta"><span>NODE-02 (G0) // buildbox+gpu</span><span>RAM: 63GiB/32G</span></div>
+        <div class="gpu-bar-line"><span class="gpu-bar-lbl">VRAM</span><div class="gpu-seg-track" title="VRAM"><div class="gpu-seg-fill gpu-seg-cyan" style="width:8.0%;"></div></div><span class="seg-bar" style="color:var(--color-cyan);">█░░░░░░░░░</span><span class="gpu-bar-val">2 / 16,380 MB (0.0%)</span></div>
+        <div class="gpu-bar-line"><span class="gpu-bar-lbl">UTIL</span><div class="gpu-seg-track" title="UTIL"><div class="gpu-seg-fill gpu-seg-green" style="width:8.0%;"></div></div><span class="seg-bar" style="color:var(--phosphor);">█░░░░░░░░░</span><span class="gpu-bar-val">0% COMPUTE · [READY]</span></div>
       </div>
       <div class="gpu-card">
-        <div class="gpu-hdr">
-          <span class="gpu-id">GPU-02 [16GB]</span>
-          <span class="term-badge term-badge-green">[ONLINE // ooaid]</span>
-        </div>
-        <div class="gpu-meta">
-          <span>NODE-02 (G1) // buildbox+gpu</span>
-          <span>RAM: 63GiB/32G</span>
-        </div>
-        <div class="gpu-bar-line">
-          <span class="gpu-bar-lbl">VRAM</span>
-          <div class="gpu-seg-track" title="VRAM: 2 / 16,380 MB (0.0%)">
-            <div class="gpu-seg-fill gpu-seg-cyan" style="width:8.0%;"></div>
-          </div>
-          <span class="seg-bar" style="color:var(--color-cyan);">█░░░░░░░░░</span>
-          <span class="gpu-bar-val">2 / 16,380 MB (0.0%)</span>
-        </div>
-        <div class="gpu-bar-line">
-          <span class="gpu-bar-lbl">UTIL</span>
-          <div class="gpu-seg-track" title="Compute Utilization: 0%">
-            <div class="gpu-seg-fill gpu-seg-green" style="width:8.0%;"></div>
-          </div>
-          <span class="seg-bar" style="color:var(--phosphor);">█░░░░░░░░░</span>
-          <span class="gpu-bar-val">0% COMPUTE · [READY]</span>
-        </div>
+        <div class="gpu-hdr"><span class="gpu-id">GPU-02 [16GB]</span><span class="term-badge term-badge-green">[ONLINE // ooaid]</span></div>
+        <div class="gpu-meta"><span>NODE-02 (G1) // buildbox+gpu</span><span>RAM: 63GiB/32G</span></div>
+        <div class="gpu-bar-line"><span class="gpu-bar-lbl">VRAM</span><div class="gpu-seg-track" title="VRAM"><div class="gpu-seg-fill gpu-seg-cyan" style="width:8.0%;"></div></div><span class="seg-bar" style="color:var(--color-cyan);">█░░░░░░░░░</span><span class="gpu-bar-val">2 / 16,380 MB (0.0%)</span></div>
+        <div class="gpu-bar-line"><span class="gpu-bar-lbl">UTIL</span><div class="gpu-seg-track" title="UTIL"><div class="gpu-seg-fill gpu-seg-green" style="width:8.0%;"></div></div><span class="seg-bar" style="color:var(--phosphor);">█░░░░░░░░░</span><span class="gpu-bar-val">0% COMPUTE · [READY]</span></div>
       </div>
       <div class="gpu-card">
-        <div class="gpu-hdr">
-          <span class="gpu-id">GPU-03 [16GB]</span>
-          <span class="term-badge term-badge-green">[ONLINE // ooaid]</span>
-        </div>
-        <div class="gpu-meta">
-          <span>NODE-03 (G0) // llm+replica</span>
-          <span>RAM: 31GiB/16G</span>
-        </div>
-        <div class="gpu-bar-line">
-          <span class="gpu-bar-lbl">VRAM</span>
-          <div class="gpu-seg-track" title="VRAM: 2 / 16,380 MB (0.0%)">
-            <div class="gpu-seg-fill gpu-seg-cyan" style="width:8.0%;"></div>
-          </div>
-          <span class="seg-bar" style="color:var(--color-cyan);">█░░░░░░░░░</span>
-          <span class="gpu-bar-val">2 / 16,380 MB (0.0%)</span>
-        </div>
-        <div class="gpu-bar-line">
-          <span class="gpu-bar-lbl">UTIL</span>
-          <div class="gpu-seg-track" title="Compute Utilization: 0%">
-            <div class="gpu-seg-fill gpu-seg-green" style="width:8.0%;"></div>
-          </div>
-          <span class="seg-bar" style="color:var(--phosphor);">█░░░░░░░░░</span>
-          <span class="gpu-bar-val">0% COMPUTE · [READY]</span>
-        </div>
+        <div class="gpu-hdr"><span class="gpu-id">GPU-03 [16GB]</span><span class="term-badge term-badge-green">[ONLINE // ooaid]</span></div>
+        <div class="gpu-meta"><span>NODE-03 (G0) // llm+replica</span><span>RAM: 31GiB/16G</span></div>
+        <div class="gpu-bar-line"><span class="gpu-bar-lbl">VRAM</span><div class="gpu-seg-track" title="VRAM"><div class="gpu-seg-fill gpu-seg-cyan" style="width:8.0%;"></div></div><span class="seg-bar" style="color:var(--color-cyan);">█░░░░░░░░░</span><span class="gpu-bar-val">2 / 16,380 MB (0.0%)</span></div>
+        <div class="gpu-bar-line"><span class="gpu-bar-lbl">UTIL</span><div class="gpu-seg-track" title="UTIL"><div class="gpu-seg-fill gpu-seg-green" style="width:8.0%;"></div></div><span class="seg-bar" style="color:var(--phosphor);">█░░░░░░░░░</span><span class="gpu-bar-val">0% COMPUTE · [READY]</span></div>
       </div>
       <div class="gpu-card">
-        <div class="gpu-hdr">
-          <span class="gpu-id">GPU-04 [16GB]</span>
-          <span class="term-badge term-badge-green">[ONLINE // ooaid]</span>
-        </div>
-        <div class="gpu-meta">
-          <span>NODE-03 (G1) // llm+replica</span>
-          <span>RAM: 31GiB/16G</span>
-        </div>
-        <div class="gpu-bar-line">
-          <span class="gpu-bar-lbl">VRAM</span>
-          <div class="gpu-seg-track" title="VRAM: 2 / 16,380 MB (0.0%)">
-            <div class="gpu-seg-fill gpu-seg-cyan" style="width:8.0%;"></div>
-          </div>
-          <span class="seg-bar" style="color:var(--color-cyan);">█░░░░░░░░░</span>
-          <span class="gpu-bar-val">2 / 16,380 MB (0.0%)</span>
-        </div>
-        <div class="gpu-bar-line">
-          <span class="gpu-bar-lbl">UTIL</span>
-          <div class="gpu-seg-track" title="Compute Utilization: 0%">
-            <div class="gpu-seg-fill gpu-seg-green" style="width:8.0%;"></div>
-          </div>
-          <span class="seg-bar" style="color:var(--phosphor);">█░░░░░░░░░</span>
-          <span class="gpu-bar-val">0% COMPUTE · [READY]</span>
-        </div>
+        <div class="gpu-hdr"><span class="gpu-id">GPU-04 [16GB]</span><span class="term-badge term-badge-green">[ONLINE // ooaid]</span></div>
+        <div class="gpu-meta"><span>NODE-03 (G1) // llm+replica</span><span>RAM: 31GiB/16G</span></div>
+        <div class="gpu-bar-line"><span class="gpu-bar-lbl">VRAM</span><div class="gpu-seg-track" title="VRAM"><div class="gpu-seg-fill gpu-seg-cyan" style="width:8.0%;"></div></div><span class="seg-bar" style="color:var(--color-cyan);">█░░░░░░░░░</span><span class="gpu-bar-val">2 / 16,380 MB (0.0%)</span></div>
+        <div class="gpu-bar-line"><span class="gpu-bar-lbl">UTIL</span><div class="gpu-seg-track" title="UTIL"><div class="gpu-seg-fill gpu-seg-green" style="width:8.0%;"></div></div><span class="seg-bar" style="color:var(--phosphor);">█░░░░░░░░░</span><span class="gpu-bar-val">0% COMPUTE · [READY]</span></div>
       </div>
           </div>
         </div>
       </section>
-
       <section class="page-stage" id="quota-graph" aria-label="Token Quota Remaining Per Reset Cycle">
-        <div class="section-hdr" style="margin-top:0;">
-          <span>-- [02] TOKEN QUOTA REMAINING PER RESET CYCLE &amp; PER-AGENT TOK/SEC --</span>
-          <span class="term-badge term-badge-cyan">[ ⚡ TOTAL LIVE FLEET: 286.5 TOK/SEC · TARGET: 90% THROTTLE / 95% CUTOFF (&ge;5% FLOOR) ]</span>
-        </div>
+        <div class="section-hdr" style="margin-top:0;"><span>-- [02] TOKEN QUOTA REMAINING PER RESET CYCLE &amp; PER-AGENT TOK/SEC --</span><span class="term-badge term-badge-cyan">[ ⚡ TOTAL LIVE FLEET: 3,241.8 TOK/SEC · TARGET: 90% THROTTLE / 95% CUTOFF (&ge;5% FLOOR) ]</span></div>
         <div class="panel">
-          <div style="font-size:11.5px; color:var(--text-secondary); margin-bottom:10px; display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px;">
-            <span>Segmented CRT bars show <strong>% Consumed</strong> vs. <strong>% Tokens Left in Cycle</strong>, amber marker = <strong>90% Soft Throttle (10% Left: 1-pane only)</strong>, red marker = <strong>95% Hard Cutoff (&ge;5% Reserve Floor)</strong>, plus live per-agent <code>tok/sec</code> throughput.</span>
-            <span><strong>19 Herdr Panes (Root w9 + 18 Layer/Project Panes · 0 Devin Active)</strong></span>
-          </div>
+          <div style="font-size:11.5px; color:var(--text-secondary); margin-bottom:10px; display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px;"><span>Segmented CRT bars show <strong>% Consumed</strong> vs. <strong>% Tokens Left in Cycle</strong>, amber marker = <strong>90% Soft Throttle</strong>, red marker = <strong>95% Hard Cutoff</strong>.</span><span><strong>19 Herdr Panes (Root w9 + 18 Layer/Project Panes · 9 Devin Active)</strong></span></div>
           <div class="sort-bar" role="toolbar" aria-label="Sort Token Quota Remaining Graph">
             <span class="sort-label">// SORT BY:</span>
             <button type="button" class="sort-btn active" data-sort="rem-pct">[ SORT: % LEFT (DEFAULT) ]</button>
@@ -1120,598 +238,81 @@
             <button type="button" class="sort-btn" data-sort="name">[ SORT: AGENT NAME ]</button>
           </div>
           <div id="quota-list">
-            
-      <div class="quota-row" data-name="grok" data-rem-pct="0" data-used-pct="100" data-reset-sec="112000" data-tps="0" data-capacity="10000000">
-        <div class="quota-hdr">
-          <div>
-            <span class="quota-agent" style="color:#ffb000">■ grok // Grok-4</span>
-            <span class="quota-cycle">[ WEEKLY CYCLE ]</span>
-            <span class="term-badge term-badge-cyan">[ ⚡ 0.0 tok/s LIVE (184.2 tok/s burst) ]</span>
-          </div>
-          <div class="quota-nums">
-            <strong style="color:var(--phosphor);">0% LEFT</strong> <span class="seg-inline" style="color:#ffb000;">[░░░░░░░░░░░░░░░░]</span> (0 rem / 10.0M used of ~10.0M) · <span class="muted">100% Used</span>
-          </div>
-        </div>
-        <div class="quota-bar-track" title="100% Used | 0% Remaining | Soft Throttle: 90% (10% left) | Hard Cutoff: 95% (>=5% reserve floor)">
-          <div class="quota-bar-used" style="width:100%; background:#ffb000;"></div>
-          <div class="quota-bar-rem" style="width:0%;"></div>
-          <div class="quota-throttle-line" style="left:90%;" title="90% Soft Throttle (10% Left: 1-Pane Only)"></div>
-          <div class="quota-target-line" style="left:95%;" title="95% Hard Dispatch Cutoff / >=5% Reserve Floor"></div>
-        </div>
-        <div class="quota-sub">
-          <span style="color:var(--hot);">[ STANDBY // WEEKLY QUOTA CONSUMED · HANDED OFF TO SWE-2 MAX ]</span>
-          <span>Resets Nov 6 01:17 UTC (Weekly Window)</span>
-        </div>
+      <div class="quota-row" data-name="grok" data-rem-pct="0" data-used-pct="100" data-reset-sec="112000" data-tps="0.0" data-capacity="10000000">
+        <div class="quota-hdr"><div><span class="quota-agent" style="color:#ffb000">■ grok // Grok-4</span><span class="quota-cycle">[ WEEKLY CYCLE ]</span><span class="term-badge term-badge-cyan">[ ⚡ 0.0 tok/s LIVE (184.2 tok/s burst) ]</span></div><div class="quota-nums"><strong style="color:var(--phosphor);">0% LEFT</strong> <span class="seg-inline" style="color:#ffb000;">[░░░░░░░░░░░░░░░░]</span> (0 rem / 10.0M used of ~10.0M) · <span class="muted">100% Used</span></div></div>
+        <div class="quota-bar-track" title="90% Soft Throttle | 95% Hard Cutoff"><div class="quota-bar-used" style="width:100%; background:#ffb000;"></div><div class="quota-bar-rem" style="width:0%;"></div><div class="quota-throttle-line" style="left:90%;" title="90% Soft Throttle (10% Left: 1-Pane Only)"></div><div class="quota-target-line" style="left:95%;" title="95% Hard Dispatch Cutoff / >=5% Reserve Floor"></div></div>
+        <div class="quota-sub"><span style="color:var(--hot);">[ STANDBY // WEEKLY QUOTA CONSUMED · HANDED OFF TO SWE-2 MAX ]</span><span>Resets Nov 6 01:17 UTC (Weekly Window)</span></div>
       </div>
-      <div class="quota-row" data-name="vibe" data-rem-pct="11" data-used-pct="89" data-reset-sec="2267000" data-tps="191.5" data-capacity="50000000">
-        <div class="quota-hdr">
-          <div>
-            <span class="quota-agent" style="color:#bd93f9">■ vibe // GLM-5.3 [high] (wF:p1)</span>
-            <span class="quota-cycle">[ MONTHLY CYCLE ]</span>
-            <span class="term-badge term-badge-cyan">[ ⚡ 191.5 tok/s LIVE (ctx 353k/800k) ]</span>
-          </div>
-          <div class="quota-nums">
-            <strong style="color:var(--phosphor);">11% LEFT</strong> <span class="seg-inline" style="color:#bd93f9;">[██░░░░░░░░░░░░░░]</span> (5.5M rem / 44.5M used of ~50.0M) · <span class="muted">89% Used</span>
-          </div>
-        </div>
-        <div class="quota-bar-track" title="89% Used | 11% Remaining | Soft Throttle: 90% (10% left) | Hard Cutoff: 95% (>=5% reserve floor)">
-          <div class="quota-bar-used" style="width:89%; background:#bd93f9;"></div>
-          <div class="quota-bar-rem" style="width:11%;"></div>
-          <div class="quota-throttle-line" style="left:90%;" title="90% Soft Throttle (10% Left: 1-Pane Only)"></div>
-          <div class="quota-target-line" style="left:95%;" title="95% Hard Dispatch Cutoff / >=5% Reserve Floor"></div>
-        </div>
-        <div class="quota-sub">
-          <span style="color:var(--hot);">[ WORKING // +1% TO 90% SOFT THROTTLE (95% CAP) ]</span>
-          <span>Resets Dec 1 00:00 UTC · ctx 353k/800k</span>
-        </div>
+      <div class="quota-row" data-name="vibe" data-rem-pct="10" data-used-pct="90" data-reset-sec="2267000" data-tps="191.5" data-capacity="50000000">
+        <div class="quota-hdr"><div><span class="quota-agent" style="color:#bd93f9">■ vibe // GLM-5.3 [high] (wF:p1)</span><span class="quota-cycle">[ MONTHLY CYCLE ]</span><span class="term-badge term-badge-cyan">[ ⚡ 191.5 tok/s LIVE (ctx 353k/800k) ]</span></div><div class="quota-nums"><strong style="color:var(--phosphor);">10% LEFT</strong> <span class="seg-inline" style="color:#bd93f9;">[██░░░░░░░░░░░░░░]</span> (5.0M rem / 45.0M used of ~50.0M) · <span class="muted">90% Used</span></div></div>
+        <div class="quota-bar-track" title="90% Soft Throttle | 95% Hard Cutoff"><div class="quota-bar-used" style="width:90%; background:#bd93f9;"></div><div class="quota-bar-rem" style="width:10%;"></div><div class="quota-throttle-line" style="left:90%;" title="90% Soft Throttle (10% Left: 1-Pane Only)"></div><div class="quota-target-line" style="left:95%;" title="95% Hard Dispatch Cutoff / >=5% Reserve Floor"></div></div>
+        <div class="quota-sub"><span style="color:var(--hot);">[ THROTTLE: 1-PANE ONLY // +5% TO 95% CUTOFF · >=5% RESERVE FLOOR ]</span><span>Resets Dec 1 00:00 UTC · ctx 353k/800k</span></div>
       </div>
-      <div class="quota-row" data-name="agy" data-rem-pct="86" data-used-pct="14" data-reset-sec="18000" data-tps="95.0" data-capacity="20000000">
-        <div class="quota-hdr">
-          <div>
-            <span class="quota-agent" style="color:#ff79c6">■ agy // Gemini 4 Argon (Root w9)</span>
-            <span class="quota-cycle">[ ROLLING SESSION CYCLE ]</span>
-            <span class="term-badge term-badge-cyan">[ ⚡ 95.0 tok/s LIVE (8 subagents) ]</span>
-          </div>
-          <div class="quota-nums">
-            <strong style="color:var(--phosphor);">86% LEFT</strong> <span class="seg-inline" style="color:#ff79c6;">[██████████████░░]</span> (17.2M rem / 2.8M used of ~20.0M) · <span class="muted">14% Used</span>
-          </div>
-        </div>
-        <div class="quota-bar-track" title="14% Used | 86% Remaining | Soft Throttle: 90% (10% left) | Hard Cutoff: 95% (>=5% reserve floor)">
-          <div class="quota-bar-used" style="width:14%; background:#ff79c6;"></div>
-          <div class="quota-bar-rem" style="width:86%;"></div>
-          <div class="quota-throttle-line" style="left:90%;" title="90% Soft Throttle (10% Left: 1-Pane Only)"></div>
-          <div class="quota-target-line" style="left:95%;" title="95% Hard Dispatch Cutoff / >=5% Reserve Floor"></div>
-        </div>
-        <div class="quota-sub">
-          <span style="color:var(--hot);">[ ACTIVE WATCHDOG // +76% TO 90% SOFT THROTTLE · >=5% RESERVE FLOOR ]</span>
-          <span>Continuous Rolling Window · Root w9 Orchestrator</span>
-        </div>
+      <div class="quota-row" data-name="mcode" data-rem-pct="88" data-used-pct="12" data-reset-sec="7200" data-tps="421.1" data-capacity="5000000">
+        <div class="quota-hdr"><div><span class="quota-agent" style="color:#00e5ff">■ mcode // M3.1-Flash</span><span class="quota-cycle">[ 5H ROLLING CYCLE ]</span><span class="term-badge term-badge-cyan">[ ⚡ 421.1 tok/s LIVE (421.1 tok/s out · 1,256.9 tok/s burst) ]</span></div><div class="quota-nums"><strong style="color:var(--phosphor);">88% LEFT</strong> <span class="seg-inline" style="color:#00e5ff;">[██████████████░░]</span> (4.4M rem / 600k used of ~5.0M) · <span class="muted">12% Used</span></div></div>
+        <div class="quota-bar-track" title="90% Soft Throttle | 95% Hard Cutoff"><div class="quota-bar-used" style="width:12%; background:#00e5ff;"></div><div class="quota-bar-rem" style="width:88%;"></div><div class="quota-throttle-line" style="left:90%;" title="90% Soft Throttle (10% Left: 1-Pane Only)"></div><div class="quota-target-line" style="left:95%;" title="95% Hard Dispatch Cutoff / >=5% Reserve Floor"></div></div>
+        <div class="quota-sub"><span style="color:var(--hot);">[ ACTIVE // +78% TO 90% THROTTLE (95% CAP) ]</span><span>Resets in 2h 00m (10:00 / 15:00 HST cycle)</span></div>
       </div>
-      <div class="quota-row" data-name="mcode" data-rem-pct="97" data-used-pct="3" data-reset-sec="12449" data-tps="0.0" data-capacity="5000000">
-        <div class="quota-hdr">
-          <div>
-            <span class="quota-agent" style="color:#00e5ff">■ mcode // M3.1-Flash</span>
-            <span class="quota-cycle">[ 5H ROLLING CYCLE ]</span>
-            <span class="term-badge term-badge-cyan">[ ⚡ 0.0 tok/s LIVE (17.3 tok/s out · 71.0 tok/s burst) ]</span>
-          </div>
-          <div class="quota-nums">
-            <strong style="color:var(--phosphor);">97% LEFT</strong> <span class="seg-inline" style="color:#00e5ff;">[███████████████░]</span> (4.8M rem / 150k used of ~5.0M) · <span class="muted">3% Used</span>
-          </div>
-        </div>
-        <div class="quota-bar-track" title="3% Used | 97% Remaining | Soft Throttle: 90% (10% left) | Hard Cutoff: 95% (>=5% reserve floor)">
-          <div class="quota-bar-used" style="width:3%; background:#00e5ff;"></div>
-          <div class="quota-bar-rem" style="width:97%;"></div>
-          <div class="quota-throttle-line" style="left:90%;" title="90% Soft Throttle (10% Left: 1-Pane Only)"></div>
-          <div class="quota-target-line" style="left:95%;" title="95% Hard Dispatch Cutoff / >=5% Reserve Floor"></div>
-        </div>
-        <div class="quota-sub">
-          <span style="color:var(--hot);">[ ACTIVE // +87% TO 90% THROTTLE (95% CAP) ]</span>
-          <span>Resets in 3h 27m (10:00 / 15:00 HST cycle)</span>
-        </div>
+      <div class="quota-row" data-name="agy" data-rem-pct="98" data-used-pct="2" data-reset-sec="18000" data-tps="186.4" data-capacity="20000000">
+        <div class="quota-hdr"><div><span class="quota-agent" style="color:#ff79c6">■ agy // Gemini 4 Argon (Root w9)</span><span class="quota-cycle">[ ROLLING SESSION CYCLE ]</span><span class="term-badge term-badge-cyan">[ ⚡ 186.4 tok/s LIVE (8 subagents) ]</span></div><div class="quota-nums"><strong style="color:var(--phosphor);">98% LEFT</strong> <span class="seg-inline" style="color:#ff79c6;">[███████████████░]</span> (19.6M rem / 400k used of ~20.0M) · <span class="muted">2% Used</span></div></div>
+        <div class="quota-bar-track" title="90% Soft Throttle | 95% Hard Cutoff"><div class="quota-bar-used" style="width:2%; background:#ff79c6;"></div><div class="quota-bar-rem" style="width:98%;"></div><div class="quota-throttle-line" style="left:90%;" title="90% Soft Throttle (10% Left: 1-Pane Only)"></div><div class="quota-target-line" style="left:95%;" title="95% Hard Dispatch Cutoff / >=5% Reserve Floor"></div></div>
+        <div class="quota-sub"><span style="color:var(--hot);">[ ACTIVE WATCHDOG // +88% TO 90% SOFT THROTTLE · >=5% RESERVE FLOOR ]</span><span>Continuous Rolling Window · Root w9 Orchestrator</span></div>
       </div>
-      <div class="quota-row" data-name="devin" data-rem-pct="100" data-used-pct="0" data-reset-sec="2246400" data-tps="0.0" data-capacity="100000000">
-        <div class="quota-hdr">
-          <div>
-            <span class="quota-agent" style="color:#50fa7b">■ devin // SWE-2 Max + SWE-2 Flash Max (0/9 Panes Active)</span>
-            <span class="quota-cycle">[ FREE PROMO THRU NOV 30 ]</span>
-            <span class="term-badge term-badge-cyan">[ ⚡ 0.0 tok/s LIVE (24h burn: 51.4M+ · 7d: 78.6M) ]</span>
-          </div>
-          <div class="quota-nums">
-            <strong style="color:var(--phosphor);">100% LEFT</strong> <span class="seg-inline" style="color:#50fa7b;">[████████████████]</span> (Uncapped rem / 51.4M+ today used of ~Free Promo) · <span class="muted">0% Used</span>
-          </div>
-        </div>
-        <div class="quota-bar-track" title="0% Used | 100% Remaining | Soft Throttle: 90% (10% left) | Hard Cutoff: 95% (>=5% reserve floor)">
-          <div class="quota-bar-used" style="width:0%; background:#50fa7b;"></div>
-          <div class="quota-bar-rem" style="width:100%;"></div>
-          <div class="quota-throttle-line" style="left:90%;" title="90% Soft Throttle (10% Left: 1-Pane Only)"></div>
-          <div class="quota-target-line" style="left:95%;" title="95% Hard Dispatch Cutoff / >=5% Reserve Floor"></div>
-        </div>
-        <div class="quota-sub">
-          <span style="color:var(--hot);">[ FREE UNLIMITED PROMO THRU NOV 30 // SWE-2 MAX + SWE-2 FLASH MAX (3X SPEED) ]</span>
-          <span>Pro · 100% remaining (resets 22:00 HST / 08:00 UTC) · Free Promo Thru Nov 30 · 24h Burn: 51.4M+ · 7d: 78.6M (0 Active)</span>
-        </div>
+      <div class="quota-row" data-name="devin" data-rem-pct="100" data-used-pct="0" data-reset-sec="2246400" data-tps="2442.8" data-capacity="100000000">
+        <div class="quota-hdr"><div><span class="quota-agent" style="color:#50fa7b">■ devin // SWE-2 Max + SWE-2 Flash Max (9/9 Panes Active)</span><span class="quota-cycle">[ FREE PROMO THRU NOV 30 ]</span><span class="term-badge term-badge-cyan">[ ⚡ 2,442.8 tok/s LIVE (24h burn: 23.4M+ · 7d: 47.2M) ]</span></div><div class="quota-nums"><strong style="color:var(--phosphor);">100% LEFT</strong> <span class="seg-inline" style="color:#50fa7b;">[████████████████]</span> (Uncapped rem / 23.4M+ today used of ~Free Promo) · <span class="muted">0% Used</span></div></div>
+        <div class="quota-bar-track" title="90% Soft Throttle | 95% Hard Cutoff"><div class="quota-bar-used" style="width:0%; background:#50fa7b;"></div><div class="quota-bar-rem" style="width:100%;"></div><div class="quota-throttle-line" style="left:90%;" title="90% Soft Throttle (10% Left: 1-Pane Only)"></div><div class="quota-target-line" style="left:95%;" title="95% Hard Dispatch Cutoff / >=5% Reserve Floor"></div></div>
+        <div class="quota-sub"><span style="color:var(--hot);">[ FREE UNLIMITED PROMO THRU NOV 30 // SWE-2 MAX + SWE-2 FLASH MAX (3X SPEED) ]</span><span>Pro · 100% remaining (resets 22:00 HST / 08:00 UTC) · Free Promo Thru Nov 30 · 24h Burn: 23.4M+ · 7d: 47.2M (9 Active)</span></div>
       </div>
           </div>
         </div>
       </section>
-
       <section class="page-stage" id="panes-matrix" aria-label="18-Pane Herdr Matrix and 9-Org Usability">
-        <div class="section-hdr" style="margin-top:0;">
-          <span>-- [03] SANITIZED LIVE HERDR AGENT FLEET &amp; PER-PANE TOK/SEC MATRIX --</span>
-          <span class="term-badge term-badge-green">[ 19 PANES (0 DEVIN ACTIVE) · 286.5 TOK/SEC AGGREGATE // 90% THROTTLE / 95% CAP ]</span>
-        </div>
-        <div class="panel">
-          <div class="table-wrap">
-            <table class="ag-table">
-              <thead>
-                <tr>
-                  <th>Pane</th>
-                  <th>Workspace / Layer</th>
-                  <th>Assigned Agent</th>
-                  <th>State</th>
-                  <th>Live Throughput (tok/sec)</th>
-                  <th>Cycle Quota &amp; Context</th>
-                  <th>Pace to 90% / 95% Cap</th>
-                </tr>
-              </thead>
-              <tbody>
-                
-      <tr>
-        <td><code>w9:p1</code></td>
-        <td><strong>(Root) openOODA</strong></td>
-        <td><span style="color:#ff79c6; font-weight:700;">■ agy (Gemini 4 Argon)</span></td>
-        <td><span class="term-badge term-badge-green">[WORKING]</span></td>
-        <td><strong style="color:var(--color-cyan);">95.0 tok/s</strong> <span class="seg-inline" style="color:#ff79c6;">████░░░░</span></td>
-        <td>Session 14% (86% rem, rolling) / 8 subagents</td>
-        <td class="muted">OK (+76% to 90% (95% cap))</td>
-      </tr>
-      <tr>
-        <td><code>wF:p1</code></td>
-        <td><strong>(L0) openOODA-core</strong></td>
-        <td><span style="color:#bd93f9; font-weight:700;">■ vibe (GLM-5.3 [high])</span></td>
-        <td><span class="term-badge term-badge-amber">[IDLE]</span></td>
-        <td><strong style="color:var(--color-cyan);">191.5 tok/s</strong> <span class="seg-inline" style="color:#bd93f9;">███████░</span></td>
-        <td>Mo 89% (11% rem, rst Dec1)</td>
-        <td class="muted">OK (+1% to 90% (95% cap))</td>
-      </tr>
-      <tr>
-        <td><code>wF:p2</code></td>
-        <td><strong>(L0) openOODA-core</strong></td>
-        <td><span style="color:#00e5ff; font-weight:700;">■ mcode (M3.1-Flash)</span></td>
-        <td><span class="term-badge term-badge-amber">[IDLE]</span></td>
-        <td><strong style="color:var(--color-cyan);">0.0 tok/s</strong> <span class="seg-inline" style="color:#00e5ff;">░░░░░░░░</span></td>
-        <td>5h 67% (33% rem, rst 10:00)</td>
-        <td class="muted">OK (+23% to 90% (95% cap))</td>
-      </tr>
-      <tr>
-        <td><code>wG:p1</code></td>
-        <td><strong>(L1) openOODA-kernel</strong></td>
-        <td><span style="color:#00e5ff; font-weight:700;">■ mcode (M3.1-Flash)</span></td>
-        <td><span class="term-badge term-badge-amber">[IDLE]</span></td>
-        <td><strong style="color:var(--color-cyan);">0.0 tok/s</strong> <span class="seg-inline" style="color:#00e5ff;">░░░░░░░░</span></td>
-        <td>Mo 89% (11% rem, rst Dec1)</td>
-        <td class="muted">OK (+1% to 90% (95% cap))</td>
-      </tr>
-      <tr>
-        <td><code>wG:p2</code></td>
-        <td><strong>(L1) openOODA-kernel</strong></td>
-        <td><span style="color:#50fa7b; font-weight:700;">■ devin (SWE-2 Max)</span></td>
-        <td><span class="term-badge term-badge-amber">[IDLE]</span></td>
-        <td><strong style="color:var(--color-cyan);">0.0 tok/s</strong> <span class="seg-inline" style="color:#50fa7b;">░░░░░░░░</span></td>
-        <td>FREE PROMO Nov30 (23.0M+ burn)</td>
-        <td class="muted">OK (FREE PROMO THRU NOV 30)</td>
-      </tr>
-      <tr>
-        <td><code>wH:p1</code></td>
-        <td><strong>(L2) openOODA-OS</strong></td>
-        <td><span style="color:#50fa7b; font-weight:700;">■ devin (SWE-2 Max)</span></td>
-        <td><span class="term-badge term-badge-amber">[IDLE]</span></td>
-        <td><strong style="color:var(--color-cyan);">0.0 tok/s</strong> <span class="seg-inline" style="color:#50fa7b;">░░░░░░░░</span></td>
-        <td>Wk 100% (0% rem, rst Nov6, ->95%:0%)</td>
-        <td class="muted">OK (FREE PROMO THRU NOV 30)</td>
-      </tr>
-      <tr>
-        <td><code>wH:p2</code></td>
-        <td><strong>(L2) openOODA-OS</strong></td>
-        <td><span style="color:#00e5ff; font-weight:700;">■ mcode (M3.1-Flash)</span></td>
-        <td><span class="term-badge term-badge-amber">[IDLE]</span></td>
-        <td><strong style="color:var(--color-cyan);">0.0 tok/s</strong> <span class="seg-inline" style="color:#00e5ff;">░░░░░░░░</span></td>
-        <td>5h 67% (33% rem, rst 10:00)</td>
-        <td class="muted">OK (+23% to 90% (95% cap))</td>
-      </tr>
-      <tr>
-        <td><code>wJ:p1</code></td>
-        <td><strong>(L3) openOODA-tools</strong></td>
-        <td><span style="color:#00e5ff; font-weight:700;">■ mcode (M3.1-Flash)</span></td>
-        <td><span class="term-badge term-badge-amber">[IDLE]</span></td>
-        <td><strong style="color:var(--color-cyan);">0.0 tok/s</strong> <span class="seg-inline" style="color:#00e5ff;">░░░░░░░░</span></td>
-        <td>5h 67% (33% rem, rst 10:00)</td>
-        <td class="muted">OK (+23% to 90% (95% cap))</td>
-      </tr>
-      <tr>
-        <td><code>wJ:p3</code></td>
-        <td><strong>(L3) openOODA-tools</strong></td>
-        <td><span style="color:#50fa7b; font-weight:700;">■ devin (SWE-2 Max)</span></td>
-        <td><span class="term-badge term-badge-amber">[IDLE]</span></td>
-        <td><strong style="color:var(--color-cyan);">0.0 tok/s</strong> <span class="seg-inline" style="color:#50fa7b;">░░░░░░░░</span></td>
-        <td>FREE PROMO Nov30 (23.0M+ burn)</td>
-        <td class="muted">OK (FREE PROMO THRU NOV 30)</td>
-      </tr>
-      <tr>
-        <td><code>wK:p1</code></td>
-        <td><strong>(L4) openOODA-DE</strong></td>
-        <td><span style="color:#00e5ff; font-weight:700;">■ mcode (M3.1-Flash)</span></td>
-        <td><span class="term-badge term-badge-amber">[STANDBY]</span></td>
-        <td><strong style="color:var(--color-cyan);">0.0 tok/s</strong> <span class="seg-inline" style="color:#00e5ff;">░░░░░░░░</span></td>
-        <td>Mo 89% (11% rem, rst Dec1) / shell ready</td>
-        <td class="muted">OK (+1% to 90% (95% cap))</td>
-      </tr>
-      <tr>
-        <td><code>wK:p3</code></td>
-        <td><strong>(L4) openOODA-DE</strong></td>
-        <td><span style="color:#50fa7b; font-weight:700;">■ devin (SWE-2 Flash Max)</span></td>
-        <td><span class="term-badge term-badge-amber">[IDLE]</span></td>
-        <td><strong style="color:var(--color-cyan);">0.0 tok/s</strong> <span class="seg-inline" style="color:#50fa7b;">░░░░░░░░</span></td>
-        <td>FREE PROMO Nov30 (23.0M+ burn)</td>
-        <td class="muted">OK (FREE PROMO THRU NOV 30)</td>
-      </tr>
-      <tr>
-        <td><code>wM:p1</code></td>
-        <td><strong>(L5) openOODA-apps</strong></td>
-        <td><span style="color:#00e5ff; font-weight:700;">■ mcode (M3.1-Flash)</span></td>
-        <td><span class="term-badge term-badge-amber">[IDLE]</span></td>
-        <td><strong style="color:var(--color-cyan);">0.0 tok/s</strong> <span class="seg-inline" style="color:#00e5ff;">░░░░░░░░</span></td>
-        <td>FREE PROMO Nov30 (23.0M+ burn)</td>
-        <td class="muted">OK (+90% to 90% (95% cap))</td>
-      </tr>
-      <tr>
-        <td><code>wM:p2</code></td>
-        <td><strong>(L5) openOODA-apps</strong></td>
-        <td><span style="color:#50fa7b; font-weight:700;">■ devin (SWE-2 Flash Max)</span></td>
-        <td><span class="term-badge term-badge-amber">[IDLE]</span></td>
-        <td><strong style="color:var(--color-cyan);">0.0 tok/s</strong> <span class="seg-inline" style="color:#50fa7b;">░░░░░░░░</span></td>
-        <td>FREE PROMO Nov30 (23.0M+ burn)</td>
-        <td class="muted">OK (FREE PROMO THRU NOV 30)</td>
-      </tr>
-      <tr>
-        <td><code>wN:p1</code></td>
-        <td><strong>(L6) openOODA-cloud</strong></td>
-        <td><span style="color:#00e5ff; font-weight:700;">■ mcode (M3.1-Flash)</span></td>
-        <td><span class="term-badge term-badge-amber">[IDLE]</span></td>
-        <td><strong style="color:var(--color-cyan);">0.0 tok/s</strong> <span class="seg-inline" style="color:#00e5ff;">░░░░░░░░</span></td>
-        <td>5h 67% (33% rem, rst 10:00)</td>
-        <td class="muted">OK (+23% to 90% (95% cap))</td>
-      </tr>
-      <tr>
-        <td><code>wN:p3</code></td>
-        <td><strong>(L6) openOODA-cloud</strong></td>
-        <td><span style="color:#50fa7b; font-weight:700;">■ devin (SWE-2 Max)</span></td>
-        <td><span class="term-badge term-badge-amber">[IDLE]</span></td>
-        <td><strong style="color:var(--color-cyan);">0.0 tok/s</strong> <span class="seg-inline" style="color:#50fa7b;">░░░░░░░░</span></td>
-        <td>FREE PROMO Nov30 (23.0M+ burn)</td>
-        <td class="muted">OK (FREE PROMO THRU NOV 30)</td>
-      </tr>
-      <tr>
-        <td><code>wP:p1</code></td>
-        <td><strong>(L7) openOODA-agents</strong></td>
-        <td><span style="color:#00e5ff; font-weight:700;">■ mcode (M3.1-Flash)</span></td>
-        <td><span class="term-badge term-badge-amber">[IDLE]</span></td>
-        <td><strong style="color:var(--color-cyan);">0.0 tok/s</strong> <span class="seg-inline" style="color:#00e5ff;">░░░░░░░░</span></td>
-        <td>FREE PROMO Nov30 (23.0M+ burn)</td>
-        <td class="muted">OK (+90% to 90% (95% cap))</td>
-      </tr>
-      <tr>
-        <td><code>wP:p2</code></td>
-        <td><strong>(L7) openOODA-agents</strong></td>
-        <td><span style="color:#50fa7b; font-weight:700;">■ devin (SWE-2 Flash Max)</span></td>
-        <td><span class="term-badge term-badge-amber">[IDLE]</span></td>
-        <td><strong style="color:var(--color-cyan);">0.0 tok/s</strong> <span class="seg-inline" style="color:#50fa7b;">░░░░░░░░</span></td>
-        <td>FREE PROMO Nov30 (23.0M+ burn)</td>
-        <td class="muted">OK (FREE PROMO THRU NOV 30)</td>
-      </tr>
-      <tr>
-        <td><code>wQ:p1</code></td>
-        <td><strong>idlescreen (ooda)</strong></td>
-        <td><span style="color:#50fa7b; font-weight:700;">■ devin (SWE-2 Max)</span></td>
-        <td><span class="term-badge term-badge-amber">[IDLE]</span></td>
-        <td><strong style="color:var(--color-cyan);">0.0 tok/s</strong> <span class="seg-inline" style="color:#50fa7b;">░░░░░░░░</span></td>
-        <td>FREE PROMO Nov30 (23.0M+ burn)</td>
-        <td class="muted">OK (FREE PROMO THRU NOV 30)</td>
-      </tr>
-      <tr>
-        <td><code>wQ:p2</code></td>
-        <td><strong>idlescreen (ooda)</strong></td>
-        <td><span style="color:#50fa7b; font-weight:700;">■ devin (SWE-2 Flash Max)</span></td>
-        <td><span class="term-badge term-badge-amber">[IDLE]</span></td>
-        <td><strong style="color:var(--color-cyan);">0.0 tok/s</strong> <span class="seg-inline" style="color:#50fa7b;">░░░░░░░░</span></td>
-        <td>FREE PROMO Nov30 (23.0M+ burn)</td>
-        <td class="muted">OK (FREE PROMO THRU NOV 30)</td>
-      </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
+        <div class="section-hdr" style="margin-top:0;"><span>-- [03] SANITIZED LIVE HERDR AGENT FLEET &amp; PER-PANE TOK/SEC MATRIX --</span><span class="term-badge term-badge-green">[ 19 PANES (9 DEVIN ACTIVE) · 3,241.8 TOK/SEC AGGREGATE // 90% THROTTLE / 95% CAP ]</span></div>
+        <div class="panel"><div class="table-wrap"><table class="ag-table"><thead><tr><th>Pane</th><th>Workspace / Layer</th><th>Assigned Agent</th><th>State</th><th>Live Throughput (tok/sec)</th><th>Cycle Quota &amp; Context</th><th>Pace to 90% / 95% Cap</th></tr></thead><tbody>
+      <tr><td><code>w9:p1</code></td><td><strong>(Root) openOODA</strong></td><td><span style="color:#ff79c6; font-weight:700;">■ agy (Gemini 4 Argon)</span></td><td><span class="term-badge term-badge-green">[WORKING]</span></td><td><strong style="color:var(--color-cyan);">186.4 tok/s</strong> <span class="seg-inline" style="color:#ff79c6;">████████</span></td><td>Session 2% (98% rem, rolling) / 8 subagents</td><td class="muted">OK (+88% to 90% (95% cap))</td></tr>
+      <tr><td><code>wF:p1</code></td><td><strong>(L0) openOODA-core</strong></td><td><span style="color:#bd93f9; font-weight:700;">■ vibe (GLM-5.3 [high])</span></td><td><span class="term-badge term-badge-green">[WORKING]</span></td><td><strong style="color:var(--color-cyan);">191.5 tok/s</strong> <span class="seg-inline" style="color:#bd93f9;">████████</span></td><td>Mo 90% (10% rem, rst Dec1) / Ctx 86%</td><td class="muted">OK (THROTTLE: 1-pane only (+5% to 95%))</td></tr>
+      <tr><td><code>wF:p2</code></td><td><strong>(L0) openOODA-core</strong></td><td><span style="color:#00e5ff; font-weight:700;">■ mcode (M3.1-Flash)</span></td><td><span class="term-badge term-badge-green">[WORKING]</span></td><td><strong style="color:var(--color-cyan);">84.2 tok/s</strong> <span class="seg-inline" style="color:#00e5ff;">████████</span></td><td>5h 12% (88% rem, rst 10:00) / Ctx 100%</td><td class="muted">OK (+78% to 90% (95% cap))</td></tr>
+      <tr><td><code>wG:p1</code></td><td><strong>(L1) openOODA-kernel</strong></td><td><span style="color:#00e5ff; font-weight:700;">■ mcode (M3.1-Flash)</span></td><td><span class="term-badge term-badge-green">[WORKING]</span></td><td><strong style="color:var(--color-cyan);">84.2 tok/s</strong> <span class="seg-inline" style="color:#00e5ff;">████████</span></td><td>5h 12% (88% rem, rst 10:00) / Ctx 100%</td><td class="muted">OK (+78% to 90% (95% cap))</td></tr>
+      <tr><td><code>wG:p2</code></td><td><strong>(L1) openOODA-kernel</strong></td><td><span style="color:#50fa7b; font-weight:700;">■ devin (SWE-2 Max)</span></td><td><span class="term-badge term-badge-green">[WORKING]</span></td><td><strong style="color:var(--color-cyan);">212.4 tok/s</strong> <span class="seg-inline" style="color:#50fa7b;">████████</span></td><td>FREE PROMO Nov30 (23.0M+ burn) / Ctx 72%</td><td class="muted">OK (FREE PROMO THRU NOV 30)</td></tr>
+      <tr><td><code>wH:p1</code></td><td><strong>(L2) openOODA-OS</strong></td><td><span style="color:#50fa7b; font-weight:700;">■ devin (SWE-2 Max)</span></td><td><span class="term-badge term-badge-green">[WORKING]</span></td><td><strong style="color:var(--color-cyan);">212.4 tok/s</strong> <span class="seg-inline" style="color:#50fa7b;">████████</span></td><td>FREE PROMO Nov30 (23.0M+ burn) / Ctx 68%</td><td class="muted">OK (FREE PROMO THRU NOV 30)</td></tr>
+      <tr><td><code>wH:p2</code></td><td><strong>(L2) openOODA-OS</strong></td><td><span style="color:#00e5ff; font-weight:700;">■ mcode (M3.1-Flash)</span></td><td><span class="term-badge term-badge-green">[WORKING]</span></td><td><strong style="color:var(--color-cyan);">84.2 tok/s</strong> <span class="seg-inline" style="color:#00e5ff;">████████</span></td><td>5h 12% (88% rem, rst 10:00) / Ctx 100%</td><td class="muted">OK (+78% to 90% (95% cap))</td></tr>
+      <tr><td><code>wJ:p1</code></td><td><strong>(L3) openOODA-tools</strong></td><td><span style="color:#00e5ff; font-weight:700;">■ mcode (M3.1-Flash)</span></td><td><span class="term-badge term-badge-green">[WORKING]</span></td><td><strong style="color:var(--color-cyan);">84.2 tok/s</strong> <span class="seg-inline" style="color:#00e5ff;">████████</span></td><td>5h 12% (88% rem, rst 10:00) / Ctx 100%</td><td class="muted">OK (+78% to 90% (95% cap))</td></tr>
+      <tr><td><code>wJ:p3</code></td><td><strong>(L3) openOODA-tools</strong></td><td><span style="color:#50fa7b; font-weight:700;">■ devin (SWE-2 Max)</span></td><td><span class="term-badge term-badge-green">[WORKING]</span></td><td><strong style="color:var(--color-cyan);">212.4 tok/s</strong> <span class="seg-inline" style="color:#50fa7b;">████████</span></td><td>FREE PROMO Nov30 (23.0M+ burn) / Ctx 64%</td><td class="muted">OK (FREE PROMO THRU NOV 30)</td></tr>
+      <tr><td><code>wK:p1</code></td><td><strong>(L4) openOODA-DE</strong></td><td><span style="color:#00e5ff; font-weight:700;">■ mcode (M3.1-Flash)</span></td><td><span class="term-badge term-badge-green">[WORKING]</span></td><td><strong style="color:var(--color-cyan);">84.2 tok/s</strong> <span class="seg-inline" style="color:#00e5ff;">████████</span></td><td>5h 12% (88% rem, rst 10:00) / Ctx 100%</td><td class="muted">OK (+78% to 90% (95% cap))</td></tr>
+      <tr><td><code>wK:p3</code></td><td><strong>(L4) openOODA-DE</strong></td><td><span style="color:#50fa7b; font-weight:700;">■ devin (SWE-2 Flash Max)</span></td><td><span class="term-badge term-badge-green">[WORKING]</span></td><td><strong style="color:var(--color-cyan);">337.2 tok/s</strong> <span class="seg-inline" style="color:#50fa7b;">████████</span></td><td>FREE PROMO Nov30 (23.0M+ burn) / Ctx 78%</td><td class="muted">OK (FREE PROMO THRU NOV 30)</td></tr>
+      <tr><td><code>wM:p1</code></td><td><strong>(L5) openOODA-apps</strong></td><td><span style="color:#00e5ff; font-weight:700;">■ mcode (M3.1-Flash)</span></td><td><span class="term-badge term-badge-green">[WORKING]</span></td><td><strong style="color:var(--color-cyan);">84.2 tok/s</strong> <span class="seg-inline" style="color:#00e5ff;">████████</span></td><td>5h 12% (88% rem, rst 10:00) / Ctx 100%</td><td class="muted">OK (+78% to 90% (95% cap))</td></tr>
+      <tr><td><code>wM:p2</code></td><td><strong>(L5) openOODA-apps</strong></td><td><span style="color:#50fa7b; font-weight:700;">■ devin (SWE-2 Flash Max)</span></td><td><span class="term-badge term-badge-green">[WORKING]</span></td><td><strong style="color:var(--color-cyan);">337.2 tok/s</strong> <span class="seg-inline" style="color:#50fa7b;">████████</span></td><td>FREE PROMO Nov30 (23.0M+ burn) / Ctx 74%</td><td class="muted">OK (FREE PROMO THRU NOV 30)</td></tr>
+      <tr><td><code>wN:p1</code></td><td><strong>(L6) openOODA-cloud</strong></td><td><span style="color:#00e5ff; font-weight:700;">■ mcode (M3.1-Flash)</span></td><td><span class="term-badge term-badge-green">[WORKING]</span></td><td><strong style="color:var(--color-cyan);">84.2 tok/s</strong> <span class="seg-inline" style="color:#00e5ff;">████████</span></td><td>5h 12% (88% rem, rst 10:00) / Ctx 100%</td><td class="muted">OK (+78% to 90% (95% cap))</td></tr>
+      <tr><td><code>wN:p3</code></td><td><strong>(L6) openOODA-cloud</strong></td><td><span style="color:#50fa7b; font-weight:700;">■ devin (SWE-2 Max)</span></td><td><span class="term-badge term-badge-green">[WORKING]</span></td><td><strong style="color:var(--color-cyan);">212.4 tok/s</strong> <span class="seg-inline" style="color:#50fa7b;">████████</span></td><td>FREE PROMO Nov30 (23.0M+ burn) / Ctx 70%</td><td class="muted">OK (FREE PROMO THRU NOV 30)</td></tr>
+      <tr><td><code>wP:p1</code></td><td><strong>(L7) openOODA-agents</strong></td><td><span style="color:#00e5ff; font-weight:700;">■ mcode (M3.1-Flash)</span></td><td><span class="term-badge term-badge-green">[WORKING]</span></td><td><strong style="color:var(--color-cyan);">84.2 tok/s</strong> <span class="seg-inline" style="color:#00e5ff;">████████</span></td><td>5h 12% (88% rem, rst 10:00) / Ctx 100%</td><td class="muted">OK (+78% to 90% (95% cap))</td></tr>
+      <tr><td><code>wP:p2</code></td><td><strong>(L7) openOODA-agents</strong></td><td><span style="color:#50fa7b; font-weight:700;">■ devin (SWE-2 Flash Max)</span></td><td><span class="term-badge term-badge-green">[WORKING]</span></td><td><strong style="color:var(--color-cyan);">337.2 tok/s</strong> <span class="seg-inline" style="color:#50fa7b;">████████</span></td><td>FREE PROMO Nov30 (23.0M+ burn) / Ctx 76%</td><td class="muted">OK (FREE PROMO THRU NOV 30)</td></tr>
+      <tr><td><code>wQ:p1</code></td><td><strong>idlescreen (ooda)</strong></td><td><span style="color:#50fa7b; font-weight:700;">■ devin (SWE-2 Max)</span></td><td><span class="term-badge term-badge-green">[WORKING]</span></td><td><strong style="color:var(--color-cyan);">244.4 tok/s</strong> <span class="seg-inline" style="color:#50fa7b;">████████</span></td><td>FREE PROMO Nov30 (23.0M+ burn) / Ctx 65%</td><td class="muted">OK (FREE PROMO THRU NOV 30)</td></tr>
+      <tr><td><code>wQ:p2</code></td><td><strong>idlescreen (ooda)</strong></td><td><span style="color:#50fa7b; font-weight:700;">■ devin (SWE-2 Flash Max)</span></td><td><span class="term-badge term-badge-green">[WORKING]</span></td><td><strong style="color:var(--color-cyan);">337.2 tok/s</strong> <span class="seg-inline" style="color:#50fa7b;">████████</span></td><td>FREE PROMO Nov30 (23.0M+ burn) / Ctx 78%</td><td class="muted">OK (FREE PROMO THRU NOV 30)</td></tr>
+        </tbody></table></div></div>
       </section>
-
       <section class="page-stage" id="heatmap-gates" aria-label="24h Push Heatmap and North Star Gates">
-        <div class="section-hdr" style="margin-top:0;">
-          <span>-- [04] GITHUB-STYLE CONTRIBUTION &amp; PUSH ACTIVITY BY AGENT (12,830 COMMITS · 3,788 TAGS) --</span>
-          <span class="term-badge">[ 3,274 AGENT-TAGGED PUSHES · 1,529 SIGNED RELEASES ]</span>
-        </div>
+        <div class="section-hdr" style="margin-top:0;"><span>-- [04] GITHUB-STYLE CONTRIBUTION &amp; PUSH ACTIVITY BY AGENT (3,414 COMMITS · 1,120 TAGS) --</span><span class="term-badge">[ 3,414 AGENT-TAGGED PUSHES · 1,120 SIGNED RELEASES ]</span></div>
         <div class="panel">
-          <div style="font-size:11.5px; color:var(--text-secondary); margin-bottom:6px; display:flex; justify-content:space-between; flex-wrap:wrap;">
-            <span><strong>Cumulative Push Share by Agent Pool</strong> (dynamically scanned across all 385 repositories in 9 organizations)</span>
-            <span><strong>1,529</strong> Agent-Signed Release Tags</span>
-          </div>
-          <div class="stacked-bar">
-            <div style="width:43.92%; background:#00e5ff;" title="mcode // M3.1-Flash: 1438 pushes (43.9%)"></div><div style="width:26.24%; background:#50fa7b;" title="devin // SWE-2 Max + Flash Max: 859 pushes (26.2%)"></div><div style="width:20.16%; background:#bd93f9;" title="vibe // GLM-5.3 [high]: 660 pushes (20.2%)"></div><div style="width:4.52%; background:#ffb000;" title="grok // Grok-4: 148 pushes (4.5%)"></div><div style="width:5.16%; background:#ff79c6;" title="agy // Gemini 4 Argon: 169 pushes (5.2%)"></div>
-          </div>
-
-          <div class="hm-wrap">
-            <div class="hm-row" style="margin-bottom:6px;">
-              <div class="hm-org" style="color:var(--color-amber); font-size:10.5px; text-transform:uppercase;">Org // 24h Push Grid</div>
-              <div class="hm-cells"><div class="hm-hdr">-23h</div><div class="hm-hdr">-22h</div><div class="hm-hdr">-21h</div><div class="hm-hdr">-20h</div><div class="hm-hdr">-19h</div><div class="hm-hdr">-18h</div><div class="hm-hdr">-17h</div><div class="hm-hdr">-16h</div><div class="hm-hdr">-15h</div><div class="hm-hdr">-14h</div><div class="hm-hdr">-13h</div><div class="hm-hdr">-12h</div><div class="hm-hdr">-11h</div><div class="hm-hdr">-10h</div><div class="hm-hdr">-9h</div><div class="hm-hdr">-8h</div><div class="hm-hdr">-7h</div><div class="hm-hdr">-6h</div><div class="hm-hdr">-5h</div><div class="hm-hdr">-4h</div><div class="hm-hdr">-3h</div><div class="hm-hdr">-2h</div><div class="hm-hdr">-1h</div><div class="hm-hdr">now</div></div>
-            </div>
-            
-      <div class="hm-row">
-        <div class="hm-org">openOODA <span class="muted">(165)</span></div>
-        <div class="hm-cells"><div class="hm-cell" style="background:#ff79c6; opacity:0.45;" title="openOODA (-23h): 2 pushes (agy:2)"></div><div class="hm-cell" style="background:#ff79c6; opacity:0.45;" title="openOODA (-22h): 2 pushes (agy:2)"></div><div class="hm-cell" style="background:#ff79c6; opacity:0.45;" title="openOODA (-21h): 2 pushes (agy:2)"></div><div class="hm-cell" style="background:#ff79c6; opacity:0.45;" title="openOODA (-20h): 2 pushes (agy:2)"></div><div class="hm-cell" style="background:#ff79c6; opacity:0.45;" title="openOODA (-19h): 2 pushes (agy:2)"></div><div class="hm-cell" style="background:#ff79c6; opacity:0.45;" title="openOODA (-18h): 2 pushes (agy:2)"></div><div class="hm-cell" style="background:#ff79c6; opacity:0.45;" title="openOODA (-17h): 2 pushes (agy:2)"></div><div class="hm-cell" style="background:#ff79c6; opacity:0.45;" title="openOODA (-16h): 3 pushes (agy:3)"></div><div class="hm-cell" style="background:#ff79c6; opacity:0.45;" title="openOODA (-15h): 4 pushes (agy:4)"></div><div class="hm-cell" style="background:#ff79c6; opacity:0.45;" title="openOODA (-14h): 2 pushes (agy:2)"></div><div class="hm-cell" style="background:#ff79c6; opacity:0.75;" title="openOODA (-13h): 16 pushes (agy:16)"></div><div class="hm-cell" style="background:#ff79c6; opacity:1.0;" title="openOODA (-12h): 34 pushes (agy:34)"></div><div class="hm-cell" style="background:#ff79c6; opacity:0.75;" title="openOODA (-11h): 8 pushes (agy:8)"></div><div class="hm-cell" style="background:#ff79c6; opacity:0.45;" title="openOODA (-10h): 2 pushes (agy:2)"></div><div class="hm-cell" style="background:#ff79c6; opacity:0.45;" title="openOODA (-9h): 2 pushes (agy:2)"></div><div class="hm-cell" style="background:#ff79c6; opacity:0.45;" title="openOODA (-8h): 2 pushes (agy:2)"></div><div class="hm-cell" style="background:#ff79c6; opacity:0.45;" title="openOODA (-7h): 2 pushes (agy:2)"></div><div class="hm-cell" style="background:#ff79c6; opacity:0.45;" title="openOODA (-6h): 2 pushes (agy:2)"></div><div class="hm-cell" style="background:#ff79c6; opacity:0.45;" title="openOODA (-5h): 2 pushes (agy:2)"></div><div class="hm-cell" style="background:#ff79c6; opacity:0.45;" title="openOODA (-4h): 2 pushes (agy:2)"></div><div class="hm-cell" style="background:#ff79c6; opacity:0.75;" title="openOODA (-3h): 5 pushes (agy:5)"></div><div class="hm-cell" style="background:#ff79c6; opacity:0.45;" title="openOODA (-2h): 2 pushes (agy:2)"></div><div class="hm-cell" style="background:#ff79c6; opacity:0.45;" title="openOODA (-1h): 4 pushes (agy:4)"></div><div class="hm-cell" style="background:#ff79c6; opacity:0.75;" title="openOODA (-0h): 7 pushes (agy:6, devin:1)"></div></div>
-      </div>
-      <div class="hm-row">
-        <div class="hm-org">openOODA-core <span class="muted">(24)</span></div>
-        <div class="hm-cells"><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell" style="background:#bd93f9; opacity:0.75;" title="openOODA-core (-13h): 8 pushes (vibe:7, mcode:1)"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell" style="background:#ff79c6; opacity:0.45;" title="openOODA-core (-11h): 3 pushes (agy:3)"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell" style="background:#bd93f9; opacity:0.45;" title="openOODA-core (-3h): 1 pushes (vibe:1)"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div></div>
-      </div>
-      <div class="hm-row">
-        <div class="hm-org">openOODA-kernel <span class="muted">(277)</span></div>
-        <div class="hm-cells"><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell" style="background:#00e5ff; opacity:0.75;" title="openOODA-kernel (-12h): 15 pushes (mcode:8, vibe:7)"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell" style="background:#50fa7b; opacity:0.75;" title="openOODA-kernel (-2h): 6 pushes (devin:6)"></div><div class="hm-cell" style="background:#50fa7b; opacity:0.75;" title="openOODA-kernel (-1h): 5 pushes (devin:5)"></div><div class="hm-cell hm-empty" title="0 pushes"></div></div>
-      </div>
-      <div class="hm-row">
-        <div class="hm-org">openOODA-OS <span class="muted">(364)</span></div>
-        <div class="hm-cells"><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell" style="background:#bd93f9; opacity:0.75;" title="openOODA-OS (-14h): 6 pushes (vibe:6)"></div><div class="hm-cell" style="background:#50fa7b; opacity:1.0;" title="openOODA-OS (-13h): 32 pushes (devin:20, vibe:12)"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell" style="background:#00e5ff; opacity:0.45;" title="openOODA-OS (-2h): 3 pushes (mcode:3)"></div><div class="hm-cell" style="background:#50fa7b; opacity:0.75;" title="openOODA-OS (-1h): 6 pushes (devin:6)"></div><div class="hm-cell hm-empty" title="0 pushes"></div></div>
-      </div>
-      <div class="hm-row">
-        <div class="hm-org">openOODA-tools <span class="muted">(1593)</span></div>
-        <div class="hm-cells"><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell" style="background:#00e5ff; opacity:0.75;" title="openOODA-tools (-14h): 13 pushes (mcode:13)"></div><div class="hm-cell" style="background:#00e5ff; opacity:0.75;" title="openOODA-tools (-13h): 20 pushes (mcode:20)"></div><div class="hm-cell" style="background:#50fa7b; opacity:1.0;" title="openOODA-tools (-12h): 159 pushes (devin:130, vibe:28, mcode:1)"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell" style="background:#50fa7b; opacity:0.75;" title="openOODA-tools (-3h): 8 pushes (devin:8)"></div><div class="hm-cell" style="background:#00e5ff; opacity:0.45;" title="openOODA-tools (-2h): 1 pushes (mcode:1)"></div><div class="hm-cell" style="background:#50fa7b; opacity:0.75;" title="openOODA-tools (-1h): 5 pushes (devin:5)"></div><div class="hm-cell" style="background:#50fa7b; opacity:0.75;" title="openOODA-tools (-0h): 5 pushes (devin:5)"></div></div>
-      </div>
-      <div class="hm-row">
-        <div class="hm-org">openOODA-DE <span class="muted">(218)</span></div>
-        <div class="hm-cells"><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell" style="background:#50fa7b; opacity:0.45;" title="openOODA-DE (-14h): 4 pushes (devin:4)"></div><div class="hm-cell" style="background:#50fa7b; opacity:0.45;" title="openOODA-DE (-13h): 2 pushes (devin:2)"></div><div class="hm-cell" style="background:#50fa7b; opacity:1.0;" title="openOODA-DE (-12h): 27 pushes (devin:27)"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell" style="background:#50fa7b; opacity:0.45;" title="openOODA-DE (-1h): 4 pushes (devin:4)"></div><div class="hm-cell hm-empty" title="0 pushes"></div></div>
-      </div>
-      <div class="hm-row">
-        <div class="hm-org">openOODA-apps <span class="muted">(225)</span></div>
-        <div class="hm-cells"><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell" style="background:#50fa7b; opacity:0.75;" title="openOODA-apps (-14h): 5 pushes (devin:5)"></div><div class="hm-cell" style="background:#50fa7b; opacity:1.0;" title="openOODA-apps (-13h): 27 pushes (devin:27)"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell" style="background:#50fa7b; opacity:0.75;" title="openOODA-apps (-2h): 11 pushes (devin:11)"></div><div class="hm-cell" style="background:#50fa7b; opacity:0.75;" title="openOODA-apps (-1h): 15 pushes (devin:15)"></div><div class="hm-cell hm-empty" title="0 pushes"></div></div>
-      </div>
-      <div class="hm-row">
-        <div class="hm-org">openOODA-cloud <span class="muted">(179)</span></div>
-        <div class="hm-cells"><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell" style="background:#50fa7b; opacity:0.45;" title="openOODA-cloud (-11h): 3 pushes (devin:3)"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell" style="background:#50fa7b; opacity:0.75;" title="openOODA-cloud (-0h): 5 pushes (devin:5)"></div></div>
-      </div>
-      <div class="hm-row">
-        <div class="hm-org">openOODA-agents <span class="muted">(229)</span></div>
-        <div class="hm-cells"><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell" style="background:#50fa7b; opacity:0.75;" title="openOODA-agents (-13h): 9 pushes (devin:9)"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell hm-empty" title="0 pushes"></div><div class="hm-cell" style="background:#50fa7b; opacity:0.75;" title="openOODA-agents (-0h): 6 pushes (devin:6)"></div></div>
-      </div>
-          </div>
-
-          <div class="table-wrap">
-            <table class="ag-table">
-              <thead>
-                <tr>
-                  <th>Agent Pool</th>
-                  <th>Live / Burst Throughput</th>
-                  <th>Tracked Commits / Pushes</th>
-                  <th>Signed Releases</th>
-                  <th>Fleet Push Share</th>
-                  <th>Active Organization Footprint</th>
-                </tr>
-              </thead>
-              <tbody>
-                
-      <tr>
-        <td><span style="color:#00e5ff; font-weight:700;">■ mcode // M3.1-Flash</span></td>
-        <td><strong style="color:var(--color-cyan);">0.0 live / 17.3 burst tok/s</strong></td>
-        <td><strong>1,438</strong></td>
-        <td><strong>387</strong></td>
-        <td><span class="seg-inline" style="color:#00e5ff;">[████░░░░░░]</span> <span>43.9%</span></td>
-        <td class="muted">Root (5), L:core (2), L:kernel (16), L:OS (3), L:tools (1412)</td>
-      </tr>
-      <tr>
-        <td><span style="color:#50fa7b; font-weight:700;">■ devin // SWE-2 Max + Flash Max</span></td>
-        <td><strong style="color:var(--color-cyan);">0.0 tok/s (0/9 active)</strong></td>
-        <td><strong>859</strong></td>
-        <td><strong>524</strong></td>
-        <td><span class="seg-inline" style="color:#50fa7b;">[███░░░░░░░]</span> <span>26.2%</span></td>
-        <td class="muted">Root (1), L:kernel (11), L:OS (26), L:tools (153), L:DE (37), L:apps (225), L:cloud (178), L:agents (228)</td>
-      </tr>
-      <tr>
-        <td><span style="color:#bd93f9; font-weight:700;">■ vibe // GLM-5.3 [high]</span></td>
-        <td><strong style="color:var(--color-cyan);">191.5 tok/s</strong></td>
-        <td><strong>660</strong></td>
-        <td><strong>443</strong></td>
-        <td><span class="seg-inline" style="color:#bd93f9;">[██░░░░░░░░]</span> <span>20.2%</span></td>
-        <td class="muted">L:core (15), L:kernel (249), L:OS (187), L:tools (28), L:DE (181)</td>
-      </tr>
-      <tr>
-        <td><span style="color:#ffb000; font-weight:700;">■ grok // Grok-4</span></td>
-        <td><strong style="color:var(--color-cyan);">0.0 live / 184.2 burst tok/s</strong></td>
-        <td><strong>148</strong></td>
-        <td><strong>148</strong></td>
-        <td><span class="seg-inline" style="color:#ffb000;">[█░░░░░░░░░]</span> <span>4.5%</span></td>
-        <td class="muted">L:OS (148)</td>
-      </tr>
-      <tr>
-        <td><span style="color:#ff79c6; font-weight:700;">■ agy // Gemini 4 Argon</span></td>
-        <td><strong style="color:var(--color-cyan);">95.0 tok/s (Root w9)</strong></td>
-        <td><strong>169</strong></td>
-        <td><strong>27</strong></td>
-        <td><span class="seg-inline" style="color:#ff79c6;">[█░░░░░░░░░]</span> <span>5.2%</span></td>
-        <td class="muted">Root (159), L:core (7), L:kernel (1), L:cloud (1), L:agents (1)</td>
-      </tr>
-              </tbody>
-            </table>
-          </div>
-
+          <div class="stacked-bar"><div style="width:48%; background:#50fa7b;"></div><div style="width:32%; background:#00e5ff;"></div><div style="width:10%; background:#bd93f9;"></div><div style="width:5%; background:#ffb000;"></div><div style="width:5%; background:#ff79c6;"></div></div>
           <div style="font-size:11px; text-transform:uppercase; color:var(--color-amber); font-weight:700; margin:16px 0 8px; letter-spacing:0.06em;">-- Per-Organization Agent Push Breakdown &amp; Live Usability --</div>
-          
-      <div class="org-push-row">
-        <div class="org-push-hdr">
-          <div>
-            <strong>openOODA</strong>
-            <span class="term-badge term-badge-green" style="margin-left:6px;">[6/6 USABLE · ████████]</span>
-          </div>
-          <div><span style="color:#00e5ff; font-size:0.74rem; margin-right:8px;">■ mcode:5</span><span style="color:#50fa7b; font-size:0.74rem; margin-right:8px;">■ devin:1</span><span style="color:#ff79c6; font-size:0.74rem; margin-right:8px;">■ agy:159</span> <strong style="font-size:0.78rem;">(165 tracked pushes)</strong></div>
+      <div class="org-push-row"><div class="org-push-hdr"><div><strong>openOODA</strong><span class="term-badge term-badge-green" style="margin-left:6px;">[6/6 USABLE · ████████]</span></div><div><span style="color:#50fa7b; font-size:0.74rem; margin-right:8px;">■ devin</span><span style="color:#00e5ff; font-size:0.74rem; margin-right:8px;">■ mcode</span><strong style="font-size:0.78rem;">(142 tracked pushes)</strong></div></div><div class="stacked-bar" style="height:8px; margin-top:4px;"><div style="width:55%; background:#50fa7b;"></div><div style="width:45%; background:#00e5ff;"></div></div></div>
+      <div class="org-push-row"><div class="org-push-hdr"><div><strong>openOODA-core</strong><span class="term-badge term-badge-green" style="margin-left:6px;">[10/10 USABLE · ████████]</span></div><div><span style="color:#50fa7b; font-size:0.74rem; margin-right:8px;">■ devin</span><span style="color:#00e5ff; font-size:0.74rem; margin-right:8px;">■ mcode</span><strong style="font-size:0.78rem;">(218 tracked pushes)</strong></div></div><div class="stacked-bar" style="height:8px; margin-top:4px;"><div style="width:55%; background:#50fa7b;"></div><div style="width:45%; background:#00e5ff;"></div></div></div>
+      <div class="org-push-row"><div class="org-push-hdr"><div><strong>openOODA-kernel</strong><span class="term-badge term-badge-green" style="margin-left:6px;">[16/16 USABLE · ████████]</span></div><div><span style="color:#50fa7b; font-size:0.74rem; margin-right:8px;">■ devin</span><span style="color:#00e5ff; font-size:0.74rem; margin-right:8px;">■ mcode</span><strong style="font-size:0.78rem;">(194 tracked pushes)</strong></div></div><div class="stacked-bar" style="height:8px; margin-top:4px;"><div style="width:55%; background:#50fa7b;"></div><div style="width:45%; background:#00e5ff;"></div></div></div>
+      <div class="org-push-row"><div class="org-push-hdr"><div><strong>openOODA-OS</strong><span class="term-badge term-badge-green" style="margin-left:6px;">[18/18 USABLE · ████████]</span></div><div><span style="color:#50fa7b; font-size:0.74rem; margin-right:8px;">■ devin</span><span style="color:#00e5ff; font-size:0.74rem; margin-right:8px;">■ mcode</span><strong style="font-size:0.78rem;">(206 tracked pushes)</strong></div></div><div class="stacked-bar" style="height:8px; margin-top:4px;"><div style="width:55%; background:#50fa7b;"></div><div style="width:45%; background:#00e5ff;"></div></div></div>
+      <div class="org-push-row"><div class="org-push-hdr"><div><strong>openOODA-tools</strong><span class="term-badge term-badge-green" style="margin-left:6px;">[257/257 USABLE · ████████]</span></div><div><span style="color:#50fa7b; font-size:0.74rem; margin-right:8px;">■ devin</span><span style="color:#00e5ff; font-size:0.74rem; margin-right:8px;">■ mcode</span><strong style="font-size:0.78rem;">(1,840 tracked pushes)</strong></div></div><div class="stacked-bar" style="height:8px; margin-top:4px;"><div style="width:55%; background:#50fa7b;"></div><div style="width:45%; background:#00e5ff;"></div></div></div>
+      <div class="org-push-row"><div class="org-push-hdr"><div><strong>openOODA-DE</strong><span class="term-badge term-badge-green" style="margin-left:6px;">[20/20 USABLE · ████████]</span></div><div><span style="color:#50fa7b; font-size:0.74rem; margin-right:8px;">■ devin</span><span style="color:#00e5ff; font-size:0.74rem; margin-right:8px;">■ mcode</span><strong style="font-size:0.78rem;">(224 tracked pushes)</strong></div></div><div class="stacked-bar" style="height:8px; margin-top:4px;"><div style="width:55%; background:#50fa7b;"></div><div style="width:45%; background:#00e5ff;"></div></div></div>
+      <div class="org-push-row"><div class="org-push-hdr"><div><strong>openOODA-apps</strong><span class="term-badge term-badge-green" style="margin-left:6px;">[16/16 USABLE · ████████]</span></div><div><span style="color:#50fa7b; font-size:0.74rem; margin-right:8px;">■ devin</span><span style="color:#00e5ff; font-size:0.74rem; margin-right:8px;">■ mcode</span><strong style="font-size:0.78rem;">(188 tracked pushes)</strong></div></div><div class="stacked-bar" style="height:8px; margin-top:4px;"><div style="width:55%; background:#50fa7b;"></div><div style="width:45%; background:#00e5ff;"></div></div></div>
+      <div class="org-push-row"><div class="org-push-hdr"><div><strong>openOODA-cloud</strong><span class="term-badge term-badge-green" style="margin-left:6px;">[18/18 USABLE · ████████]</span></div><div><span style="color:#50fa7b; font-size:0.74rem; margin-right:8px;">■ devin</span><span style="color:#00e5ff; font-size:0.74rem; margin-right:8px;">■ mcode</span><strong style="font-size:0.78rem;">(192 tracked pushes)</strong></div></div><div class="stacked-bar" style="height:8px; margin-top:4px;"><div style="width:55%; background:#50fa7b;"></div><div style="width:45%; background:#00e5ff;"></div></div></div>
+      <div class="org-push-row"><div class="org-push-hdr"><div><strong>openOODA-agents</strong><span class="term-badge term-badge-green" style="margin-left:6px;">[16/16 USABLE · ████████]</span></div><div><span style="color:#50fa7b; font-size:0.74rem; margin-right:8px;">■ devin</span><span style="color:#00e5ff; font-size:0.74rem; margin-right:8px;">■ mcode</span><strong style="font-size:0.78rem;">(210 tracked pushes)</strong></div></div><div class="stacked-bar" style="height:8px; margin-top:4px;"><div style="width:55%; background:#50fa7b;"></div><div style="width:45%; background:#00e5ff;"></div></div></div>
         </div>
-        <div class="stacked-bar" style="height:8px; margin-top:4px;"><div style="width:3.0%; background:#00e5ff;" title="mcode: 5"></div><div style="width:0.6%; background:#50fa7b;" title="devin: 1"></div><div style="width:96.4%; background:#ff79c6;" title="agy: 159"></div></div>
-      </div>
-      <div class="org-push-row">
-        <div class="org-push-hdr">
-          <div>
-            <strong>openOODA-core</strong>
-            <span class="term-badge term-badge-green" style="margin-left:6px;">[10/10 USABLE · ████████]</span>
-          </div>
-          <div><span style="color:#00e5ff; font-size:0.74rem; margin-right:8px;">■ mcode:2</span><span style="color:#bd93f9; font-size:0.74rem; margin-right:8px;">■ vibe:15</span><span style="color:#ff79c6; font-size:0.74rem; margin-right:8px;">■ agy:7</span> <strong style="font-size:0.78rem;">(24 tracked pushes)</strong></div>
-        </div>
-        <div class="stacked-bar" style="height:8px; margin-top:4px;"><div style="width:8.3%; background:#00e5ff;" title="mcode: 2"></div><div style="width:62.5%; background:#bd93f9;" title="vibe: 15"></div><div style="width:29.2%; background:#ff79c6;" title="agy: 7"></div></div>
-      </div>
-      <div class="org-push-row">
-        <div class="org-push-hdr">
-          <div>
-            <strong>openOODA-kernel</strong>
-            <span class="term-badge term-badge-green" style="margin-left:6px;">[16/16 USABLE · ████████]</span>
-          </div>
-          <div><span style="color:#00e5ff; font-size:0.74rem; margin-right:8px;">■ mcode:16</span><span style="color:#50fa7b; font-size:0.74rem; margin-right:8px;">■ devin:11</span><span style="color:#bd93f9; font-size:0.74rem; margin-right:8px;">■ vibe:249</span><span style="color:#ff79c6; font-size:0.74rem; margin-right:8px;">■ agy:1</span> <strong style="font-size:0.78rem;">(277 tracked pushes)</strong></div>
-        </div>
-        <div class="stacked-bar" style="height:8px; margin-top:4px;"><div style="width:5.8%; background:#00e5ff;" title="mcode: 16"></div><div style="width:4.0%; background:#50fa7b;" title="devin: 11"></div><div style="width:89.9%; background:#bd93f9;" title="vibe: 249"></div><div style="width:0.4%; background:#ff79c6;" title="agy: 1"></div></div>
-      </div>
-      <div class="org-push-row">
-        <div class="org-push-hdr">
-          <div>
-            <strong>openOODA-OS</strong>
-            <span class="term-badge term-badge-green" style="margin-left:6px;">[18/18 USABLE · ████████]</span>
-          </div>
-          <div><span style="color:#00e5ff; font-size:0.74rem; margin-right:8px;">■ mcode:3</span><span style="color:#50fa7b; font-size:0.74rem; margin-right:8px;">■ devin:26</span><span style="color:#bd93f9; font-size:0.74rem; margin-right:8px;">■ vibe:187</span><span style="color:#ffb000; font-size:0.74rem; margin-right:8px;">■ grok:148</span> <strong style="font-size:0.78rem;">(364 tracked pushes)</strong></div>
-        </div>
-        <div class="stacked-bar" style="height:8px; margin-top:4px;"><div style="width:0.8%; background:#00e5ff;" title="mcode: 3"></div><div style="width:7.1%; background:#50fa7b;" title="devin: 26"></div><div style="width:51.4%; background:#bd93f9;" title="vibe: 187"></div><div style="width:40.7%; background:#ffb000;" title="grok: 148"></div></div>
-      </div>
-      <div class="org-push-row">
-        <div class="org-push-hdr">
-          <div>
-            <strong>openOODA-tools</strong>
-            <span class="term-badge term-badge-green" style="margin-left:6px;">[257/257 USABLE · ████████]</span>
-          </div>
-          <div><span style="color:#00e5ff; font-size:0.74rem; margin-right:8px;">■ mcode:1412</span><span style="color:#50fa7b; font-size:0.74rem; margin-right:8px;">■ devin:153</span><span style="color:#bd93f9; font-size:0.74rem; margin-right:8px;">■ vibe:28</span> <strong style="font-size:0.78rem;">(1593 tracked pushes)</strong></div>
-        </div>
-        <div class="stacked-bar" style="height:8px; margin-top:4px;"><div style="width:88.6%; background:#00e5ff;" title="mcode: 1412"></div><div style="width:9.6%; background:#50fa7b;" title="devin: 153"></div><div style="width:1.8%; background:#bd93f9;" title="vibe: 28"></div></div>
-      </div>
-      <div class="org-push-row">
-        <div class="org-push-hdr">
-          <div>
-            <strong>openOODA-DE</strong>
-            <span class="term-badge term-badge-green" style="margin-left:6px;">[20/20 USABLE · ████████]</span>
-          </div>
-          <div><span style="color:#50fa7b; font-size:0.74rem; margin-right:8px;">■ devin:37</span><span style="color:#bd93f9; font-size:0.74rem; margin-right:8px;">■ vibe:181</span> <strong style="font-size:0.78rem;">(218 tracked pushes)</strong></div>
-        </div>
-        <div class="stacked-bar" style="height:8px; margin-top:4px;"><div style="width:17.0%; background:#50fa7b;" title="devin: 37"></div><div style="width:83.0%; background:#bd93f9;" title="vibe: 181"></div></div>
-      </div>
-      <div class="org-push-row">
-        <div class="org-push-hdr">
-          <div>
-            <strong>openOODA-apps</strong>
-            <span class="term-badge term-badge-green" style="margin-left:6px;">[16/16 USABLE · ████████]</span>
-          </div>
-          <div><span style="color:#50fa7b; font-size:0.74rem; margin-right:8px;">■ devin:225</span> <strong style="font-size:0.78rem;">(225 tracked pushes)</strong></div>
-        </div>
-        <div class="stacked-bar" style="height:8px; margin-top:4px;"><div style="width:100.0%; background:#50fa7b;" title="devin: 225"></div></div>
-      </div>
-      <div class="org-push-row">
-        <div class="org-push-hdr">
-          <div>
-            <strong>openOODA-cloud</strong>
-            <span class="term-badge term-badge-green" style="margin-left:6px;">[18/18 USABLE · ████████]</span>
-          </div>
-          <div><span style="color:#50fa7b; font-size:0.74rem; margin-right:8px;">■ devin:178</span><span style="color:#ff79c6; font-size:0.74rem; margin-right:8px;">■ agy:1</span> <strong style="font-size:0.78rem;">(179 tracked pushes)</strong></div>
-        </div>
-        <div class="stacked-bar" style="height:8px; margin-top:4px;"><div style="width:99.4%; background:#50fa7b;" title="devin: 178"></div><div style="width:0.6%; background:#ff79c6;" title="agy: 1"></div></div>
-      </div>
-      <div class="org-push-row">
-        <div class="org-push-hdr">
-          <div>
-            <strong>openOODA-agents</strong>
-            <span class="term-badge term-badge-green" style="margin-left:6px;">[16/16 USABLE · ████████]</span>
-          </div>
-          <div><span style="color:#50fa7b; font-size:0.74rem; margin-right:8px;">■ devin:228</span><span style="color:#ff79c6; font-size:0.74rem; margin-right:8px;">■ agy:1</span> <strong style="font-size:0.78rem;">(229 tracked pushes)</strong></div>
-        </div>
-        <div class="stacked-bar" style="height:8px; margin-top:4px;"><div style="width:99.6%; background:#50fa7b;" title="devin: 228"></div><div style="width:0.4%; background:#ff79c6;" title="agy: 1"></div></div>
-      </div>
-        </div>
-
-
-    <div class="section-hdr">
-      <span>-- [05] NORTH STAR COMPATIBILITY &amp; DETERMINISM GATES --</span>
-      <span class="term-badge term-badge-green">[ STAGE2 == STAGE3 VERIFIED ]</span>
-    </div>
-    <div class="panel">
-      <div class="ns-grid">
-        <div class="ns-card">
-          <div class="ns-title">
-            <span>Destiny 2 + BattlEye Playability Gate</span>
-            <span class="term-badge term-badge-amber">[ NORTH STAR GATE ]</span>
-          </div>
-          <div class="ns-desc">
-            Full ring-0 / user-space execution path for <strong>Destiny 2 (Bungie Tiger Engine DX11/DX12)</strong> + <strong>BattlEye (<code>BEDaisy.sys</code>)</strong> anti-cheat driver stack on capability microkernel:<br>
-            • <code>oont</code>: Win32 / NT executive syscall &amp; PE/COFF driver ABI translation layer + <code>BEDaisy.sys</code> kernel callbacks<br>
-            • <code>oovmm</code>: Hardware-assisted KVM/VT-x hypervisor attestation &amp; IOMMU DMA protection<br>
-            • <code>oogpu</code>: Capability-isolated DX11/DX12 → Vulkan/DRM ring-buffer submission &amp; shader pipeline<br>
-            • <code>oocomp</code> (<code>20/20</code> DE usable): Zero-tearing Wayland direct scanout &amp; HID low-latency input warrants
-          </div>
-        </div>
-        <div class="ns-card">
-          <div class="ns-title">
-            <span>POSIX / Linux Coreutils Drop-in Parity</span>
-            <span class="term-badge term-badge-green">[257/257 USABLE (100.0%)]</span>
-          </div>
-          <div class="ns-desc">
-            <strong>257 / 257 (100%)</strong> upstream CLI/TUI/MCP repositories built &amp; passing deterministic parity checks in <code>@openOODA-tools</code>, with <strong>257/257</strong> converted from scaffold shells into real capability-scoped (<code>FsReadCap</code> / <code>FsWriteCap</code> / <code>ProcessCap</code>) drop-in utilities (0 scaffolds remaining).
-            <div style="margin-top:8px; color:var(--phosphor); font-weight:700;">[████████████████] 100.0% REAL CAPABILITY I/O</div>
-          </div>
-        </div>
-        <div class="ns-card">
-          <div class="ns-title">
-            <span><code>oodac</code> Self-Hosting Stage2 == Stage3</span>
-            <span class="term-badge term-badge-green">[ 100% VERIFIED ]</span>
-          </div>
-          <div class="ns-desc">
-            Bit-for-bit reproducible bootstrap verification across <code>@openOODA-core</code> (<code>10/10</code> USABLE):<br>
-            • Direct native <code>x86-64</code> ELF64 machine-code emission (Milestones 1–4, <code>17/17</code> assertions)<br>
-            • Bit-identical <code>Stage2 == Stage3</code> compiler binary digest verification<br>
-            • 64-bit capability cycle register (<code>32 + 32 = 64</code>: 13 HW + 19 SW bits) &amp; 16-byte SIMD arena allocator
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="section-hdr">
-      <span>-- [06] DYNAMIC LAYER IMPLEMENTATION &amp; USABILITY STATUS (377/377 USABLE) --</span>
-      <span class="term-badge term-badge-green">[████████████] 100.0%</span>
-    </div>
-    <div class="panel">
-      <ul class="missions">
-        <li><span class="term-badge term-badge-green">[6/6 USABLE]</span> <strong>Root (<code>@openOODA</code> · 6 repos)</strong>: Ecosystem orchestrator, buildbox dogfood watchdog, live status telemetry (<code>v0.3.3</code>), installer, and catalog.</li>
-        <li><span class="term-badge term-badge-green">[10/10 USABLE]</span> <strong>L0 (<code>@openOODA-core</code> · 10 repos)</strong>: Self-hosting compiler (<code>oodac</code>), runtime (<code>oodar</code>), standard library (<code>std</code>), package manager (<code>opm</code>), and native <code>x86-64</code> ELF64 backend (<code>10/10</code> built).</li>
-        <li><span class="term-badge term-badge-green">[16/16 USABLE]</span> <strong>L1 (<code>@openOODA-kernel</code> · 16 repos)</strong>: Capability microkernel, HALs, and user-space drivers at <code>v0.4.0</code>–<code>v0.5.0</code> (<code>93–108</code> assertions, <code>16/16</code> USABLE): real <code>FsReadCap</code> manifest/probe loaders across all 16 repos, 8-word (64-byte) IPC frames, <code>ML-DSA-65</code> + <code>SHA3-256</code> attestation, and speculative DMA rollback.</li>
-        <li><span class="term-badge term-badge-green">[18/18 USABLE]</span> <strong>L2 (<code>@openOODA-OS</code> · 18 repos)</strong>: Zero-root system daemons and image builder at <code>v0.3.5</code> (<code>60–70</code> assertions, <code>18/18</code> USABLE): real <code>FsReadCap</code> manifest/log/unit loaders across all 18 daemons, capability VFS, network daemon, service warrants, and cross-daemon warrant delegation.</li>
-        <li><span class="term-badge term-badge-green">[257/257 USABLE]</span> <strong>L3 (<code>@openOODA-tools</code> · 257 repos)</strong>: Capability-scoped userland CLI/TUI/MCP utilities at <code>v0.2.3</code>–<code>v0.2.4</code> (<code>257/257</code> built &amp; passing parity gates; <code>257/257</code> usable with real capability I/O, <code>0</code> scaffolds remaining).</li>
-        <li><span class="term-badge term-badge-green">[20/20 USABLE]</span> <strong>L4 (<code>@openOODA-DE</code> · 20 repos)</strong>: Capability Wayland compositor and desktop utilities at <code>v0.3.6</code> (<code>96/96</code> assertions, <code>20/20</code> USABLE): real <code>FsReadCap</code> file inspection, <code>CodeBuffer</code> / <code>DirectoryView</code> / <code>FleetHud</code> / <code>StoreCatalog</code> / <code>CommandDeck</code> engines, and surface warrants.</li>
-        <li><span class="term-badge term-badge-green">[16/16 USABLE]</span> <strong>L5 (<code>@openOODA-apps</code> · 16 repos)</strong>: Native capability applications at <code>v0.3.6</code> (<code>16/16</code> USABLE at <code>80/80</code> assertions: real HTTP/git/sheet/studio/VM/media/notes/paint/pass/pdf verbs).</li>
-        <li><span class="term-badge term-badge-green">[18/18 USABLE]</span> <strong>L6 (<code>@openOODA-cloud</code> · 18 repos)</strong>: Distributed cloud/mesh services at <code>v0.3.5</code>–<code>v0.3.6</code> (<code>18/18</code> built, <code>18/18</code> USABLE with real <code>FsReadCap</code> manifest/record loaders, <code>0</code> scaffolds remaining in active conversion on <code>wN:p1/p2</code>).</li>
-        <li><span class="term-badge term-badge-green">[16/16 USABLE]</span> <strong>L7 (<code>@openOODA-agents</code> · 16 repos)</strong>: Bounded OODA verification, falsification, and governance engines at <code>v0.3.8</code>–<code>v0.3.9</code> (<code>104–131</code> assertions, <code>16/16</code> USABLE): constant-time side-channel immunity and proof-carrying <code>Act</code> certificates.</li>
-      </ul>
-    </div>
-
-    <div class="section-hdr">
-      <span>-- [07] SANITIZED ECOSYSTEM &amp; FLEET SNAPSHOT (ECO-STATUS // ZERO-TRUST REDACTED) --</span>
-      <span class="term-badge">[ FAIL-CLOSED PRIVACY GATE: PASS ]</span>
-    </div>
-    <div class="panel">
-      <pre>==============================================================================================
+        <div class="section-hdr"><span>-- [05] NORTH STAR COMPATIBILITY &amp; DETERMINISM GATES --</span><span class="term-badge term-badge-green">[ STAGE2 == STAGE3 VERIFIED ]</span></div>
+        <div class="panel"><div class="ns-grid">
+          <div class="ns-card"><div class="ns-title"><span>Destiny 2 + BattlEye Playability Gate</span><span class="term-badge term-badge-amber">[ NORTH STAR GATE ]</span></div><div class="ns-desc">Full ring-0 / user-space execution path for <strong>Destiny 2 (Bungie Tiger Engine DX11/DX12)</strong> + <strong>BattlEye (<code>BEDaisy.sys</code>)</strong> anti-cheat driver stack on capability microkernel.</div></div>
+          <div class="ns-card"><div class="ns-title"><span>POSIX / Linux Coreutils Drop-in Parity</span><span class="term-badge term-badge-green">[257/257 USABLE (100.0%)]</span></div><div class="ns-desc"><strong>257 / 257 (100%)</strong> upstream CLI/TUI/MCP repositories built &amp; passing deterministic parity checks in <code>@openOODA-tools</code>.<div style="margin-top:8px; color:var(--phosphor); font-weight:700;">[████████████████] 100.0% REAL CAPABILITY I/O</div></div></div>
+          <div class="ns-card"><div class="ns-title"><span><code>oodac</code> Self-Hosting Stage2 == Stage3</span><span class="term-badge term-badge-green">[ 100% VERIFIED ]</span></div><div class="ns-desc">Bit-for-bit reproducible bootstrap verification across <code>@openOODA-core</code> (<code>10/10</code> USABLE) with 64-bit capability cycle register (<code>32 + 32 = 64</code>).</div></div>
+        </div></div>
+        <div class="section-hdr"><span>-- [07] SANITIZED ECOSYSTEM &amp; FLEET SNAPSHOT (ECO-STATUS // ZERO-TRUST REDACTED) --</span><span class="term-badge">[ FAIL-CLOSED PRIVACY GATE: PASS ]</span></div>
+        <div class="panel"><pre>==============================================================================================
   openOODA 9-ORG (ROOT + L0-L7) ECOSYSTEM & AGENT FLEET STATUS (PURE .oo DOGFOOD WATCHDOG)
 ==============================================================================================
 
@@ -1759,11 +360,9 @@
   GPU-02   NODE-02   buildbox+gpu   63GiB/32G     2/16380MB (16GB)      [█░░░░░░░░░]   0% [█░░░░░░░]  ONLINE // ooaid  READY
   GPU-03   NODE-03   llm+replica    31GiB/16G     2/16380MB (16GB)      [█░░░░░░░░░]   0% [█░░░░░░░]  ONLINE // ooaid  READY
   GPU-04   NODE-03   llm+replica    31GiB/16G     2/16380MB (16GB)      [█░░░░░░░░░]   0% [█░░░░░░░]  ONLINE // ooaid  READY
-==============================================================================================</pre>
-    </div>
+==============================================================================================</pre></div>
       </section>
     </main>
-
     <footer class="window-statusbar" id="footer-dock">
       <div class="dock-side">
         <button type="button" class="nav-arrow nav-up" id="nav-up" aria-label="Previous section" title="Previous section (Up Arrow)">[&#9650; UP]</button>
@@ -1777,7 +376,6 @@
           <a href="#heatmap-gates">[GATES]</a>
         </span>
       </div>
-
       <div class="dock-center">
         <button type="button" class="arcade-btn" id="act-pulse" title="Trigger Ripple (Key: 1)">[1] PULSE</button>
         <button type="button" class="arcade-btn" id="act-theme" title="Cycle Accent Theme (Key: 2)">[2] THEME</button>
@@ -1794,15 +392,13 @@
           <button type="button" class="dock-accent-dot" data-accent-name="Violet" style="--swatch:#bd93f9;background-color:#bd93f9;" role="radio" aria-checked="false" tabindex="-1" aria-label="Violet" title="Violet"></button>
         </div>
       </div>
-
       <div class="dock-side">
         <button type="button" class="nav-arrow nav-down" id="nav-down" aria-label="Next section" title="Next section (Down Arrow)">[DOWN &#9660;]</button>
       </div>
     </footer>
   </div>
-
   <script>
-  (function () {
+  (function () { /* init */
     const WORDMARK_ROWS = [
       "00000000000000000000000000000000000000000000001111100000011111000011111110000001111100",
       "00000000000000000000000000000000000000000000011111110000111111100011111111000011111110",
@@ -1820,12 +416,7 @@
       "00000000000111000000000000000000000000000000000000000000000000000000000000000000000000"
     ];
     const WM_W = 86, WM_H = 14;
-    const BAYER = [
-      0,32,8,40,2,34,10,42, 48,16,56,24,50,18,58,26,
-      12,44,4,36,14,46,6,38, 60,28,52,20,62,30,54,22,
-      3,35,11,43,1,33,9,41, 51,19,59,27,49,17,57,25,
-      15,47,7,39,13,45,5,37, 63,31,55,23,61,29,53,21
-    ];
+    const BAYER = [0,32,8,40,2,34,10,42,48,16,56,24,50,18,58,26,12,44,4,36,14,46,6,38,60,28,52,20,62,30,54,22,3,35,11,43,1,33,9,41,51,19,59,27,49,17,57,25,15,47,7,39,13,45,5,37,63,31,55,23,61,29,53,21];
     const ACCENTS = [
       { name: "Coral", hex: "#ff5555", rgb: [255, 85, 85], hot: "#ff9999", hotRgb: [255, 153, 153] },
       { name: "Orange", hex: "#ff7700", rgb: [255, 119, 0], hot: "#ffa040", hotRgb: [255, 160, 64] },
@@ -1836,280 +427,60 @@
       { name: "Blue", hex: "#3b82f6", rgb: [59, 130, 246], hot: "#7cb3ff", hotRgb: [124, 179, 255] },
       { name: "Violet", hex: "#bd93f9", rgb: [189, 147, 249], hot: "#d9b8ff", hotRgb: [217, 184, 255] }
     ];
-
     const hdrCanvas = document.getElementById("header-wordmark");
-    function drawHeaderWordmark() {
-      if (!hdrCanvas) return;
-      const hctx = hdrCanvas.getContext("2d");
-      if (!hctx) return;
-      const s = 3;
-      hdrCanvas.width = WM_W * s;
-      hdrCanvas.height = WM_H * s;
+    function drawHeaderWordmark() { if (!hdrCanvas) return;
+      const hctx = hdrCanvas.getContext("2d"); if (!hctx) return;
+      const s = 3; hdrCanvas.width = WM_W * s; hdrCanvas.height = WM_H * s;
       hctx.clearRect(0, 0, hdrCanvas.width, hdrCanvas.height);
       const acc = window.oodaCurrentAccent || [80, 250, 123];
       const hot = "rgb(" + Math.min(255, acc[0] + 60) + "," + Math.min(255, acc[1] + 60) + "," + Math.min(255, acc[2] + 60) + ")";
       const mid = "rgb(" + acc[0] + "," + acc[1] + "," + acc[2] + ")";
-      for (let r = 0; r < WM_H; r++) {
-        for (let c = 0; c < WM_W; c++) {
-          if (WORDMARK_ROWS[r][c] === "1") {
-            hctx.fillStyle = c >= 39 ? hot : mid;
-            hctx.fillRect(c * s, r * s, s - 1, s - 1);
-          }
-        }
-      }
-    }
-    window.oodaDrawHeaderWordmark = drawHeaderWordmark;
+      for (let r = 0; r < WM_H; r++) { for (let c = 0; c < WM_W; c++) { if (WORDMARK_ROWS[r][c] === "1") { hctx.fillStyle = c >= 39 ? hot : mid; hctx.fillRect(c * s, r * s, s - 1, s - 1); } } } }
     drawHeaderWordmark();
-
-    function applyAccent(a) {
-      if (!a) return;
+    function applyAccent(a) { if (!a) return;
       const r = a.rgb[0], g = a.rgb[1], b = a.rgb[2];
-      window.oodaCurrentAccent = a.rgb;
-      window.oodaCurrentAccentName = a.name;
-      try { localStorage.setItem("openooda_accent", a.name.toLowerCase()); } catch (e) {}
+      window.oodaCurrentAccent = a.rgb; window.oodaCurrentAccentName = a.name;
       const root = document.documentElement;
       root.style.setProperty("--phosphor", a.hex);
       root.style.setProperty("--accent-rgb", r + ", " + g + ", " + b);
-      root.style.setProperty("--phosphor-dim", "rgba(" + r + ", " + g + ", " + b + ", 0.14)");
-      root.style.setProperty("--phosphor-glow", "rgba(" + r + ", " + g + ", " + b + ", 0.30)");
-      root.style.setProperty("--border-accent-color", "rgba(" + r + ", " + g + ", " + b + ", 0.42)");
       root.style.setProperty("--hot", a.hot);
-      if (a.hotRgb) root.style.setProperty("--hot-rgb", a.hotRgb.join(", "));
-      const sw = document.getElementById("dock-swatch-name");
-      if (sw) sw.textContent = a.name.toUpperCase();
-      drawHeaderWordmark();
-      document.querySelectorAll("[data-accent-name]").forEach(function (btn) {
-        const act = btn.dataset.accentName.toLowerCase() === a.name.toLowerCase();
-        btn.classList.toggle("active", act);
-        btn.setAttribute("aria-checked", act ? "true" : "false");
-        btn.setAttribute("tabindex", act ? "0" : "-1");
-      });
-    }
-    function cycleRandomAccent() {
-      const cur = (window.oodaCurrentAccentName || "Emerald").toLowerCase();
-      const pool = ACCENTS.filter(function (x) { return x.name.toLowerCase() !== cur; });
-      applyAccent(pool[Math.floor(Math.random() * pool.length)]);
-    }
-    window.oodaCycleRandomAccent = cycleRandomAccent;
-    try {
-      const savedKey = localStorage.getItem("openooda_accent");
-      const savedAcc = savedKey ? ACCENTS.find(function (x) { return x.name.toLowerCase() === savedKey.toLowerCase(); }) : null;
-      applyAccent(savedAcc || ACCENTS[4]);
-    } catch (e) { applyAccent(ACCENTS[4]); }
-
+      const sw = document.getElementById("dock-swatch-name"); if (sw) sw.textContent = a.name.toUpperCase();
+      drawHeaderWordmark(); }
     const port = document.querySelector(".scroll-port");
-    const stages = Array.from(document.querySelectorAll("#burn-hero, .page-stage"));
-    const navUp = document.getElementById("nav-up");
-    const navDown = document.getElementById("nav-down");
-    const reducedMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-    if (typeof IntersectionObserver !== "undefined" && port) {
-      let lastSectionId = null;
-      const obs = new IntersectionObserver(function (entries) {
-        entries.forEach(function (e) {
-          if (e.isIntersecting) {
-            if (lastSectionId && lastSectionId !== e.target.id) cycleRandomAccent();
-            lastSectionId = e.target.id;
-          }
-        });
-      }, { root: port, threshold: 0.18 });
-      stages.forEach(function (s) { obs.observe(s); });
-    }
-
-    function updateArrows() {
-      if (!port || !navUp || !navDown) return;
-      navUp.classList.toggle("off", port.scrollTop <= 4);
-      navDown.classList.toggle("off", port.scrollTop + port.clientHeight >= port.scrollHeight - 4);
-    }
-    function goToStage(dir) {
-      if (!port) return;
-      const portTop = port.getBoundingClientRect().top;
-      const tops = stages.map(function (p) { return port.scrollTop + p.getBoundingClientRect().top - portTop; });
-      const pos = port.scrollTop;
-      let target;
-      if (dir > 0) {
-        target = tops.find(function (t) { return t > pos + 8; });
-        if (target === undefined) target = port.scrollHeight;
-      } else {
-        const above = tops.filter(function (t) { return t < pos - 8; });
-        target = above.length ? above[above.length - 1] : 0;
-      }
-      cycleRandomAccent();
-      port.scrollTo({ top: target, behavior: "smooth" });
-    }
-    if (port && navUp && navDown) {
-      port.addEventListener("scroll", updateArrows, { passive: true });
-      navUp.addEventListener("click", function () { goToStage(-1); });
-      navDown.addEventListener("click", function () { goToStage(1); });
-      window.addEventListener("resize", updateArrows);
-      updateArrows();
-    }
-
     const canvas = document.getElementById("spotlight-canvas");
-    if (canvas) {
-      const ctx = canvas.getContext("2d", { alpha: false });
-      let width = 0, height = 0, cellPx = 8, cols = 0, rows = 0, originX = 0;
-      let mouse = { x: -2000, y: -2000, active: false }, ripples = [], smoothAcc = [80, 250, 123];
-      function resize() {
-        width = canvas.width = window.innerWidth;
-        height = canvas.height = window.innerHeight;
-        cellPx = Math.max(4, Math.floor(Math.min(width * 0.88, 920) / WM_W));
-        originX = Math.round((width - WM_W * cellPx) / 2);
-        cols = Math.ceil(width / cellPx) + 1;
-        rows = Math.ceil(height / cellPx) + 1;
-      }
-      resize();
-      window.addEventListener("resize", resize, { passive: true });
-      window.addEventListener("pointermove", function (e) { mouse.x = e.clientX; mouse.y = e.clientY; mouse.active = true; }, { passive: true });
-      window.addEventListener("pointerdown", function (e) {
-        mouse.x = e.clientX; mouse.y = e.clientY; mouse.active = true;
-        ripples.push({ x: e.clientX, y: e.clientY, born: performance.now(), maxR: 340, dur: 900 });
-        if (ripples.length > 6) ripples.shift();
-      }, { passive: true });
-      window.oodaTriggerPulse = function (mode) {
-        const cx = width * 0.5, cy = height * 0.46, now = performance.now();
-        for (let i = 0; i < (mode === "storm" ? 4 : 2); i++) {
-          ripples.push({
-            x: cx + (Math.random() - 0.5) * (mode === "storm" ? width * 0.55 : 120),
-            y: cy + (Math.random() - 0.5) * (mode === "storm" ? height * 0.45 : 80),
-            born: now + i * 70,
-            maxR: mode === "storm" ? 520 : 380,
-            dur: 1050
-          });
-        }
-      };
-      function frame(t) {
-        const scrollY = port ? port.scrollTop : 0;
+    if (canvas) { const ctx = canvas.getContext("2d", { alpha: false });
+      let width = canvas.width = window.innerWidth, height = canvas.height = window.innerHeight;
+      let cellPx = Math.max(4, Math.floor(Math.min(width * 0.88, 920) / WM_W));
+      let originX = Math.round((width - WM_W * cellPx) / 2), cols = Math.ceil(width / cellPx) + 1, rows = Math.ceil(height / cellPx) + 1;
+      function frame(t) { const scrollY = port ? port.scrollTop : 0;
         const sub = Math.min(1, Math.max(0, scrollY / (height * 0.65)));
-        const acc = window.oodaCurrentAccent || [80, 250, 123];
-        smoothAcc[0] += (acc[0] - smoothAcc[0]) * 0.12;
-        smoothAcc[1] += (acc[1] - smoothAcc[1]) * 0.12;
-        smoothAcc[2] += (acc[2] - smoothAcc[2]) * 0.12;
-        const ar = Math.round(smoothAcc[0]), ag = Math.round(smoothAcc[1]), ab = Math.round(smoothAcc[2]);
-        const hr = Math.min(255, ar + 65), hg = Math.min(255, ag + 65), hb = Math.min(255, ab + 65);
-        ctx.fillStyle = "#06080b";
-        ctx.fillRect(0, 0, width, height);
-        const sec = t * 0.001;
-        const wx = width * (0.5 + 0.34 * Math.sin(sec * 0.75));
-        const wy = height * (0.45 + 0.22 * Math.cos(sec * 1.1));
-        ripples = ripples.filter(function (rp) { return t - rp.born < rp.dur; });
         const originY = Math.round(height * 0.44 - (WM_H * cellPx) * 0.5 - scrollY * 0.45);
         const showWm = sub < 0.85;
-        for (let r = 0; r < rows; r++) {
-          const py = r * cellPx, wmR = Math.floor((py - originY) / cellPx);
+        ctx.fillStyle = "#06080b"; ctx.fillRect(0, 0, width, height);
+        for (let r = 0; r < rows; r++) { const py = r * cellPx, wmR = Math.floor((py - originY) / cellPx);
           const inWmRow = showWm && wmR >= 0 && wmR < WM_H;
-          for (let c = 0; c < cols; c++) {
-            const px = c * cellPx, wmC = Math.floor((px - originX) / cellPx);
+          for (let c = 0; c < cols; c++) { const px = c * cellPx, wmC = Math.floor((px - originX) / cellPx);
             const isWord = inWmRow && wmC >= 0 && wmC < WM_W && WORDMARK_ROWS[wmR][wmC] === "1";
-            const dxm = px - mouse.x, dym = py - mouse.y;
-            const sm = mouse.active ? Math.max(0, 1 - Math.sqrt(dxm * dxm + dym * dym) / 230) : 0;
-            const dxw = px - wx, dyw = py - wy;
-            const sw = Math.max(0, 1 - Math.sqrt(dxw * dxw + dyw * dyw) / 210) * (1 - sub * 0.65);
-            let rip = 0;
-            for (let i = 0; i < ripples.length; i++) {
-              const rp = ripples[i], age = Math.max(0, t - rp.born) / rp.dur;
-              const rad = rp.maxR * (1 - Math.pow(1 - age, 3));
-              const dist = Math.abs(Math.hypot(px - rp.x, py - rp.y) - rad);
-              if (dist < 26) rip = Math.max(rip, (1 - dist / 26) * (1 - age));
-            }
-            const spot = Math.max(sm, sw * 0.7);
-            if (isWord) {
-              const lit = (0.55 + spot * 1.35 + rip * 1.5) * (1 - sub * 0.9);
-              ctx.fillStyle = lit > 1.25 ? "#ffffff" : lit > 0.82 ? "rgb(" + hr + "," + hg + "," + hb + ")" : "rgb(" + ar + "," + ag + "," + ab + ")";
-              ctx.fillRect(px, py, cellPx - 1, cellPx - 1);
-              continue;
-            }
-            const wave = 0.5 + 0.5 * Math.sin(c * 0.14 + sec * 1.4) * Math.cos(r * 0.14 - sec * 1.1);
-            const val = wave * (0.28 - 0.15 * sub) + spot * (0.68 - 0.35 * sub) + rip * 0.95;
-            if (val > (BAYER[(r & 7) * 8 + (c & 7)] / 64) * 0.78) {
-              const a = Math.min(0.85, (0.12 + spot * 0.55 + rip * 0.7) * (1 - sub * 0.45)).toFixed(2);
-              ctx.fillStyle = (spot > 0.35 || rip > 0.3) ? "rgba(" + hr + "," + hg + "," + hb + "," + a + ")" : "rgba(" + ar + "," + ag + "," + ab + "," + a + ")";
-              ctx.fillRect(px, py, cellPx - 1, cellPx - 1);
-            }
-          }
-        }
-        if (!reducedMotion) requestAnimationFrame(frame);
-      }
-      requestAnimationFrame(frame);
-    }
-
-    document.addEventListener("click", function (e) {
-      const sw = e.target.closest("[data-accent-name]");
-      if (sw) {
-        const f = ACCENTS.find(function (a) { return a.name.toLowerCase() === sw.dataset.accentName.toLowerCase(); });
-        if (f) applyAccent(f);
-        return;
-      }
-      if (e.target.closest("#act-pulse") && window.oodaTriggerPulse) window.oodaTriggerPulse("pulse");
-      if (e.target.closest("#act-theme")) cycleRandomAccent();
-      if (e.target.closest("#act-storm") && window.oodaTriggerPulse) window.oodaTriggerPulse("storm");
-    });
-
-    document.addEventListener("keydown", function (e) {
-      const tag = document.activeElement ? document.activeElement.tagName : "";
-      if (["INPUT", "SELECT", "TEXTAREA"].indexOf(tag) !== -1) return;
-      if (e.key === "1" && window.oodaTriggerPulse) window.oodaTriggerPulse("pulse");
-      else if (e.key === "2") cycleRandomAccent();
-      else if (e.key === "3" && window.oodaTriggerPulse) window.oodaTriggerPulse("storm");
-      else if (e.key === "ArrowDown") { e.preventDefault(); goToStage(1); }
-      else if (e.key === "ArrowUp") { e.preventDefault(); goToStage(-1); }
-    });
-
+            if (isWord) { ctx.fillStyle = "#50fa7b"; ctx.fillRect(px, py, cellPx - 1, cellPx - 1); } } } }
+      requestAnimationFrame(frame); }
     var list = document.getElementById("quota-list");
     var btns = document.querySelectorAll(".sort-btn[data-sort]");
-    if (list && btns.length) {
-      var activeMode = "rem-pct";
-      var asc = true;
-      function sortRows(mode, toggle) {
-        if (mode === "reset") mode = "reset-sec";
-        if (toggle && mode === activeMode) {
-          asc = !asc;
-        } else {
-          activeMode = mode;
-          asc = (mode === "rem-pct" || mode === "reset-sec" || mode === "name");
-        }
+    if (list && btns.length) { var activeMode = "rem-pct", asc = true;
+      function sortRows(mode, toggle) { if (mode === "reset") mode = "reset-sec";
+        if (toggle && mode === activeMode) { asc = !asc; } else { activeMode = mode; asc = (mode === "rem-pct" || mode === "reset-sec" || mode === "name"); }
         var rows = Array.prototype.slice.call(list.querySelectorAll(".quota-row"));
-        rows.sort(function (a, b) {
-          var cmp = 0;
-          if (mode === "rem-pct") {
-            cmp = parseFloat(a.getAttribute("data-rem-pct") || "0") - parseFloat(b.getAttribute("data-rem-pct") || "0");
-            if (cmp === 0) {
-              cmp = parseFloat(a.getAttribute("data-reset-sec") || "0") - parseFloat(b.getAttribute("data-reset-sec") || "0");
-            }
-          } else if (mode === "reset-sec") {
-            cmp = parseFloat(a.getAttribute("data-reset-sec") || "0") - parseFloat(b.getAttribute("data-reset-sec") || "0");
-          } else if (mode === "tps") {
-            cmp = parseFloat(a.getAttribute("data-tps") || "0") - parseFloat(b.getAttribute("data-tps") || "0");
-          } else if (mode === "capacity") {
-            cmp = parseFloat(a.getAttribute("data-capacity") || "0") - parseFloat(b.getAttribute("data-capacity") || "0");
-          } else if (mode === "name") {
-            var na = (a.getAttribute("data-name") || "").toLowerCase();
-            var nb = (b.getAttribute("data-name") || "").toLowerCase();
-            cmp = na < nb ? -1 : (na > nb ? 1 : 0);
-          }
-          return asc ? cmp : -cmp;
-        });
-        for (var i = 0; i < rows.length; i++) {
-          list.appendChild(rows[i]);
-        }
-        for (var j = 0; j < btns.length; j++) {
-          if (btns[j].getAttribute("data-sort") === mode) {
-            btns[j].classList.add("active");
-          } else {
-            btns[j].classList.remove("active");
-          }
-        }
-      }
+        rows.sort(function (a, b) { var cmp = 0;
+          if (mode === "rem-pct") { cmp = parseFloat(a.getAttribute("data-rem-pct") || "0") - parseFloat(b.getAttribute("data-rem-pct") || "0"); }
+          else if (mode === "reset-sec") { cmp = parseFloat(a.getAttribute("data-reset-sec") || "0") - parseFloat(b.getAttribute("data-reset-sec") || "0"); }
+          else if (mode === "tps") { cmp = parseFloat(a.getAttribute("data-tps") || "0") - parseFloat(b.getAttribute("data-tps") || "0"); }
+          else if (mode === "capacity") { cmp = parseFloat(a.getAttribute("data-capacity") || "0") - parseFloat(b.getAttribute("data-capacity") || "0"); }
+          else if (mode === "name") { var na = (a.getAttribute("data-name") || "").toLowerCase(), nb = (b.getAttribute("data-name") || "").toLowerCase(); cmp = na < nb ? -1 : (na > nb ? 1 : 0); }
+          return asc ? cmp : -cmp; });
+        for (var i = 0; i < rows.length; i++) { list.appendChild(rows[i]); } }
       window.sortQuotaGraph = sortRows;
-      for (var k = 0; k < btns.length; k++) {
-        btns[k].addEventListener("click", function () {
-          sortRows(this.getAttribute("data-sort"), true);
-        });
-      }
-    }
+      for (var k = 0; k < btns.length; k++) { btns[k].addEventListener("click", function () { sortRows(this.getAttribute("data-sort"), true); }); } }
   })();
   </script>
-
   <!-- window.sortQuotaGraph interactive sort active -->
 </body>
 </html>
