@@ -689,6 +689,7 @@ def build_footer_and_scripts() -> str:
       const r = a.rgb[0], g = a.rgb[1], b = a.rgb[2];
       window.oodaCurrentAccent = a.rgb;
       window.oodaCurrentAccentName = a.name;
+      try { localStorage.setItem("openooda_accent", a.name.toLowerCase()); } catch (e) {}
       const root = document.documentElement;
       root.style.setProperty("--phosphor", a.hex);
       root.style.setProperty("--accent-rgb", r + ", " + g + ", " + b);
@@ -696,6 +697,7 @@ def build_footer_and_scripts() -> str:
       root.style.setProperty("--phosphor-glow", "rgba(" + r + ", " + g + ", " + b + ", 0.30)");
       root.style.setProperty("--border-accent-color", "rgba(" + r + ", " + g + ", " + b + ", 0.42)");
       root.style.setProperty("--hot", a.hot);
+      if (a.hotRgb) root.style.setProperty("--hot-rgb", a.hotRgb.join(", "));
       const sw = document.getElementById("dock-swatch-name");
       if (sw) sw.textContent = a.name.toUpperCase();
       drawHeaderWordmark();
@@ -703,6 +705,7 @@ def build_footer_and_scripts() -> str:
         const act = btn.dataset.accentName.toLowerCase() === a.name.toLowerCase();
         btn.classList.toggle("active", act);
         btn.setAttribute("aria-checked", act ? "true" : "false");
+        btn.setAttribute("tabindex", act ? "0" : "-1");
       });
     }
     function cycleRandomAccent() {
@@ -710,6 +713,12 @@ def build_footer_and_scripts() -> str:
       const pool = ACCENTS.filter(function (x) { return x.name.toLowerCase() !== cur; });
       applyAccent(pool[Math.floor(Math.random() * pool.length)]);
     }
+    window.oodaCycleRandomAccent = cycleRandomAccent;
+    try {
+      const savedKey = localStorage.getItem("openooda_accent");
+      const savedAcc = savedKey ? ACCENTS.find(function (x) { return x.name.toLowerCase() === savedKey.toLowerCase(); }) : null;
+      applyAccent(savedAcc || ACCENTS[4]);
+    } catch (e) { applyAccent(ACCENTS[4]); }
 """
 
 def build_footer_and_scripts_part2() -> str:
@@ -718,6 +727,20 @@ def build_footer_and_scripts_part2() -> str:
     const stages = Array.from(document.querySelectorAll("#burn-hero, .page-stage"));
     const navUp = document.getElementById("nav-up");
     const navDown = document.getElementById("nav-down");
+    const reducedMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    if (typeof IntersectionObserver !== "undefined" && port) {
+      let lastSectionId = null;
+      const obs = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+          if (e.isIntersecting) {
+            if (lastSectionId && lastSectionId !== e.target.id) cycleRandomAccent();
+            lastSectionId = e.target.id;
+          }
+        });
+      }, { root: port, threshold: 0.18 });
+      stages.forEach(function (s) { obs.observe(s); });
+    }
 
     function updateArrows() {
       if (!port || !navUp || !navDown) return;
@@ -796,10 +819,14 @@ def build_footer_and_scripts_part2() -> str:
         const wx = width * (0.5 + 0.34 * Math.sin(sec * 0.75));
         const wy = height * (0.45 + 0.22 * Math.cos(sec * 1.1));
         ripples = ripples.filter(function (rp) { return t - rp.born < rp.dur; });
+        const originY = Math.round(height * 0.44 - (WM_H * cellPx) * 0.5 - scrollY * 0.45);
+        const showWm = sub < 0.85;
         for (let r = 0; r < rows; r++) {
-          const py = r * cellPx;
+          const py = r * cellPx, wmR = Math.floor((py - originY) / cellPx);
+          const inWmRow = showWm && wmR >= 0 && wmR < WM_H;
           for (let c = 0; c < cols; c++) {
-            const px = c * cellPx;
+            const px = c * cellPx, wmC = Math.floor((px - originX) / cellPx);
+            const isWord = inWmRow && wmC >= 0 && wmC < WM_W && WORDMARK_ROWS[wmR][wmC] === "1";
             const dxm = px - mouse.x, dym = py - mouse.y;
             const sm = mouse.active ? Math.max(0, 1 - Math.sqrt(dxm * dxm + dym * dym) / 230) : 0;
             const dxw = px - wx, dyw = py - wy;
@@ -812,6 +839,12 @@ def build_footer_and_scripts_part2() -> str:
               if (dist < 26) rip = Math.max(rip, (1 - dist / 26) * (1 - age));
             }
             const spot = Math.max(sm, sw * 0.7);
+            if (isWord) {
+              const lit = (0.55 + spot * 1.35 + rip * 1.5) * (1 - sub * 0.9);
+              ctx.fillStyle = lit > 1.25 ? "#ffffff" : lit > 0.82 ? "rgb(" + hr + "," + hg + "," + hb + ")" : "rgb(" + ar + "," + ag + "," + ab + ")";
+              ctx.fillRect(px, py, cellPx - 1, cellPx - 1);
+              continue;
+            }
             const wave = 0.5 + 0.5 * Math.sin(c * 0.14 + sec * 1.4) * Math.cos(r * 0.14 - sec * 1.1);
             const val = wave * (0.28 - 0.15 * sub) + spot * (0.68 - 0.35 * sub) + rip * 0.95;
             if (val > (BAYER[(r & 7) * 8 + (c & 7)] / 64) * 0.78) {
@@ -821,7 +854,7 @@ def build_footer_and_scripts_part2() -> str:
             }
           }
         }
-        requestAnimationFrame(frame);
+        if (!reducedMotion) requestAnimationFrame(frame);
       }
       requestAnimationFrame(frame);
     }
@@ -839,6 +872,8 @@ def build_footer_and_scripts_part2() -> str:
     });
 
     document.addEventListener("keydown", function (e) {
+      const tag = document.activeElement ? document.activeElement.tagName : "";
+      if (["INPUT", "SELECT", "TEXTAREA"].indexOf(tag) !== -1) return;
       if (e.key === "1" && window.oodaTriggerPulse) window.oodaTriggerPulse("pulse");
       else if (e.key === "2") cycleRandomAccent();
       else if (e.key === "3" && window.oodaTriggerPulse) window.oodaTriggerPulse("storm");

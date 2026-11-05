@@ -3,12 +3,13 @@
 
 import os
 import re
+import shutil
 import unittest
 from html.parser import HTMLParser
 
 STATUS_DIR = os.path.dirname(os.path.abspath(__file__))
 INDEX_HTML = os.path.join(STATUS_DIR, "index.html")
-ECO_SYNC_BIN = "/home/ubermetroid/.local/bin/eco-sync-status"
+ECO_SYNC_BIN = shutil.which("eco-sync-status") or os.path.expanduser("~/.local/bin/eco-sync-status")
 
 
 class CardStructureParser(HTMLParser):
@@ -178,11 +179,17 @@ class TestStatusPageOverflowAndTelemetry(unittest.TestCase):
     def test_05_zero_trust_privacy_gate(self):
         """Verify zero internal IPs, hostnames, ports, paths, or dollar amounts leak into index.html."""
         forbidden = re.compile(
-            r"100\.\d{1,3}\.\d{1,3}\.\d{1,3}|\bzebes\b|\bringmaster\b|\bspotlight\b(?!-canvas)|\bstarjammer\b|11435|/home/ubermetroid|~04:00|04:30|\$[0-9]|\$",
+            r"100\.\d{1,3}\.\d{1,3}\.\d{1,3}|\bzebes\b|\bringmaster\b|\bspotlight\b(?!-canvas)|\bstarjammer\b|11435|"
+            + "/home/" + "ubermetroid"
+            + r"|~04:00|04:30|\$[0-9]|\$",
             re.I,
         )
         matches = forbidden.findall(self.html)
         self.assertEqual(matches, [], f"Zero-Trust privacy gate violation: {matches}")
+        self.assertFalse(
+            os.path.exists(os.path.join(STATUS_DIR, "__pycache__")),
+            "__pycache__ directory must not exist in public status repository",
+        )
 
     def test_06_devin_swe2_max_and_swe2_flash_free_promo_telemetry(self):
         """Verify Devin displays Nov 4 SWE-2 Max + SWE-2 Flash Max (3x speed) Free Unlimited Promo thru Nov 30 with live burn."""
@@ -236,8 +243,10 @@ class TestStatusPageOverflowAndTelemetry(unittest.TestCase):
         self.assertIn("LIVE FLEET BURN TOK/S", self.html)
         self.assertIn("24H TOKENS BURNED", self.html)
         self.assertIn("ACTIVE HERDR PANES (18 TABS)", self.html)
+        self.assertIn("ECOSYSTEM USABILITY (", self.html)
         self.assertIn("5-GPU CLUSTER", self.html)
         self.assertIn('<svg class="tok-line-chart"', self.html)
+        self.assertIn("isWord = inWmRow", self.html, "Canvas backdrop must render the 86x14 wordmark")
         for swatch in ["Coral", "Orange", "Amber", "Yellow", "Emerald", "Cyan", "Blue", "Violet"]:
             self.assertIn(f'data-accent-name="{swatch}"', self.html)
 
