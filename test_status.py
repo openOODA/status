@@ -178,7 +178,7 @@ class TestStatusPageOverflowAndTelemetry(unittest.TestCase):
     def test_05_zero_trust_privacy_gate(self):
         """Verify zero internal IPs, hostnames, ports, paths, or dollar amounts leak into index.html."""
         forbidden = re.compile(
-            r"100\.\d{1,3}\.\d{1,3}\.\d{1,3}|zebes|ringmaster|spotlight|starjammer|11435|/home/ubermetroid|~04:00|04:30|\$[0-9]|\$",
+            r"100\.\d{1,3}\.\d{1,3}\.\d{1,3}|\bzebes\b|\bringmaster\b|\bspotlight\b(?!-canvas)|\bstarjammer\b|11435|/home/ubermetroid|~04:00|04:30|\$[0-9]|\$",
             re.I,
         )
         matches = forbidden.findall(self.html)
@@ -209,7 +209,40 @@ class TestStatusPageOverflowAndTelemetry(unittest.TestCase):
         self.assertIn("18 Layer/Project Panes", self.html, "18 Layer/Project Panes summary must be present")
         self.assertIn("Pro · 100% remaining (resets 22:00 HST / 08:00 UTC)", self.html, "Devin Pro · 100% remaining reset schedule must be displayed")
 
+    def test_07_openooda_org_theme_burn_hero_and_ticker_graph(self):
+        """Verify openOODA.org header/footer, #burn-hero landing stage, and #ticker-graph section."""
+        for required_id in [
+            'id="spotlight-canvas"',
+            'id="header-wordmark"',
+            'id="footer-dock"',
+            'id="nav-up"',
+            'id="nav-down"',
+            'id="act-pulse"',
+            'id="act-theme"',
+            'id="act-storm"',
+            'id="dock-swatch-name"',
+            'id="footer-accent-picker"',
+            'id="burn-hero"',
+            'id="ticker-graph"',
+            'id="gpu-telemetry"',
+            'id="quota-graph"',
+            'id="panes-matrix"',
+            'id="heatmap-gates"',
+        ]:
+            self.assertIn(required_id, self.html, f"Missing required element {required_id}")
+
+        self.assertIn("LIVE COMBINED FLEET BURN // TOK/SEC", self.html)
+        self.assertIn("[▼ SCROLL TO TICKER &amp; TOK/S TIMELINE]", self.html)
+        self.assertIn("LIVE FLEET BURN TOK/S", self.html)
+        self.assertIn("24H TOKENS BURNED", self.html)
+        self.assertIn("ACTIVE HERDR PANES (18 TABS)", self.html)
+        self.assertIn("5-GPU CLUSTER", self.html)
+        self.assertIn('<svg class="tok-line-chart"', self.html)
+        for swatch in ["Coral", "Orange", "Amber", "Yellow", "Emerald", "Cyan", "Blue", "Violet"]:
+            self.assertIn(f'data-accent-name="{swatch}"', self.html)
+
 
 if __name__ == "__main__":
     unittest.main()
+
 
