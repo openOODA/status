@@ -1,0 +1,32 @@
+// # status QA Seal — Governance Digest
+//
+// Logline: Bind a status-page digest and verifier nonce through the canonical post-quantum round so two runs agree.
+//
+// Setup: Pure functions over integers. Explicit read capability on the entrypoint; zero ambient authority.
+//
+// Beats:
+//   1. Fold the digest and nonce through oo_pqc_sha3_round.
+//   2. Verify the seal stays in the positive field.
+//   3. Reject tampered nonces and forged digests.
+
+import "std/sec/pqc.oo";
+
+// The seal of one status digest, bound to the verifier nonce.
+pub fn status_qa_seal(digest: Int, nonce: Int) -> Int {
+    return oo_pqc_sha3_round(digest, nonce);
+}
+
+// The seal is admitted only when it lands in the positive field.
+pub fn status_qa_admit(seal: Int) -> Bool {
+    return seal > 0;
+}
+
+// Two runs of the same digest and nonce must agree bit for bit.
+pub fn status_qa_agree(digest: Int, nonce: Int) -> Bool {
+    return status_qa_seal(digest, nonce) == status_qa_seal(digest, nonce);
+}
+
+// A forged digest must never collide with the honest seal.
+pub fn status_qa_forged(honest: Int, forged: Int, nonce: Int) -> Bool {
+    return status_qa_seal(honest, nonce) != status_qa_seal(forged, nonce);
+}

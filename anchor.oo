@@ -1,0 +1,12 @@
+// # openOODA Status — Anchor for Agents
+//
+// Logline: Public status site at status.openooda.org. Static index.html plus the bin/test_status probe.
+//
+// Setup: GitHub Pages, no build. bin/test_status is the compiled uptime probe.
+//
+// Beats:
+//   1. index.html — live status page.
+//   2. bin/test_status — compiled probe binary.
+//   3. qa/seal.oo — governance seal page for this repo.
+
+import "qa/seal.oo";
