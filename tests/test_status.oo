@@ -10,6 +10,7 @@
 //   3. Assert a forged digest fails closed.
 //   4. Assert honest seals admit across an input sweep and reproduce bit-for-bit.
 //   5. Assert the published page carries the VERSION stamp and full quota schema.
+//   6. Assert the stamp matcher refuses prefix, extension, and absent versions.
 
 import "std/core/primitives/str.oo";
 import "std/fs/os/fs.oo";
@@ -24,6 +25,19 @@ fn expect(cond: Bool, label: String) -> Bool {
     return false;
 }
 
+// Exact version stamp: "v"+ver must appear with a non-version byte after it,
+// so "0.3" can never satisfy a page stamped "v0.3.7".
+fn stamp_ok(html: String, ver: String) -> Bool {
+    let needle: String = "v" + ver;
+    let k: Int = str_index_of(html, needle);
+    if k < 0 { return false; }
+    let n: Int = chars_len(html);
+    let e: Int = k + chars_len(needle);
+    if e >= n { return true; }
+    let c: String = char_at(html, e);
+    return str_index_of("0123456789.", c) < 0;
+}
+
 fn check_page(fs: &FsReadCap, p: Int) -> Int {
     // Page-schema completeness: the published status page must carry
     // the VERSION stamp and every quota-card data attribute.
@@ -34,7 +48,7 @@ fn check_page(fs: &FsReadCap, p: Int) -> Int {
     let html: String = if hr.is_ok() { hr.val } else { "" };
     let readable: Bool = ver != "" && html != "";
     if expect(readable, "23 VERSION and index.html are readable") { p = p + 1; }
-    let stamped: Bool = str_index_of(html, "v" + ver) >= 0;
+    let stamped: Bool = stamp_ok(html, ver);
     if expect(stamped, "24 page carries the VERSION stamp") { p = p + 1; }
     let core_attrs: Bool = str_index_of(html, "data-name") >= 0 &&
         str_index_of(html, "data-used-pct") >= 0 && str_index_of(html, "data-rem-pct") >= 0 &&
@@ -82,10 +96,20 @@ pub fn main(
         status_qa_seal(1234, 99) == status_qa_seal(1234, 99);
     if expect(repro_sweep, "22 sweep seals reproduce bit-for-bit") { p = p + 1; }
     p = check_page(fs_r, p);
-    if p == 26 {
-        println("status tests: 26/26 passed");
+    if expect(status_qa_admit(1) && status_qa_admit(2), "27 admit floor accepts smallest positive seals") { p = p + 1; }
+    let eq_seal: Int = status_qa_seal(2147483647, 2147483647);
+    let eq_ok: Bool = eq_seal > 0 && status_qa_admit(eq_seal) && eq_seal != status_qa_seal(41, 7);
+    if expect(eq_ok, "28 extreme-equal input seals positive and distinct") { p = p + 1; }
+    if expect(stamp_ok("<b>>v0.3.7</b>", "0.3.7"), "29 stamp matcher accepts exact version") { p = p + 1; }
+    let stamp_neg: Bool = !stamp_ok("<b>>v0.3.7</b>", "0.3") &&
+        !stamp_ok("<b>>v0.3.7</b>", "0.3.7.1") &&
+        !stamp_ok("<b>>v0.2.1</b>", "0.3.7") &&
+        !stamp_ok("<b>no stamp</b>", "0.3.7");
+    if expect(stamp_neg, "30 stamp matcher refuses prefix, extension, and absent versions") { p = p + 1; }
+    if p == 30 {
+        println("status tests: 30/30 passed");
         return Ok(0);
     }
-    println("status tests: FAILED (" + to_string(p) + "/26)");
+    println("status tests: FAILED (" + to_string(p) + "/30)");
     return Ok(1);
 }
