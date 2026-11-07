@@ -238,10 +238,10 @@ pub fn main(
         status_qa_seal(41, 0 - 1) != status_qa_seal(41, 7) && neg_seal == status_qa_seal(0 - 1, 7);
     if expect(neg_ok, "33 negative seal inputs stay deterministic and distinct") { p = p + 1; }
     p = check_output(fs_r, p);
-    if p == 41 {
-        println("status tests: 41/41 passed");
+    if p == 43 {
+        println("status tests: 43/43 passed");
         return Ok(0);
     }
-    println("status tests: FAILED (" + to_string(p) + "/41)");
+    println("status tests: FAILED (" + to_string(p) + "/43)");
     return Ok(1);
 }

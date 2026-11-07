@@ -29,9 +29,74 @@ fn fr_badge(seg: String) -> Bool {
     if sl <= 0 { return false; }
     let ns: String = byte_slice(inner, 0, sl);
     let ms: String = byte_slice(inner, sl + 1, bytes_len(inner));
-    let ni: Result[Int, String] = parse_int(ns);
-    let mi: Result[Int, String] = parse_int(ms);
-    return ni.is_ok() && mi.is_ok() && ni.val == mi.val && ni.val > 0;
+    let nn: Int = bytes_len(ns);
+    if nn == 0 || nn != bytes_len(ms) || ns != ms { return false; }
+    let mut i: Int = 0;
+    while i < nn {
+        let c: Int = byte_at(ns, i);
+        if c < 48 || c > 57 { return false; }
+        i = i + 1;
+    }
+    return true;
+}
+
+fn fr_name(seg: String) -> String {
+    let op: Int = str_index_of(seg, "<strong>");
+    if op < 0 { return ""; }
+    let after: String = byte_slice(seg, op + 8, bytes_len(seg));
+    let cl: Int = str_index_of(after, "</strong>");
+    if cl < 0 { return ""; }
+    return byte_slice(after, 0, cl);
+}
+
+fn fr_want(i: Int) -> String {
+    if i == 0 { return "openOODA"; }
+    if i == 1 { return "openOODA-core"; }
+    if i == 2 { return "openOODA-kernel"; }
+    if i == 3 { return "openOODA-OS"; }
+    if i == 4 { return "openOODA-tools"; }
+    if i == 5 { return "openOODA-DE"; }
+    if i == 6 { return "openOODA-apps"; }
+    if i == 7 { return "openOODA-cloud"; }
+    if i == 8 { return "openOODA-agents"; }
+    return "";
+}
+
+fn fr_attr_clean(html: String) -> Bool {
+    let mut rest: String = html;
+    let mut guard: Int = 0;
+    while guard < 600 {
+        guard = guard + 1;
+        let dp: Int = str_index_of(rest, "data-");
+        if dp < 0 { return true; }
+        let seg: String = byte_slice(rest, dp, bytes_len(rest));
+        let sn: Int = bytes_len(seg);
+        let mut ni: Int = 5;
+        while ni < sn {
+            let c: Int = byte_at(seg, ni);
+            let ok: Bool = (c >= 97 && c <= 122) || (c >= 48 && c <= 57) || c == 45;
+            if !ok { break; }
+            ni = ni + 1;
+        }
+        if ni + 1 >= sn || byte_at(seg, ni) != 61 || byte_at(seg, ni + 1) != 34 {
+            rest = byte_slice(rest, dp + 5, bytes_len(rest));
+            continue;
+        }
+        let vs: Int = ni + 2;
+        let tail: String = byte_slice(seg, vs, sn);
+        let ve: Int = str_index_of(tail, "\"");
+        if ve < 0 { return false; }
+        let val: String = byte_slice(tail, 0, ve);
+        let vn: Int = bytes_len(val);
+        let mut i: Int = 0;
+        while i < vn {
+            let c: Int = byte_at(val, i);
+            if c == 34 || c == 38 || c == 39 || c == 60 || c == 62 { return false; }
+            i = i + 1;
+        }
+        rest = byte_slice(rest, dp + vs + ve + 1, bytes_len(rest));
+    }
+    return false;
 }
 
 pub fn fleet_rows(fs: &FsReadCap, p: Int) -> Int {
@@ -41,17 +106,27 @@ pub fn fleet_rows(fs: &FsReadCap, p: Int) -> Int {
     let html: String = hr.val;
     let needle: String = "org-push-row\"><div";
     let mut rows: Int = 0;
-    let mut rest: String = html;
+    let mut rest: String = byte_slice(html, 0, bytes_len(html));
     let mut all_ok: Bool = true;
+    let mut names: List[String] = list_new();
     while rows < 16 {
         let pos: Int = str_index_of(rest, needle);
         if pos < 0 { break; }
         let seg: String = byte_slice(rest, pos, bytes_len(rest));
         rows = rows + 1;
         if !fr_badge(byte_slice(seg, 0, 700)) { all_ok = false; }
+        names = list_push(names, fr_name(byte_slice(seg, 0, 700)));
         rest = byte_slice(rest, pos + bytes_len(needle), bytes_len(rest));
     }
     if fr_expect(rows == 9, "40 status page declares exactly nine org rows") { np = np + 1; }
     if fr_expect(all_ok && rows == 9, "41 every org badge reports done == total usable") { np = np + 1; }
+    let mut ord_ok: Bool = rows == 9;
+    let mut k: Int = 0;
+    while k < rows && k < 9 {
+        if list_get(names, k) != fr_want(k) { ord_ok = false; }
+        k = k + 1;
+    }
+    if fr_expect(ord_ok, "42 org rows emit in canonical architecture order") { np = np + 1; }
+    if fr_expect(fr_attr_clean(html), "43 data attribute values carry no raw markup characters") { np = np + 1; }
     return np;
 }
