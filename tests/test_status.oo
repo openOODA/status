@@ -28,6 +28,7 @@ fn expect(cond: Bool, label: String) -> Bool {
 // Exact version stamp: "v"+ver must appear with a non-version byte after it,
 // so "0.3" can never satisfy a page stamped "v0.3.7".
 fn stamp_ok(html: String, ver: String) -> Bool {
+    if ver == "" { return false; }
     let needle: String = "v" + ver;
     let k: Int = str_index_of(html, needle);
     if k < 0 { return false; }
@@ -106,10 +107,21 @@ pub fn main(
         !stamp_ok("<b>>v0.2.1</b>", "0.3.7") &&
         !stamp_ok("<b>no stamp</b>", "0.3.7");
     if expect(stamp_neg, "30 stamp matcher refuses prefix, extension, and absent versions") { p = p + 1; }
-    if p == 30 {
-        println("status tests: 30/30 passed");
+    if expect(stamp_ok("release v0.3.7", "0.3.7"), "31 stamp at end-of-string still matches") { p = p + 1; }
+    let stamp_fuzz: Bool = !stamp_ok("v0.3.70", "0.3.7") &&
+        !stamp_ok("v0.3.7.1", "0.3.7") &&
+        stamp_ok("v0.3.7\nrest", "0.3.7") &&
+        stamp_ok("v0.3.7-rc1", "0.3.7") &&
+        !stamp_ok("<b>>v0.3.7</b>", "");
+    if expect(stamp_fuzz, "32 stamp fuzz bounds zero/dot extensions, newline, prerelease, empty ver") { p = p + 1; }
+    let neg_seal: Int = status_qa_seal(0 - 1, 7);
+    let neg_ok: Bool = neg_seal != status_qa_seal(41, 7) &&
+        status_qa_seal(41, 0 - 1) != status_qa_seal(41, 7) && neg_seal == status_qa_seal(0 - 1, 7);
+    if expect(neg_ok, "33 negative seal inputs stay deterministic and distinct") { p = p + 1; }
+    if p == 33 {
+        println("status tests: 33/33 passed");
         return Ok(0);
     }
-    println("status tests: FAILED (" + to_string(p) + "/30)");
+    println("status tests: FAILED (" + to_string(p) + "/33)");
     return Ok(1);
 }
