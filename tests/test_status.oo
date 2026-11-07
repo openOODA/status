@@ -37,10 +37,19 @@ pub fn main(
     if expect(status_qa_seal(41, 7) != status_qa_seal(42, 7), "10 one-step digest drift differs") { p = p + 1; }
     if expect(status_qa_seal(100000007, 7) > 0, "11 large-input seal stays positive") { p = p + 1; }
     if expect(status_qa_admit(status_qa_seal(100000007, 7)), "12 large-input seal admitted") { p = p + 1; }
-    if p == 12 {
-        println("status tests: 12/12 passed");
+    if expect(status_qa_seal(41, 7) != status_qa_seal(7, 41), "13 swapped digest/nonce differs") { p = p + 1; }
+    if expect(status_qa_seal(2147483647, 3) != status_qa_seal(3, 2147483647), "14 extreme swap differs") { p = p + 1; }
+    if expect(status_qa_seal(1000000009, 11) == status_qa_seal(1000000009, 11), "15 prime input deterministic") { p = p + 1; }
+    if expect(status_qa_admit(status_qa_seal(0 - 2147483647, 5)), "16 negative-large input seals positive") { p = p + 1; }
+    let neg_seal: Int = status_qa_seal(0 - 2147483647, 5);
+    if expect(neg_seal != status_qa_seal(41, 7), "17 negative-large differs from honest") { p = p + 1; }
+    if expect(status_qa_seal(41, 0) != status_qa_seal(41, 7), "18 zero-nonce edge differs") { p = p + 1; }
+    if expect(status_qa_seal(4294967291, 13) == status_qa_seal(4294967291, 13), "19 u32-max input deterministic") { p = p + 1; }
+    if expect(status_qa_seal(9, 9) != status_qa_seal(9, 10), "20 self-bind nonce drift differs") { p = p + 1; }
+    if p == 20 {
+        println("status tests: 20/20 passed");
         return Ok(0);
     }
-    println("status tests: FAILED (" + to_string(p) + "/12)");
+    println("status tests: FAILED (" + to_string(p) + "/20)");
     return Ok(1);
 }
