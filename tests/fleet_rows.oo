@@ -1,0 +1,57 @@
+// # Fleet Rows - Org Badge Consistency Probe
+//
+// Logline: Assert the status page carries exactly the nine canonical org rows and every badge reports full usability.
+//
+// Setup: Read-only FsReadCap over index.html. Pure string assertions; no subprocess, no network.
+//
+// Beats:
+//   1. Count org-push-row elements and require exactly nine.
+//   2. Parse each row's [done/total USABLE] badge and require done == total > 0.
+
+import "std/core/primitives/str.oo";
+import "std/fs/os/fs.oo";
+
+fn fr_expect(cond: Bool, label: String) -> Bool {
+    if cond {
+        println("ok " + label);
+        return true;
+    }
+    println("FAIL " + label);
+    return false;
+}
+
+fn fr_badge(seg: String) -> Bool {
+    let lb: Int = str_index_of(seg, "[");
+    let ue: Int = str_index_of(seg, " USABLE");
+    if lb < 0 || ue < 0 || ue <= lb { return false; }
+    let inner: String = byte_slice(seg, lb + 1, ue);
+    let sl: Int = str_index_of(inner, "/");
+    if sl <= 0 { return false; }
+    let ns: String = byte_slice(inner, 0, sl);
+    let ms: String = byte_slice(inner, sl + 1, bytes_len(inner));
+    let ni: Result[Int, String] = parse_int(ns);
+    let mi: Result[Int, String] = parse_int(ms);
+    return ni.is_ok() && mi.is_ok() && ni.val == mi.val && ni.val > 0;
+}
+
+pub fn fleet_rows(fs: &FsReadCap, p: Int) -> Int {
+    let mut np: Int = p;
+    let hr: Result[String, String] = fs_read_file(fs, "index.html");
+    if hr.is_err() { return np; }
+    let html: String = hr.val;
+    let needle: String = "org-push-row\"><div";
+    let mut rows: Int = 0;
+    let mut rest: String = html;
+    let mut all_ok: Bool = true;
+    while rows < 16 {
+        let pos: Int = str_index_of(rest, needle);
+        if pos < 0 { break; }
+        let seg: String = byte_slice(rest, pos, bytes_len(rest));
+        rows = rows + 1;
+        if !fr_badge(byte_slice(seg, 0, 700)) { all_ok = false; }
+        rest = byte_slice(rest, pos + bytes_len(needle), bytes_len(rest));
+    }
+    if fr_expect(rows == 9, "40 status page declares exactly nine org rows") { np = np + 1; }
+    if fr_expect(all_ok && rows == 9, "41 every org badge reports done == total usable") { np = np + 1; }
+    return np;
+}

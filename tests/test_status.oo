@@ -15,6 +15,7 @@
 import "std/core/primitives/str.oo";
 import "std/fs/os/fs.oo";
 import "qa/seal.oo";
+import "tests/fleet_rows.oo";
 
 fn expect(cond: Bool, label: String) -> Bool {
     if cond {
@@ -153,6 +154,7 @@ fn check_output(fs: &FsReadCap, p: Int) -> Int {
     if expect(m2, "38 reset-sec latency stays positive on every row") { p = p + 1; }
     let m3: Bool = metric_group_ok(page, 3);
     if expect(m3, "39 tps and capacity metrics stay numeric and non-negative") { p = p + 1; }
+    p = fleet_rows(fs, p);
     return p;
 }
 
@@ -236,10 +238,10 @@ pub fn main(
         status_qa_seal(41, 0 - 1) != status_qa_seal(41, 7) && neg_seal == status_qa_seal(0 - 1, 7);
     if expect(neg_ok, "33 negative seal inputs stay deterministic and distinct") { p = p + 1; }
     p = check_output(fs_r, p);
-    if p == 39 {
-        println("status tests: 39/39 passed");
+    if p == 41 {
+        println("status tests: 41/41 passed");
         return Ok(0);
     }
-    println("status tests: FAILED (" + to_string(p) + "/39)");
+    println("status tests: FAILED (" + to_string(p) + "/41)");
     return Ok(1);
 }
