@@ -39,6 +39,53 @@ fn stamp_ok(html: String, ver: String) -> Bool {
     return str_index_of("0123456789.", c) < 0;
 }
 
+// Count data-* schema attributes; -1 when any is malformed (missing
+// =" or an empty/unterminated value). data-* name references inside
+// <script> selectors are skipped; they are not attributes.
+fn data_attrs_ok(html: String) -> Int {
+    let mut rest: String = html;
+    let mut dcount: Int = 0;
+    let mut guard: Int = 0;
+    while guard < 64 {
+        let d: Int = str_index_of(rest, "data-");
+        if d < 0 { break; }
+        guard = guard + 1;
+        let rn: Int = chars_len(rest);
+        let mut ni: Int = d + 5;
+        while ni < rn {
+            let c: String = char_at(rest, ni);
+            if str_index_of("abcdefghijklmnopqrstuvwxyz-", c) < 0 { break; }
+            ni = ni + 1;
+        }
+        if ni + 1 < rn && char_at(rest, ni) == "=" && char_at(rest, ni + 1) == "\"" {
+            dcount = dcount + 1;
+            let v0: Int = ni + 2;
+            let mut ve: Int = v0;
+            while ve < rn && char_at(rest, ve) != "\"" { ve = ve + 1; }
+            if ve == v0 || ve >= rn { return 0 - 1; }
+            rest = str_slice(rest, ve + 1, rn);
+        } else {
+            rest = str_slice(rest, d + 5, rn);
+        }
+    }
+    return dcount;
+}
+
+fn check_output(fs: &FsReadCap, p: Int) -> Int {
+    // Output-schema completeness: every data-* attribute on the
+    // published page must carry a non-empty quoted value, and the
+    // seal must stay inside the positive 62-bit field.
+    let hr: Result[String, String] = fs_read_file(fs, "index.html");
+    let page: String = if hr.is_ok() { hr.val } else { "" };
+    let dcount: Int = data_attrs_ok(page);
+    if expect(dcount >= 8, "34 every data-* attribute carries a non-empty value") { p = p + 1; }
+    let band: Bool = status_qa_seal(41, 7) >= 1 &&
+        status_qa_seal(41, 7) <= 4611686018427387903 &&
+        status_qa_seal(0 - 1, 0 - 1) <= 4611686018427387903;
+    if expect(band, "35 seal output stays inside the positive 62-bit field") { p = p + 1; }
+    return p;
+}
+
 fn check_page(fs: &FsReadCap, p: Int) -> Int {
     // Page-schema completeness: the published status page must carry
     // the VERSION stamp and every quota-card data attribute.
@@ -118,10 +165,11 @@ pub fn main(
     let neg_ok: Bool = neg_seal != status_qa_seal(41, 7) &&
         status_qa_seal(41, 0 - 1) != status_qa_seal(41, 7) && neg_seal == status_qa_seal(0 - 1, 7);
     if expect(neg_ok, "33 negative seal inputs stay deterministic and distinct") { p = p + 1; }
-    if p == 33 {
-        println("status tests: 33/33 passed");
+    p = check_output(fs_r, p);
+    if p == 35 {
+        println("status tests: 35/35 passed");
         return Ok(0);
     }
-    println("status tests: FAILED (" + to_string(p) + "/33)");
+    println("status tests: FAILED (" + to_string(p) + "/35)");
     return Ok(1);
 }
