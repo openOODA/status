@@ -8,7 +8,11 @@
 //   1. Assert the seal round is deterministic and positive.
 //   2. Assert a tampered nonce changes the seal.
 //   3. Assert a forged digest fails closed.
+//   4. Assert honest seals admit across an input sweep and reproduce bit-for-bit.
+//   5. Assert the published page carries the VERSION stamp and full quota schema.
 
+import "std/core/primitives/str.oo";
+import "std/fs/os/fs.oo";
 import "qa/seal.oo";
 
 fn expect(cond: Bool, label: String) -> Bool {
@@ -18,6 +22,29 @@ fn expect(cond: Bool, label: String) -> Bool {
     }
     println("FAIL " + label);
     return false;
+}
+
+fn check_page(fs: &FsReadCap, p: Int) -> Int {
+    // Page-schema completeness: the published status page must carry
+    // the VERSION stamp and every quota-card data attribute.
+    let vr: Result[String, String] = fs_read_file(fs, "VERSION");
+    let mut ver: String = "";
+    if vr.is_ok() { ver = str_replace(vr.val, "\n", ""); }
+    let hr: Result[String, String] = fs_read_file(fs, "index.html");
+    let html: String = if hr.is_ok() { hr.val } else { "" };
+    let readable: Bool = ver != "" && html != "";
+    if expect(readable, "23 VERSION and index.html are readable") { p = p + 1; }
+    let stamped: Bool = str_index_of(html, "v" + ver) >= 0;
+    if expect(stamped, "24 page carries the VERSION stamp") { p = p + 1; }
+    let core_attrs: Bool = str_index_of(html, "data-name") >= 0 &&
+        str_index_of(html, "data-used-pct") >= 0 && str_index_of(html, "data-rem-pct") >= 0 &&
+        str_index_of(html, "data-capacity") >= 0;
+    if expect(core_attrs, "25 quota schema core attributes present") { p = p + 1; }
+    let ext_attrs: Bool = str_index_of(html, "data-tps") >= 0 &&
+        str_index_of(html, "data-accent-name") >= 0 && str_index_of(html, "data-reset-sec") >= 0 &&
+        str_index_of(html, "data-sort") >= 0;
+    if expect(ext_attrs, "26 quota schema extended attributes present") { p = p + 1; }
+    return p;
 }
 
 pub fn main(
@@ -46,10 +73,19 @@ pub fn main(
     if expect(status_qa_seal(41, 0) != status_qa_seal(41, 7), "18 zero-nonce edge differs") { p = p + 1; }
     if expect(status_qa_seal(4294967291, 13) == status_qa_seal(4294967291, 13), "19 u32-max input deterministic") { p = p + 1; }
     if expect(status_qa_seal(9, 9) != status_qa_seal(9, 10), "20 self-bind nonce drift differs") { p = p + 1; }
-    if p == 20 {
-        println("status tests: 20/20 passed");
+    let admit_sweep: Bool = status_qa_admit(status_qa_seal(3, 11)) &&
+        status_qa_admit(status_qa_seal(77, 5)) && status_qa_admit(status_qa_seal(1234, 99)) &&
+        status_qa_admit(status_qa_seal(0 - 42, 7));
+    if expect(admit_sweep, "21 honest seals admit across the input sweep") { p = p + 1; }
+    let repro_sweep: Bool = status_qa_seal(3, 11) == status_qa_seal(3, 11) &&
+        status_qa_seal(77, 5) == status_qa_seal(77, 5) &&
+        status_qa_seal(1234, 99) == status_qa_seal(1234, 99);
+    if expect(repro_sweep, "22 sweep seals reproduce bit-for-bit") { p = p + 1; }
+    p = check_page(fs_r, p);
+    if p == 26 {
+        println("status tests: 26/26 passed");
         return Ok(0);
     }
-    println("status tests: FAILED (" + to_string(p) + "/20)");
+    println("status tests: FAILED (" + to_string(p) + "/26)");
     return Ok(1);
 }
