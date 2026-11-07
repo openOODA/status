@@ -29,7 +29,10 @@ pub fn main(
     if expect(status_qa_admit(status_qa_seal(41, 7)), "02 seal stays in the positive field") { p = p + 1; }
     if expect(status_qa_seal(41, 7) != status_qa_seal(41, 8), "03 tampered nonce yields a different seal") { p = p + 1; }
     if expect(status_qa_forged(41, 0, 7), "04 forged digest yields a different seal") { p = p + 1; }
-    if p == 4 { println("status tests: 4/4 passed"); return Ok(0); }
+    if p == 4 {
+        println("status tests: 4/4 passed");
+        return Ok(0);
+    }
     println("status tests: FAILED (" + to_string(p) + "/4)");
     return Ok(1);
 }
