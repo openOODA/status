@@ -29,10 +29,18 @@ pub fn main(
     if expect(status_qa_admit(status_qa_seal(41, 7)), "02 seal stays in the positive field") { p = p + 1; }
     if expect(status_qa_seal(41, 7) != status_qa_seal(41, 8), "03 tampered nonce yields a different seal") { p = p + 1; }
     if expect(status_qa_forged(41, 0, 7), "04 forged digest yields a different seal") { p = p + 1; }
-    if p == 4 {
-        println("status tests: 4/4 passed");
+    if expect(!status_qa_admit(0), "05 zero seal is refused") { p = p + 1; }
+    if expect(!status_qa_admit(0 - 1), "06 negative seal is refused") { p = p + 1; }
+    if expect(status_qa_seal(0, 0) != status_qa_seal(41, 7), "07 empty-input seal differs") { p = p + 1; }
+    if expect(status_qa_seal(41, 7) != status_qa_seal(0 - 1, 7), "08 forged negative digest differs") { p = p + 1; }
+    if expect(status_qa_seal(41, 7) != status_qa_seal(41, 0 - 1), "09 forged negative nonce differs") { p = p + 1; }
+    if expect(status_qa_seal(41, 7) != status_qa_seal(42, 7), "10 one-step digest drift differs") { p = p + 1; }
+    if expect(status_qa_seal(100000007, 7) > 0, "11 large-input seal stays positive") { p = p + 1; }
+    if expect(status_qa_admit(status_qa_seal(100000007, 7)), "12 large-input seal admitted") { p = p + 1; }
+    if p == 12 {
+        println("status tests: 12/12 passed");
         return Ok(0);
     }
-    println("status tests: FAILED (" + to_string(p) + "/4)");
+    println("status tests: FAILED (" + to_string(p) + "/12)");
     return Ok(1);
 }
